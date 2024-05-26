@@ -1,0 +1,23 @@
+package com.event_listeners;
+
+import com.GameManager;
+
+import javax.swing.*;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
+
+public class PauseListener extends KeyAdapter {
+
+    public PauseListener() {
+
+    }
+
+    @Override
+    public void keyPressed(KeyEvent e) {
+        if (e.getKeyCode() == KeyEvent.VK_SPACE) {
+            if (!GameManager.getInstance().gameOver()) {
+                GameManager.getInstance().pauseGame();
+            }
+        }
+    }
+}
