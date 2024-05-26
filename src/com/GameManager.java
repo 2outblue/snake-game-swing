@@ -2,6 +2,7 @@ package com;
 
 import com.components.ComponentFactory;
 import com.components.border.BorderComponent;
+import com.components.food.SmallFood;
 import com.components.snake.SnakeBody;
 import com.components.snake.SnakeHead;
 import com.components.constants.Direction;
@@ -13,6 +14,7 @@ import com.game_objects.Snake;
 import javax.swing.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 public class GameManager {
 
@@ -48,6 +50,7 @@ public class GameManager {
 //        movementThread.start();
 
         threadGovernor.createMovementThread();
+//        threadGovernor.createFoodGenerationThread();
 
         growSnake();
         growSnake();
@@ -61,37 +64,6 @@ public class GameManager {
         growSnake();
         growSnake();
         growSnake();
-        growSnake();
-        growSnake();
-        growSnake();
-        growSnake();
-        growSnake();
-        growSnake();
-        growSnake();
-        growSnake();
-        growSnake();
-        growSnake();
-        growSnake();
-        growSnake();
-        growSnake();
-        growSnake();
-        growSnake();
-        growSnake();
-        growSnake();
-        growSnake();
-        growSnake();
-        growSnake();
-        growSnake();
-        growSnake();
-        growSnake();
-        growSnake();
-        growSnake();
-        growSnake();
-        growSnake();
-        growSnake();
-        growSnake();
-        growSnake();
-
 
     }
 
@@ -121,7 +93,7 @@ public class GameManager {
         frame.addKeyListener(new PauseListener());
     }
 
-    private void growSnake() {
+    public synchronized void growSnake() {
         SnakeBody body = componentFactory.createBody();
         frame.getContentPane().add(body);
         SnakeBody body2 = componentFactory.createBody();
@@ -174,6 +146,7 @@ public class GameManager {
 
         frame.getContentPane().add(gameOverElement);
         frame.setComponentZOrder(gameOverElement, 0);
+        frame.revalidate();
         frame.repaint();
 
         int labelWidth = 350;
@@ -184,6 +157,17 @@ public class GameManager {
 
         gameOver = true;
         snake.setPaused(true);
+    }
+
+    public synchronized void addFood(SmallFood sf) {
+        frame.getContentPane().add(sf);
+        frame.revalidate();
+        frame.repaint();
+    }
+    public synchronized void removeFood(SmallFood sf) {
+        frame.getContentPane().remove(sf);
+        frame.revalidate();
+        frame.repaint();
     }
 
     public synchronized boolean gameOver() {

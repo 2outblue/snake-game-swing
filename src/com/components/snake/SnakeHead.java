@@ -9,6 +9,8 @@ public class SnakeHead extends JComponent implements SnakeComponent{
 
     private int size;
     private Direction direction;
+
+    private Rectangle previousBounds;
     private boolean directionChange;
     public SnakeHead(int size) {
         setPreferredSize(new Dimension(size, size));
@@ -63,6 +65,14 @@ public class SnakeHead extends JComponent implements SnakeComponent{
 
     public synchronized void setDirection(Direction direction) {
         this.direction = direction;
+    }
+
+    public synchronized Rectangle getPreviousBounds() {
+        return previousBounds;
+    }
+
+    public synchronized void setPreviousBounds(Rectangle previousBounds) {
+        this.previousBounds = previousBounds;
     }
 
     public synchronized void display(Rectangle bounds){

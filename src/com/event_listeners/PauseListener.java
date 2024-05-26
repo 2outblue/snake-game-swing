@@ -1,6 +1,7 @@
 package com.event_listeners;
 
 import com.GameManager;
+import com.game_objects.Snake;
 
 import javax.swing.*;
 import java.awt.event.KeyAdapter;

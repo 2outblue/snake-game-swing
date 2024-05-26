@@ -1,5 +1,6 @@
 package com.components;
 
+import com.components.food.SmallFood;
 import com.components.snake.SnakeBody;
 import com.components.snake.SnakeHead;
 import com.components.snake.SnakeTail;
@@ -72,6 +73,10 @@ public class ComponentFactory {
         label.setBorder(new LineBorder(Color.GREEN, 2));
 
         return label;
+    }
+
+    public SmallFood createSmallFood() {
+        return new SmallFood();
     }
 
     public static ComponentFactory getInstance() {

@@ -1,9 +1,12 @@
 package com.threads;
 
 import com.GameManager;
+import com.components.ComponentFactory;
+import com.components.food.SmallFood;
 import com.game_objects.Snake;
 
 import java.awt.*;
+import java.util.Random;
 
 public class SnakeMovementThread implements Runnable{
 
@@ -11,19 +14,28 @@ public class SnakeMovementThread implements Runnable{
 
     private Snake snake;
 
+    private SmallFood smallFood;
+
     //maybe should be isRunning ?
     private boolean isMoving;
+
+    private Rectangle headBounds;
+    private Rectangle previousBounds;
+
+    int test1 = 0;
 
     public SnakeMovementThread() {
         snake = Snake.getInstance();
         isMoving = true;
+        headBounds = snake.getHead().getBounds();
+        previousBounds = headBounds;
     }
 
     @Override
     public void run() {
-
+        spawnFood();
         while (isMoving) {
-            Rectangle headBounds = snake.getHead().getBounds();
+            headBounds = snake.getHead().getBounds();
 //            Direction headDirection = snake.getHead().getDirection();
             int step = 5;
             if (!snake.isPaused()) {
@@ -41,7 +53,14 @@ public class SnakeMovementThread implements Runnable{
                         snake.getHead().setBounds(headBounds.x + step, headBounds.y, headBounds.width, headBounds.height);
                 }
                 if (borderCollision() || selfCollision()) {
-                    GameManager.getInstance().pauseGame();
+                    GameManager.getInstance().endGame();
+                }
+                // take that out to the food thread along with the relevant methods
+                if (foodCollision()) {
+                    GameManager.getInstance().removeFood(smallFood);
+                    GameManager.getInstance().growSnake();
+
+                    spawnFood();
                 }
                 snake.paintBody();
 
@@ -53,7 +72,7 @@ public class SnakeMovementThread implements Runnable{
             } catch (InterruptedException e) {
                 throw new RuntimeException(e);
             }
-
+            previousBounds = headBounds;
         }
     }
 
@@ -83,6 +102,35 @@ public class SnakeMovementThread implements Runnable{
             }
         }
 //        System.out.println(snakeX + "<-X snake Y->" + snakeY);
+        return false;
+    }
+
+    private void spawnFood() {
+        Random random = new Random();
+        smallFood = ComponentFactory.getInstance().createSmallFood();
+        int randomX = random.nextInt(100, 690);
+        int randomY = random.nextInt(80, 670);
+
+        smallFood.setBounds(randomX, randomY, smallFood.getPreferredSize().width, smallFood.getPreferredSize().height);
+        GameManager.getInstance().addFood(smallFood);
+    }
+    private boolean foodCollision() {
+        int snakeX = headBounds.x;
+        int snakeY = headBounds.y;
+
+        int foodX = smallFood.getBounds().x;
+        int foodY = smallFood.getBounds().y;
+
+        if ((snakeX >= foodX && snakeX <= foodX + 12) && (snakeY >= foodY && snakeY <= foodY + 12)) {
+            System.out.println("Food collision");
+            return true;
+        }
+        snakeX = previousBounds.x;
+        snakeY = previousBounds.y;
+        if ((snakeX + 11 >= foodX && snakeX <= foodX + 12) && (snakeY + 11 >= foodY && snakeY <= foodY + 12)) {
+            System.out.println("Food collision");
+            return true;
+        }
         return false;
     }
 
