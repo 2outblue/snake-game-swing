@@ -57,6 +57,40 @@ public class GameManager {
         growSnake();
         growSnake();
         growSnake();
+        growSnake();
+        growSnake();
+        growSnake();
+        growSnake();
+        growSnake();
+        growSnake();
+        growSnake();
+        growSnake();
+        growSnake();
+        growSnake();
+        growSnake();
+        growSnake();
+        growSnake();
+        growSnake();
+        growSnake();
+        growSnake();
+        growSnake();
+        growSnake();
+        growSnake();
+        growSnake();
+        growSnake();
+        growSnake();
+        growSnake();
+        growSnake();
+        growSnake();
+        growSnake();
+        growSnake();
+        growSnake();
+        growSnake();
+        growSnake();
+        growSnake();
+        growSnake();
+        growSnake();
+        growSnake();
 
 
     }

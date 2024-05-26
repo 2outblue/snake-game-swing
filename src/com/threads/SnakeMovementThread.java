@@ -40,8 +40,8 @@ public class SnakeMovementThread implements Runnable{
                     case RIGHT:
                         snake.getHead().setBounds(headBounds.x + step, headBounds.y, headBounds.width, headBounds.height);
                 }
-                if (borderCollision()) {
-                    GameManager.getInstance().endGame();
+                if (borderCollision() || selfCollision()) {
+                    GameManager.getInstance().pauseGame();
                 }
                 snake.paintBody();
 
@@ -69,6 +69,20 @@ public class SnakeMovementThread implements Runnable{
     }
 
     private boolean selfCollision() {
+        int snakeX = snake.getHead().getBounds().x;
+        int snakeY = snake.getHead().getBounds().y;
+        //doesn't check for the first two blocks (the first one always collides since there is a 5px overlap
+        // with the snakeHead, doesn't check for the second and third for safety)
+        for (int i = 3; i < snake.getBody().size(); i++) {
+            Rectangle compBounds = snake.getBody().get(i).getBounds();
+            int compX = compBounds.x;
+            int compY = compBounds.y;
+//            System.out.println(String.format("Component %d - coords x:%d--y:%d",i, compX, compY));
+            if ((snakeX > compX && snakeX < compX + 10) && (snakeY > compY && snakeY < compY + 10)) {
+                return true;
+            }
+        }
+//        System.out.println(snakeX + "<-X snake Y->" + snakeY);
         return false;
     }
 

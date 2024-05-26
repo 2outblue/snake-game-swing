@@ -10,7 +10,7 @@ import java.awt.*;
 
 public class ComponentFactory {
 
-    private final int COMPONENT_SIZE = 10;
+    public static final int COMPONENT_SIZE = 10;
     private static ComponentFactory instance;
     private JFrame frame;
     private SnakeHead snakeHead;
