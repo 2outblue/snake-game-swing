@@ -22,8 +22,6 @@ public class SnakeMovementThread implements Runnable{
     private Rectangle headBounds;
     private Rectangle previousBounds;
 
-    int test1 = 0;
-
     public SnakeMovementThread() {
         snake = Snake.getInstance();
         isMoving = true;
@@ -76,10 +74,6 @@ public class SnakeMovementThread implements Runnable{
         }
     }
 
-    public synchronized void moving(boolean moving) {
-        isMoving = moving;
-    }
-
     private boolean borderCollision() {
         int snakeX = snake.getHead().getBounds().x;
         int snakeY = snake.getHead().getBounds().y;
@@ -115,6 +109,7 @@ public class SnakeMovementThread implements Runnable{
         GameManager.getInstance().addFood(smallFood);
     }
     private boolean foodCollision() {
+        //can this cause issues?
         int snakeX = headBounds.x;
         int snakeY = headBounds.y;
 
