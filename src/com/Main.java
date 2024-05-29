@@ -5,8 +5,6 @@ public class Main {
 
         GameManager gameManager = GameManager.getInstance();
 
-
-
         javax.swing.SwingUtilities.invokeLater(new Runnable() {
             public void run() {
                 gameManager.createAndShowGame();

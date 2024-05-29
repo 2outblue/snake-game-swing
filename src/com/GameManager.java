@@ -130,6 +130,7 @@ public class GameManager {
             frame.setComponentZOrder(pauseElement, 0);
             frame.repaint();
 
+            // calculate bounds which will show the label in the center of the window(frame)
             int labelWidth = 300;
             int labelHeight = 140;
             int x = (frame.getWidth() - labelWidth) / 2;

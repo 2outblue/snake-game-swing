@@ -2,6 +2,7 @@ package com.threads;
 
 import com.GameManager;
 import com.components.ComponentFactory;
+import com.components.constants.ComponentConst;
 import com.components.food.SmallFood;
 import com.game_objects.Snake;
 
@@ -20,13 +21,11 @@ public class SnakeMovementThread implements Runnable{
     private boolean isMoving;
 
     private Rectangle headBounds;
-    private Rectangle previousBounds;
 
     public SnakeMovementThread() {
         snake = Snake.getInstance();
         isMoving = true;
         headBounds = snake.getHead().getBounds();
-        previousBounds = headBounds;
     }
 
     @Override
@@ -70,7 +69,6 @@ public class SnakeMovementThread implements Runnable{
             } catch (InterruptedException e) {
                 throw new RuntimeException(e);
             }
-            previousBounds = headBounds;
         }
     }
 
@@ -109,24 +107,15 @@ public class SnakeMovementThread implements Runnable{
         GameManager.getInstance().addFood(smallFood);
     }
     private boolean foodCollision() {
-        //can this cause issues?
+        //can headBounds.x/y cause issues? (not .get, so its not going through a synch method?)
         int snakeX = headBounds.x;
         int snakeY = headBounds.y;
-
         int foodX = smallFood.getBounds().x;
         int foodY = smallFood.getBounds().y;
 
-        if ((snakeX >= foodX && snakeX <= foodX + 12) && (snakeY >= foodY && snakeY <= foodY + 12)) {
-            System.out.println("Food collision");
-            return true;
-        }
-        snakeX = previousBounds.x;
-        snakeY = previousBounds.y;
-        if ((snakeX + 11 >= foodX && snakeX <= foodX + 12) && (snakeY + 11 >= foodY && snakeY <= foodY + 12)) {
-            System.out.println("Food collision");
-            return true;
-        }
-        return false;
+        //            System.out.println("Food collision");
+        return (snakeX + ComponentConst.SNAKE_COMPONENT_SIZE >= foodX && snakeX <= foodX + ComponentConst.FOOD_SIZE) &&
+                (snakeY + ComponentConst.SNAKE_COMPONENT_SIZE >= foodY && snakeY <= foodY + ComponentConst.FOOD_SIZE);
     }
 
 }
