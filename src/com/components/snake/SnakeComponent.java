@@ -5,10 +5,14 @@ import com.components.constants.Direction;
 import javax.swing.*;
 import java.awt.*;
 
-public interface SnakeComponent{
+public abstract class SnakeComponent{
 
-    Direction getDirection();
+    public Direction getDirection() {
+        return null;
+    }
 
-    Rectangle getBounds();
+    public Rectangle getBounds() {
+        return null;
+    }
 
 }

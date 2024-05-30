@@ -5,7 +5,7 @@ import com.components.constants.Direction;
 import javax.swing.*;
 import java.awt.*;
 
-public class SnakeTail extends JComponent implements SnakeComponent {
+public class SnakeTail extends JComponent {
 
     private Direction direction;
     private int size;
@@ -23,7 +23,6 @@ public class SnakeTail extends JComponent implements SnakeComponent {
         g.fillRect(0, 0, this.size, this.size);
     }
 
-    @Override
     public Direction getDirection() {
         return null;
     }

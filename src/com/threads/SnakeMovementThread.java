@@ -3,7 +3,9 @@ package com.threads;
 import com.GameManager;
 import com.components.ComponentFactory;
 import com.components.constants.ComponentConst;
+import com.components.constants.Direction;
 import com.components.food.SmallFood;
+import com.components.snake.SnakeHead;
 import com.game_objects.Snake;
 
 import java.awt.*;
@@ -13,42 +15,62 @@ public class SnakeMovementThread implements Runnable{
 
     private int movementSpeedInverse = 33;
 
-    private Snake snake;
+    private final Snake snake;
 
     private SmallFood smallFood;
 
     //maybe should be isRunning ?
-    private boolean isMoving;
+    private boolean isRunning;
 
     private Rectangle headBounds;
 
+    private boolean skip = false;
+
     public SnakeMovementThread() {
         snake = Snake.getInstance();
-        isMoving = true;
+        isRunning = true;
         headBounds = snake.getHead().getBounds();
     }
 
     @Override
     public void run() {
         spawnFood();
-        while (isMoving) {
-            headBounds = snake.getHead().getBounds();
-//            Direction headDirection = snake.getHead().getDirection();
-            int step = 5;
+        Direction updatedDirection = snake.getHead().getDirection();
+        int step = 6;
+        while (isRunning) {
+            SnakeHead head = snake.getHead();
+            headBounds = head.getBounds();
+
+            // this skips checking for the actual direction once per two 'frames' (updates) -this is
+            // so the snake can't turn around quicker than 12px - which would be less than its body width
+            // and it will immediately collide with itself - this presents another problem, but this is solved and
+            // explained in the HeadDirectionChangeListener
+            if (!skip) {
+                updatedDirection = head.getDirection();
+                skip = true;
+            } else {
+                skip = false;
+            }
+
             if (!snake.isPaused()) {
-                switch (snake.getHead().getDirection()) {
-                    case UP:
-                        snake.getHead().setBounds(headBounds.x, headBounds.y - step, headBounds.width, headBounds.height);
-                        break;
-                    case DOWN:
-                        snake.getHead().setBounds(headBounds.x, headBounds.y + step, headBounds.width, headBounds.height);
-                        break;
-                    case LEFT:
-                        snake.getHead().setBounds(headBounds.x - step, headBounds.y, headBounds.width, headBounds.height);
-                        break;
-                    case RIGHT:
-                        snake.getHead().setBounds(headBounds.x + step, headBounds.y, headBounds.width, headBounds.height);
+                if (updatedDirection == Direction.UP) {
+                    head.setBounds(headBounds.x, headBounds.y - step, headBounds.width, headBounds.height);
+                    head.setAngle(3.141592653);
+                    snake.setPreviousDirectionInput(Direction.UP);
+                } else if (updatedDirection == Direction.DOWN) {
+                    head.setBounds(headBounds.x, headBounds.y + step, headBounds.width, headBounds.height);
+                    head.setAngle(0.0);
+                    snake.setPreviousDirectionInput(Direction.DOWN);
+                } else if (updatedDirection == Direction.LEFT) {
+                    head.setBounds(headBounds.x - step, headBounds.y, headBounds.width, headBounds.height);
+                    head.setAngle(1.5708);
+                    snake.setPreviousDirectionInput(Direction.LEFT);
+                } else if (updatedDirection == Direction.RIGHT) {
+                    head.setBounds(headBounds.x + step, headBounds.y, headBounds.width, headBounds.height);
+                    head.setAngle(4.71239);
+                    snake.setPreviousDirectionInput(Direction.RIGHT);
                 }
+
                 if (borderCollision() || selfCollision()) {
                     GameManager.getInstance().endGame();
                 }
@@ -59,10 +81,9 @@ public class SnakeMovementThread implements Runnable{
 
                     spawnFood();
                 }
-                snake.paintBody();
+                snake.paintBody(headBounds);
 
             }
-
 
             try {
                 Thread.sleep(movementSpeedInverse);
@@ -80,8 +101,8 @@ public class SnakeMovementThread implements Runnable{
     }
 
     private boolean selfCollision() {
-        int snakeX = snake.getHead().getBounds().x;
-        int snakeY = snake.getHead().getBounds().y;
+        int headX = snake.getHead().getBounds().x;
+        int headY = snake.getHead().getBounds().y;
         //doesn't check for the first two blocks (the first one always collides since there is a 5px overlap
         // with the snakeHead, doesn't check for the second and third for safety)
         for (int i = 3; i < snake.getBody().size(); i++) {
@@ -89,7 +110,8 @@ public class SnakeMovementThread implements Runnable{
             int compX = compBounds.x;
             int compY = compBounds.y;
 //            System.out.println(String.format("Component %d - coords x:%d--y:%d",i, compX, compY));
-            if ((snakeX > compX && snakeX < compX + 10) && (snakeY > compY && snakeY < compY + 10)) {
+            if ((headX > compX && headX < compX + ComponentConst.SNAKE_COMPONENT_SIZE) &&
+                    (headY > compY && headY < compY + ComponentConst.SNAKE_COMPONENT_SIZE)) {
                 return true;
             }
         }
@@ -114,8 +136,8 @@ public class SnakeMovementThread implements Runnable{
         int foodY = smallFood.getBounds().y;
 
         //            System.out.println("Food collision");
-        return (snakeX + ComponentConst.SNAKE_COMPONENT_SIZE >= foodX && snakeX <= foodX + ComponentConst.FOOD_SIZE) &&
-                (snakeY + ComponentConst.SNAKE_COMPONENT_SIZE >= foodY && snakeY <= foodY + ComponentConst.FOOD_SIZE);
+        return (snakeX + ComponentConst.SNAKE_HEAD_20 - 5 >= foodX && snakeX <= foodX + ComponentConst.FOOD_SIZE) &&
+                (snakeY + ComponentConst.SNAKE_HEAD_20  - 5>= foodY && snakeY <= foodY + ComponentConst.FOOD_SIZE);
     }
 
 }

@@ -1,5 +1,6 @@
 package com.components;
 
+import com.components.constants.ComponentConst;
 import com.components.food.SmallFood;
 import com.components.snake.SnakeBody;
 import com.components.snake.SnakeHead;
@@ -11,7 +12,7 @@ import java.awt.*;
 
 public class ComponentFactory {
 
-    public static final int COMPONENT_SIZE = 10;
+    public static final int COMPONENT_SIZE = ComponentConst.SNAKE_COMPONENT_SIZE;
     private static ComponentFactory instance;
     private JFrame frame;
     private SnakeHead snakeHead;
@@ -33,7 +34,7 @@ public class ComponentFactory {
 
     public SnakeHead createHead() {
         if (this.snakeHead == null) {
-            return new SnakeHead(COMPONENT_SIZE);
+            return new SnakeHead(ComponentConst.SNAKE_HEAD_20);
         }
         return this.snakeHead;
     }
@@ -84,6 +85,5 @@ public class ComponentFactory {
                 instance = new ComponentFactory();
             }
             return instance;
-
     }
 }

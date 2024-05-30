@@ -13,7 +13,8 @@ public class Snake {
    private SnakeHead head;
    private List<SnakeBody> body;
 
-   private Direction currentInput;
+   private Direction currentDirectionInput;
+   private Direction previousDirectionInput;
 
    private boolean paused;
 
@@ -22,31 +23,12 @@ public class Snake {
         this.body = body;
     }
 
-//    private void setBody(List<SnakeComponent<JComponent>> list){
-////        if (list.size() < 3) {
-////            throw new IllegalArgumentException("Snake body can't be less than 3 components");
-////        }
-////        if (list.get(0).getClass().getSimpleName().equals("SnakeHead")) {
-////            throw new IllegalArgumentException("First component of snake is not a head");
-////        }
-//        body = list;
-//    }
-
     public synchronized SnakeHead getHead(){
         return head;
     }
 
     public synchronized List<SnakeBody> getBody(){
         return body;
-    }
-
-    public synchronized void updateHead(Rectangle bounds, Direction direction) {
-        head.setDirection(direction);
-        head.setBounds(bounds);
-    }
-
-    public synchronized void setBody(List<SnakeBody> newBody) {
-        body = newBody;
     }
 
     public synchronized static Snake getInstance(){
@@ -59,36 +41,74 @@ public class Snake {
         }
     }
 
-    public synchronized void grow(SnakeBody b) {
+    public void grow(SnakeBody b) {
         b.setDirection(body.getLast().getDirection());
         body.addLast(b);
     }
 
-    public synchronized void paintBody() {
-        Rectangle previousBounds = getHead().getBounds();
+    public synchronized void paintBody(Rectangle headBounds) {
+        Rectangle previousBounds = headBounds;
         Direction previousDirection = getHead().getReverseDirection();
+        previousBounds.x+= 0;
+        previousBounds.y-= 0;
+//
+//
+//        for (SnakeBody bodyPart : getBody()) {
+//            Rectangle nextBounds = bodyPart.getBounds();
+//            Direction nextDirection = bodyPart.getDirection();
+//
+//            if (nextDirection == Direction.DOWN) {
+//                // y+
+//                bodyPart.setBounds(previousBounds.x, previousBounds.y, previousBounds.width, previousBounds.height);
+//                bodyPart.setDirection(previousDirection);
+//            } else if (nextDirection == Direction.UP) {
+//                //y-
+//                bodyPart.setBounds(previousBounds.x, previousBounds.y, previousBounds.width, previousBounds.height);
+//                bodyPart.setDirection(previousDirection);
+//            } else if (nextDirection == Direction.LEFT) {
+//                //x-
+//                bodyPart.setBounds(previousBounds.x, previousBounds.y, previousBounds.width, previousBounds.height);
+//                bodyPart.setDirection(previousDirection);
+//            } else if (nextDirection == Direction.RIGHT) {
+//                //x+
+//                bodyPart.setBounds(previousBounds.x, previousBounds.y, previousBounds.width, previousBounds.height);
+//                bodyPart.setDirection(previousDirection);
+//            }
+//
+//
+//            previousBounds = nextBounds;
+//            previousDirection = nextDirection;
+//        }
 
 
-        for (SnakeBody snakeBody : getBody()) {
-            Rectangle nextBounds = snakeBody.getBounds();
-            Direction nextDirection = snakeBody.getDirection();
+        for (int i = 0; i < getBody().size(); i++) {
+            SnakeBody bodyPart = getBody().get(i);
+            if (i < 1) {
+//                bodyPart.getGraphics().setColor(Color.GREEN);
+//                bodyPart.getGraphics().fillRect(0,0, bodyPart.getWidth(), bodyPart.getHeight());
+                bodyPart.setSquareTransparency(0.0F);
+                bodyPart.repaint();
+            }
+
+            Rectangle nextBounds = bodyPart.getBounds();
+            Direction nextDirection = bodyPart.getDirection();
 
             if (nextDirection == Direction.DOWN) {
                 // y+
-                snakeBody.setBounds(previousBounds.x, previousBounds.y, previousBounds.width, previousBounds.height);
-                snakeBody.setDirection(previousDirection);
+                bodyPart.setBounds(previousBounds.x, previousBounds.y, previousBounds.width, previousBounds.height);
+                bodyPart.setDirection(previousDirection);
             } else if (nextDirection == Direction.UP) {
                 //y-
-                snakeBody.setBounds(previousBounds.x, previousBounds.y, previousBounds.width, previousBounds.height);
-                snakeBody.setDirection(previousDirection);
+                bodyPart.setBounds(previousBounds.x, previousBounds.y, previousBounds.width, previousBounds.height);
+                bodyPart.setDirection(previousDirection);
             } else if (nextDirection == Direction.LEFT) {
                 //x-
-                snakeBody.setBounds(previousBounds.x, previousBounds.y, previousBounds.width, previousBounds.height);
-                snakeBody.setDirection(previousDirection);
+                bodyPart.setBounds(previousBounds.x, previousBounds.y, previousBounds.width, previousBounds.height);
+                bodyPart.setDirection(previousDirection);
             } else if (nextDirection == Direction.RIGHT) {
                 //x+
-                snakeBody.setBounds(previousBounds.x, previousBounds.y, previousBounds.width, previousBounds.height);
-                snakeBody.setDirection(previousDirection);
+                bodyPart.setBounds(previousBounds.x, previousBounds.y, previousBounds.width, previousBounds.height);
+                bodyPart.setDirection(previousDirection);
             }
 
 
@@ -97,13 +117,13 @@ public class Snake {
         }
     }
 
-    public synchronized Direction getCurrentInput() {
-        return currentInput;
+    public synchronized Direction getCurrentDirectionInput() {
+        return currentDirectionInput;
     }
 
-    public synchronized void setCurrentInput(Direction currentInput) {
-        getHead().setDirection(currentInput);
-        this.currentInput = currentInput;
+    public synchronized void setCurrentDirectionInput(Direction currentDirectionInput) {
+        getHead().setDirection(currentDirectionInput);
+        this.currentDirectionInput = currentDirectionInput;
     }
 
     public synchronized boolean isPaused() {
@@ -112,5 +132,13 @@ public class Snake {
 
     public synchronized void setPaused(boolean paused) {
         this.paused = paused;
+    }
+
+    public synchronized Direction getPreviousDirectionInput() {
+        return previousDirectionInput;
+    }
+
+    public synchronized void setPreviousDirectionInput(Direction previousDirectionInput) {
+        this.previousDirectionInput = previousDirectionInput;
     }
 }

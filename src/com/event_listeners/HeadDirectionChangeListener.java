@@ -16,15 +16,23 @@ public class HeadDirectionChangeListener extends KeyAdapter {
 
     @Override
     public void keyPressed(KeyEvent e) {
-        Direction currentDir = snake.getCurrentInput();
-        if (e.getKeyCode() == KeyEvent.VK_LEFT && currentDir != Direction.RIGHT) {
-            snake.setCurrentInput(Direction.LEFT);
-        } else if (e.getKeyCode() == KeyEvent.VK_RIGHT && currentDir != Direction.LEFT) {
-            snake.setCurrentInput(Direction.RIGHT);
-        } else if (e.getKeyCode() == KeyEvent.VK_UP && currentDir != Direction.DOWN) {
-            snake.setCurrentInput(Direction.UP);
-        } else if (e.getKeyCode() == KeyEvent.VK_DOWN && currentDir != Direction.UP) {
-            snake.setCurrentInput(Direction.DOWN);
+        // the currentDir exists so you cant turn from UP to DOWN directly - not a valid input
+        Direction currentDir = snake.getCurrentDirectionInput();
+
+        // last dir exists in tandem with the updatedDirection in the SnakeMovementThread - prevents
+        // the snake from turning around quicker than 12 px - because you can have two inputs within the
+        // time it takes to 'refresh' two times, your currentDir can change twice before the snake head updates
+        // so this still turns the snake from up to down directly - to prevent that lastDir is needed
+        Direction lastDir = snake.getPreviousDirectionInput();
+
+        if (e.getKeyCode() == KeyEvent.VK_LEFT && currentDir != Direction.RIGHT && lastDir != Direction.RIGHT) {
+            snake.setCurrentDirectionInput(Direction.LEFT);
+        } else if (e.getKeyCode() == KeyEvent.VK_RIGHT && currentDir != Direction.LEFT && lastDir != Direction.LEFT) {
+            snake.setCurrentDirectionInput(Direction.RIGHT);
+        } else if (e.getKeyCode() == KeyEvent.VK_UP && currentDir != Direction.DOWN && lastDir != Direction.DOWN) {
+            snake.setCurrentDirectionInput(Direction.UP);
+        } else if (e.getKeyCode() == KeyEvent.VK_DOWN && currentDir != Direction.UP && lastDir != Direction.UP) {
+            snake.setCurrentDirectionInput(Direction.DOWN);
         }
     }
 }

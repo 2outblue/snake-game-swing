@@ -2,6 +2,7 @@ package com;
 
 import com.components.ComponentFactory;
 import com.components.border.BorderComponent;
+import com.components.constants.ComponentConst;
 import com.components.food.SmallFood;
 import com.components.snake.SnakeBody;
 import com.components.snake.SnakeHead;
@@ -68,13 +69,17 @@ public class GameManager {
     }
 
     private void setInitialSnakePosition(){
-        snake.getHead().setBounds(390, 390, 15, 15);
+        snake.getHead().setBounds(390, 390, ComponentConst.SNAKE_HEAD_20, ComponentConst.SNAKE_HEAD_20);
     }
 
     private void createSnake() {
         SnakeHead h1 = componentFactory.createHead();
         h1.setDirection(Direction.UP);
+//        h1.setBounds(390, 390, ComponentConst.SNAKE_COMPONENT_SIZE, ComponentConst.SNAKE_COMPONENT_SIZE);
         frame.getContentPane().add(h1);
+//        frame.setComponentZOrder(h1, 0);
+        frame.revalidate();
+        frame.repaint();
 
         SnakeBody body1 = componentFactory.createBody();
         body1.setDirection(Direction.DOWN);
