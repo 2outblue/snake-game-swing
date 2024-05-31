@@ -24,7 +24,7 @@ public class SnakeHead extends JComponent{
         this.direction = Direction.UP;
         try {
             this.image = ImageIO.read(new File("src/resources/snake-head-20.png"));
-            System.out.println("loaded");
+//            System.out.println("loaded");
         } catch (IOException e) {
             e.printStackTrace();
         }

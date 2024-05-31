@@ -7,6 +7,8 @@ import com.components.food.SmallFood;
 import com.components.snake.SnakeBody;
 import com.components.snake.SnakeHead;
 import com.components.constants.Direction;
+import com.components.snake.tail.TailComponent;
+import com.components.snake.tail.TailPart;
 import com.event_listeners.HeadDirectionChangeListener;
 import com.event_listeners.PauseListener;
 import com.game_objects.Border;
@@ -57,14 +59,6 @@ public class GameManager {
         growSnake();
         growSnake();
         growSnake();
-        growSnake();
-        growSnake();
-        growSnake();
-        growSnake();
-        growSnake();
-        growSnake();
-        growSnake();
-        growSnake();
 
     }
 
@@ -88,7 +82,30 @@ public class GameManager {
         List<SnakeBody> bl = new ArrayList<>();
         bl.add(body1);
 
-        Snake.instantiateSnake(h1, bl);
+        List<SnakeBody> tail = new ArrayList<>();
+        SnakeBody tailPart12 = componentFactory.createTailPart(12, ComponentConst.TAIL_12);
+        frame.getContentPane().add(tailPart12);
+        tail.add(tailPart12);
+        SnakeBody tailPart = componentFactory.createTailPart(11, ComponentConst.TAIL_11);
+        frame.getContentPane().add(tailPart);
+        tail.add(tailPart);
+        SnakeBody tailPart2 = componentFactory.createTailPart(10, ComponentConst.TAIL_10);
+        frame.getContentPane().add(tailPart2);
+        tail.add(tailPart2);
+        SnakeBody tailPart3 = componentFactory.createTailPart(9, ComponentConst.TAIL_9);
+        frame.getContentPane().add(tailPart3);
+        tail.add(tailPart3);
+        SnakeBody tailPart4 = componentFactory.createTailPart(8, ComponentConst.TAIL_8);
+        frame.getContentPane().add(tailPart4);
+        tail.add(tailPart4);
+        SnakeBody tailPart5 = componentFactory.createTailPart(7, ComponentConst.TAIL_7);
+        frame.getContentPane().add(tailPart5);
+        tail.add(tailPart5);
+        SnakeBody tailPart6 = componentFactory.createTailPart(5, ComponentConst.TAIL_5);
+        frame.getContentPane().add(tailPart6);
+        tail.add(tailPart6);
+
+        Snake.instantiateSnake(h1, bl, tail);
         snake = Snake.getInstance();
     }
 

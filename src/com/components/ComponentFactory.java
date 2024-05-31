@@ -4,7 +4,6 @@ import com.components.constants.ComponentConst;
 import com.components.food.SmallFood;
 import com.components.snake.SnakeBody;
 import com.components.snake.SnakeHead;
-import com.components.snake.SnakeTail;
 
 import javax.swing.*;
 import javax.swing.border.LineBorder;
@@ -12,24 +11,21 @@ import java.awt.*;
 
 public class ComponentFactory {
 
-    public static final int COMPONENT_SIZE = ComponentConst.SNAKE_COMPONENT_SIZE;
     private static ComponentFactory instance;
     private JFrame frame;
     private SnakeHead snakeHead;
-    private SnakeTail snakeTail;
+//    private TailComponent snakeTail;
 
     private ComponentFactory() {
     }
 
-    public SnakeTail createTail() {
-        if (this.snakeHead == null) {
-            return new SnakeTail(COMPONENT_SIZE);
-        }
-        return this.snakeTail;
+    public SnakeBody createTailPart(int size, String path) {
+        return new SnakeBody(size, path);
+
     }
 
     public SnakeBody createBody() {
-        return new SnakeBody(COMPONENT_SIZE);
+        return new SnakeBody(ComponentConst.SNAKE_COMPONENT_SIZE, ComponentConst.BODY_13);
     }
 
     public SnakeHead createHead() {

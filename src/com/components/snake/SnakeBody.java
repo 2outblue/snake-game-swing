@@ -16,12 +16,12 @@ public class SnakeBody extends JComponent{
     Image image;
 
     private float transparency = 1.0f;
-    public SnakeBody(int size) {
+    public SnakeBody(int size, String path) {
         setPreferredSize(new Dimension(size, size));
         this.size = size;
         this.direction = Direction.DOWN;
         try {
-            this.image = ImageIO.read(new File("src/resources/body13.png"));
+            this.image = ImageIO.read(new File(path));
 //            System.out.println("loaded");
         } catch (IOException e) {
             e.printStackTrace();
