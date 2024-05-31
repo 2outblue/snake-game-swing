@@ -74,7 +74,7 @@ public class SnakeMovementThread implements Runnable{
                 }
 
                 if (borderCollision() || selfCollision()) {
-                    GameManager.getInstance().pauseGame();
+                    GameManager.getInstance().endGame();
                 }
                 // take that out to the food thread along with the relevant methods, maybe
                 if (foodCollision()) {

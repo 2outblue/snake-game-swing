@@ -88,7 +88,7 @@ public class ComponentFactory {
     }
 
     public SmallFood createSmallFood() {
-        return new SmallFood();
+        return new SmallFood(ComponentConst.FOOD_SIZE, ComponentConst.APPLE_RED_1);
     }
 
     public static ComponentFactory getInstance() {
