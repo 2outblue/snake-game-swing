@@ -13,10 +13,18 @@ public class ComponentFactory {
 
     private static ComponentFactory instance;
     private JFrame frame;
-    private SnakeHead snakeHead;
+    private String[] pattern;
+    private int repeatCounter;
+    private final int patternRepeater;
+    private int patternPointer;
+
 //    private TailComponent snakeTail;
 
     private ComponentFactory() {
+        repeatCounter = 1;
+        patternPointer = 0;
+        patternRepeater = 2;
+        makePattern();
     }
 
     public SnakeBody createTailPart(int size, String path) {
@@ -25,14 +33,21 @@ public class ComponentFactory {
     }
 
     public SnakeBody createBody() {
-        return new SnakeBody(ComponentConst.SNAKE_COMPONENT_SIZE, ComponentConst.BODY_13);
+        repeatCounter++;
+
+        if (repeatCounter > patternRepeater) {
+            repeatCounter = 1;
+
+            patternPointer++;
+            if (patternPointer > 4) {patternPointer = 0;}
+        }
+        return new SnakeBody(ComponentConst.SNAKE_COMPONENT_SIZE, pattern[patternPointer]);
     }
 
     public SnakeHead createHead() {
-        if (this.snakeHead == null) {
-            return new SnakeHead(ComponentConst.SNAKE_HEAD_20);
-        }
-        return this.snakeHead;
+
+        return new SnakeHead(ComponentConst.SNAKE_HEAD_20);
+
     }
 
     public JFrame createFrame() {
@@ -81,5 +96,15 @@ public class ComponentFactory {
                 instance = new ComponentFactory();
             }
             return instance;
+    }
+
+    private void makePattern() {
+        pattern = new String[5];
+
+        pattern[0] = ComponentConst.BODY_13_GREEN;
+        pattern[1] = ComponentConst.BODY_13_RED;
+        pattern[2] = ComponentConst.BODY_13_PURPLE;
+        pattern[3] = ComponentConst.BODY_13_YELLOW;
+        pattern[4] = ComponentConst.BODY_13_BLUE;
     }
 }

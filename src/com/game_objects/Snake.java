@@ -1,5 +1,6 @@
 package com.game_objects;
 
+import com.components.constants.ComponentConst;
 import com.components.snake.SnakeBody;
 import com.components.snake.SnakeHead;
 import com.components.constants.Direction;
@@ -46,13 +47,12 @@ public class Snake {
         }
     }
 
-    public void grow(SnakeBody b) {
+    public synchronized void grow(SnakeBody b) {
         b.setDirection(body.getLast().getDirection());
         body.addLast(b);
     }
 
-    // if there are issues you can try to make this method synchronized - (it was previously but
-    // you changed it because you thought it shouldn't need to be synchronized)...
+    // this method was previously synchronized, but it seems like it doesn't need to be - could cause issues ?
     public void paintBody(Rectangle headBounds) {
         Rectangle previousBounds = headBounds;
         Direction previousDirection = getHead().getReverseDirection();
@@ -65,34 +65,17 @@ public class Snake {
                 bodyPart.repaint();
             }
 
-            Rectangle nextBounds = bodyPart.getBounds();
-            Direction nextDirection = bodyPart.getDirection();
-
-//            if (nextDirection == Direction.DOWN) {
-//                // y+
-//                bodyPart.setBounds(previousBounds.x, previousBounds.y, previousBounds.width, previousBounds.height);
-//                bodyPart.setDirection(previousDirection);
-//            } else if (nextDirection == Direction.UP) {
-//                //y-
-//                bodyPart.setBounds(previousBounds.x, previousBounds.y, previousBounds.width, previousBounds.height);
-//                bodyPart.setDirection(previousDirection);
-//            } else if (nextDirection == Direction.LEFT) {
-//                //x-
-//                bodyPart.setBounds(previousBounds.x, previousBounds.y, previousBounds.width, previousBounds.height);
-//                bodyPart.setDirection(previousDirection);
-//            } else if (nextDirection == Direction.RIGHT) {
-//                //x+
-//                bodyPart.setBounds(previousBounds.x, previousBounds.y, previousBounds.width, previousBounds.height);
-//                bodyPart.setDirection(previousDirection);
-//            }
+            Rectangle currentBounds = bodyPart.getBounds();
+            Direction currentDirection = bodyPart.getDirection();
 
             bodyPart.setBounds(previousBounds);
             bodyPart.setDirection(previousDirection);
 
 
-            previousBounds = nextBounds;
-            previousDirection = nextDirection;
+            previousBounds = currentBounds;
+            previousDirection = currentDirection;
         }
+
         paintTail();
     }
 
@@ -133,8 +116,8 @@ public class Snake {
                 previousPartCurrentDirection = getTail().get(i-1).getDirection();
             }
 
-            Rectangle nextBounds = tailPart.getBounds();
-            Direction nextDirection = tailPart.getDirection();
+            Rectangle currentBounds = tailPart.getBounds();
+            Direction currentDirection = tailPart.getDirection();
 
             // this part makes the tail turn more smoothly and keep closer together when not turning - since the
             // icons are smaller, if you don't do that, they appear as small dots behind the snake and not really as a tail
@@ -148,19 +131,27 @@ public class Snake {
                 turnCompensatorFactor = 1;
             } else if (i == 5) {
                 modifier = 1;
-                deModifier = 0;
-                turnCompensatorFactor = 0;
+//                deModifier = 0;
+//                turnCompensatorFactor = 0;
             } else if (i == 6) {
                 modifier = 1;
-                deModifier = 0;
+//                deModifier = 0;
                 turnCompensatorFactor = 2;
             } else if (i > 6) {
                 modifier = 1;
-                deModifier = 0;
+//                deModifier = 0;
                 turnCompensatorFactor = 1;
             }
 
-            if (nextDirection == Direction.DOWN) {
+
+            if (currentDirection == Direction.DOWN) {
+                // applies modifier if previous part is not turning - ie current part moves closer with
+                // modifier amount of pixels. If the previous part has a different direction, the current part
+                // is moved deModifier amount of pixels in the opposite direction to where its currently going
+
+                // turnCompensatorFactor - the current part moves turnCompensatorFactor amount of pixels in the
+                // direction of the previous part (to make the turn more smooth and to overlap with the previous part
+                // so the current part is not just a separate circle behind the snake)
                 // y+
                 previousBounds.y -= modifier;
                 if (previousPartCurrentDirection == Direction.LEFT) {
@@ -170,7 +161,7 @@ public class Snake {
                     previousBounds.y += deModifier; // - same as next direction (closer together)
                     previousBounds.x -= turnCompensatorFactor; // turn compensator
                 }
-            } else if (nextDirection == Direction.UP) {
+            } else if (currentDirection == Direction.UP) {
                 //y-
                 previousBounds.y += modifier;
                 if (previousPartCurrentDirection == Direction.LEFT) {
@@ -180,7 +171,7 @@ public class Snake {
                     previousBounds.y -= deModifier; // - same as next direction (closer together)
                     previousBounds.x -= turnCompensatorFactor; // turn compensator
                 }
-            } else if (nextDirection == Direction.LEFT) {
+            } else if (currentDirection == Direction.LEFT) {
                 //x-
                 previousBounds.x += modifier;
                 if (previousPartCurrentDirection == Direction.UP) {
@@ -190,9 +181,8 @@ public class Snake {
                 } else if (previousPartCurrentDirection == Direction.DOWN) {
                     previousBounds.y -= turnCompensatorFactor; // turn compensator
                     previousBounds.x -= deModifier; // - same as next direction (closer together)
-
                 }
-            } else if (nextDirection == Direction.RIGHT) {
+            } else if (currentDirection == Direction.RIGHT) {
                 //x+
                 previousBounds.x -= modifier;
                 if (previousPartCurrentDirection == Direction.UP) {
@@ -201,15 +191,13 @@ public class Snake {
                 } else if (previousPartCurrentDirection == Direction.DOWN) {
                     previousBounds.y -= turnCompensatorFactor; // turn compensator
                     previousBounds.x += deModifier; // - same as next direction (closer together)
-
                 }
             }
-
             tailPart.setDirection(previousDirection);
             tailPart.setBounds(previousBounds);
 
-            previousBounds = nextBounds;
-            previousDirection = nextDirection;
+            previousBounds = currentBounds;
+            previousDirection = currentDirection;
         }
     }
 }

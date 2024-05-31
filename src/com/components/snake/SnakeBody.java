@@ -5,6 +5,7 @@ import com.components.constants.Direction;
 import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
+import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 
@@ -38,6 +39,11 @@ public class SnakeBody extends JComponent{
             int x = (getWidth() - image.getWidth(this)) / 2;
             int y = (getHeight() - image.getHeight(this)) / 2;
             g2d.drawImage(image, x, y, this);
+        } else {
+            Image image2 = new BufferedImage(10, 10, BufferedImage.TYPE_INT_RGB);
+            int x = (getWidth() - image2.getWidth(this)) / 2;
+            int y = (getHeight() - image2.getHeight(this)) / 2;
+            g2d.drawImage(image2, x, y, this);
         }
 
 //        g2d.setColor(Color.BLACK);
@@ -53,12 +59,12 @@ public class SnakeBody extends JComponent{
     }
 
     @Override
-    public synchronized void setBounds(Rectangle r) {
+    public void setBounds(Rectangle r) {
         super.setBounds(r);
     }
 
     @Override
-    public synchronized Rectangle getBounds(Rectangle rv) {
+    public Rectangle getBounds(Rectangle rv) {
         return super.getBounds(rv);
     }
 

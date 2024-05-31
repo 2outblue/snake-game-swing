@@ -10,6 +10,9 @@ import com.game_objects.Snake;
 import java.awt.*;
 import java.util.Random;
 
+import static java.lang.Thread.currentThread;
+
+// Currently does nothing - not even started by the ThreadGovernor
 public class FoodGenerationThread implements Runnable {
     boolean running;
 //    private SnakeHead head;
@@ -27,6 +30,7 @@ public class FoodGenerationThread implements Runnable {
 
     @Override
     public void run() {
+        System.out.println("FoodGenerationThread --> " + currentThread().getName());
         spawnFood();
         while (running) {
             if (foodCollision()) {

@@ -59,6 +59,11 @@ public class GameManager {
         growSnake();
         growSnake();
         growSnake();
+        growSnake();
+        growSnake();
+        growSnake();
+
+
 
     }
 
@@ -182,7 +187,8 @@ public class GameManager {
         snake.setPaused(true);
     }
 
-    public synchronized void addFood(SmallFood sf) {
+    // maybe make a class field SmallFood sf; and use it instead ?
+    public void addFood(SmallFood sf) {
         frame.getContentPane().add(sf);
         frame.revalidate();
         frame.repaint();

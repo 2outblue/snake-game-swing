@@ -6,7 +6,11 @@ public class ComponentConst {
     public final static int SNAKE_HEAD_20 = 26;
     public final static int FOOD_SIZE = 10;
 
-    public final static String BODY_13 = "src/resources/body13.png";
+    public final static String BODY_13_GREEN = "src/resources/body13.png";
+    public final static String BODY_13_BLUE = "src/resources/body-13-blue.png";
+    public final static String BODY_13_PURPLE = "src/resources/body-13-purple.png";
+    public final static String BODY_13_RED = "src/resources/body-13-red.png";
+    public final static String BODY_13_YELLOW = "src/resources/body-13-yellow.png";
     public final static String TAIL_12 = "src/resources/tail-12.png";
     public final static String TAIL_11 = "src/resources/tail-11.png";
     public final static String TAIL_10 = "src/resources/tail-10.png";

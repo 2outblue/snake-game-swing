@@ -11,6 +11,8 @@ import com.game_objects.Snake;
 import java.awt.*;
 import java.util.Random;
 
+import static java.lang.Thread.currentThread;
+
 public class SnakeMovementThread implements Runnable{
 
     private int movementSpeedInverse = 33;
@@ -74,7 +76,7 @@ public class SnakeMovementThread implements Runnable{
                 if (borderCollision() || selfCollision()) {
                     GameManager.getInstance().endGame();
                 }
-                // take that out to the food thread along with the relevant methods
+                // take that out to the food thread along with the relevant methods, maybe
                 if (foodCollision()) {
                     GameManager.getInstance().removeFood(smallFood);
                     GameManager.getInstance().growSnake();
