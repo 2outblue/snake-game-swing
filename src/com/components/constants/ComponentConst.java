@@ -4,7 +4,7 @@ public class ComponentConst {
     public final static int SNAKE_COMPONENT_SIZE = 12;
 
     public final static int SNAKE_HEAD_20 = 26;
-    public final static int FOOD_SIZE = 24;
+    public final static int FOOD_SIZE = 23;
 
 //    public final static String BACKGROUND_1 = "src/resources/grass-background1.png";
 
