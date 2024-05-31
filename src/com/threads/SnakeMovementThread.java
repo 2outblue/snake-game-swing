@@ -74,7 +74,7 @@ public class SnakeMovementThread implements Runnable{
                 }
 
                 if (borderCollision() || selfCollision()) {
-                    GameManager.getInstance().endGame();
+                    GameManager.getInstance().pauseGame();
                 }
                 // take that out to the food thread along with the relevant methods, maybe
                 if (foodCollision()) {
@@ -84,7 +84,7 @@ public class SnakeMovementThread implements Runnable{
                     spawnFood();
                 }
                 snake.paintBody(headBounds);
-
+//                System.out.println(headBounds);
             }
 
             try {
@@ -98,8 +98,8 @@ public class SnakeMovementThread implements Runnable{
     private boolean borderCollision() {
         int snakeX = snake.getHead().getBounds().x;
         int snakeY = snake.getHead().getBounds().y;
-        // collision if x < 100 or x > 690 // if y > 670 or y < 80
-        return snakeX < 100 || snakeX > 690 || snakeY < 80 || snakeY > 670;
+        // collision if x < 100 or x > 690 // if y > 670 or y < 80 - previous values with the border components
+        return snakeX < 96 || snakeX > 680 || snakeY < 78 || snakeY > 660;
     }
 
     private boolean selfCollision() {
@@ -124,8 +124,8 @@ public class SnakeMovementThread implements Runnable{
     private void spawnFood() {
         Random random = new Random();
         smallFood = ComponentFactory.getInstance().createSmallFood();
-        int randomX = random.nextInt(100, 690);
-        int randomY = random.nextInt(80, 670);
+        int randomX = random.nextInt(100, 680);
+        int randomY = random.nextInt(80, 660);
 
         smallFood.setBounds(randomX, randomY, smallFood.getPreferredSize().width, smallFood.getPreferredSize().height);
         GameManager.getInstance().addFood(smallFood);

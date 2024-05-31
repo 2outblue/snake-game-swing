@@ -2,7 +2,6 @@ package com;
 
 import com.components.ComponentFactory;
 import com.components.background.BackgroundComponent;
-import com.components.border.BorderComponent;
 import com.components.constants.ComponentConst;
 import com.components.food.SmallFood;
 import com.components.snake.SnakeBody;
@@ -43,18 +42,17 @@ public class GameManager {
 
     private GameManager() {
         componentFactory = ComponentFactory.getInstance();
-        this.frame = componentFactory.createFrame();
-        testing();
-        createSnake();
-        threadGovernor = ThreadGovernor.getInstance();
     }
 
     public void createAndShowGame(){
+        this.frame = componentFactory.createFrame();
+        createLayeredPane();
+        createBackground();
+        createSnake();
+        threadGovernor = ThreadGovernor.getInstance();
         setInitialSnakePosition();
         addEventListeners();
-        createBorder();
-//        movementThread.start();
-//        frame.setComponentZOrder(background, 0);
+//        createBorder();
 
         threadGovernor.createMovementThread();
 //        threadGovernor.createFoodGenerationThread();
@@ -66,23 +64,22 @@ public class GameManager {
         growSnake();
         growSnake();
         growSnake();
-
-
-
     }
 
     private void setInitialSnakePosition(){
         snake.getHead().setBounds(390, 390, ComponentConst.SNAKE_HEAD_20, ComponentConst.SNAKE_HEAD_20);
     }
 
-    private void testing() {
-        this.layeredPane = new JLayeredPane();
-        layeredPane.setPreferredSize(frame.getPreferredSize());
-        frame.setContentPane(layeredPane);
-
+    private void createBackground() {
         background = new BackgroundComponent();
         background.setBounds(0, 0, 800, 800);
         layeredPane.add(background, JLayeredPane.DEFAULT_LAYER);
+    }
+
+    private void createLayeredPane() {
+        this.layeredPane = new JLayeredPane();
+        layeredPane.setPreferredSize(frame.getPreferredSize());
+        frame.setContentPane(layeredPane);
     }
 
     private void createSnake() {
@@ -157,15 +154,15 @@ public class GameManager {
         snake.grow(body2);
     }
 
-    private void createBorder() {
-        this.border = new Border();
-        for (int i = 0; i < border.getBorderComponents().length; i++) {
-            BorderComponent bc = border.getBorderComponents()[i];
-//            frame.getContentPane().add(bc);
-            layeredPane.add(bc, JLayeredPane.PALETTE_LAYER);
-            bc.setBounds(bc.x, bc.y, bc.getPreferredSize().width, bc.getPreferredSize().height);
-        }
-    }
+//    private void createBorder() {
+//        this.border = new Border();
+//        for (int i = 0; i < border.getBorderComponents().length; i++) {
+//            BorderComponent bc = border.getBorderComponents()[i];
+////            frame.getContentPane().add(bc);
+//            layeredPane.add(bc, JLayeredPane.PALETTE_LAYER);
+//            bc.setBounds(bc.x, bc.y, bc.getPreferredSize().width, bc.getPreferredSize().height);
+//        }
+//    }
 
     public synchronized void pauseGame() {
         if (pauseElement == null) {
