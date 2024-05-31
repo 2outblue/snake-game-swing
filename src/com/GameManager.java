@@ -1,14 +1,13 @@
 package com;
 
 import com.components.ComponentFactory;
+import com.components.background.BackgroundComponent;
 import com.components.border.BorderComponent;
 import com.components.constants.ComponentConst;
 import com.components.food.SmallFood;
 import com.components.snake.SnakeBody;
 import com.components.snake.SnakeHead;
 import com.components.constants.Direction;
-import com.components.snake.tail.TailComponent;
-import com.components.snake.tail.TailPart;
 import com.event_listeners.HeadDirectionChangeListener;
 import com.event_listeners.PauseListener;
 import com.game_objects.Border;
@@ -17,7 +16,6 @@ import com.game_objects.Snake;
 import javax.swing.*;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
 
 public class GameManager {
 
@@ -35,6 +33,10 @@ public class GameManager {
 
     private JLabel gameOverElement;
 
+    private JComponent background;
+
+    JLayeredPane layeredPane;
+
     private boolean gameOver = false;
 
 
@@ -42,6 +44,7 @@ public class GameManager {
     private GameManager() {
         componentFactory = ComponentFactory.getInstance();
         this.frame = componentFactory.createFrame();
+        testing();
         createSnake();
         threadGovernor = ThreadGovernor.getInstance();
     }
@@ -51,6 +54,7 @@ public class GameManager {
         addEventListeners();
         createBorder();
 //        movementThread.start();
+//        frame.setComponentZOrder(background, 0);
 
         threadGovernor.createMovementThread();
 //        threadGovernor.createFoodGenerationThread();
@@ -71,43 +75,65 @@ public class GameManager {
         snake.getHead().setBounds(390, 390, ComponentConst.SNAKE_HEAD_20, ComponentConst.SNAKE_HEAD_20);
     }
 
+    private void testing() {
+        this.layeredPane = new JLayeredPane();
+        layeredPane.setPreferredSize(frame.getPreferredSize());
+        frame.setContentPane(layeredPane);
+
+        background = new BackgroundComponent();
+        background.setBounds(0, 0, 800, 800);
+        layeredPane.add(background, JLayeredPane.DEFAULT_LAYER);
+    }
+
     private void createSnake() {
         SnakeHead h1 = componentFactory.createHead();
         h1.setDirection(Direction.UP);
 //        h1.setBounds(390, 390, ComponentConst.SNAKE_COMPONENT_SIZE, ComponentConst.SNAKE_COMPONENT_SIZE);
-        frame.getContentPane().add(h1);
+
+//        frame.getContentPane().add(h1);
+        layeredPane.add(h1, JLayeredPane.PALETTE_LAYER);
+
 //        frame.setComponentZOrder(h1, 0);
         frame.revalidate();
         frame.repaint();
 
         SnakeBody body1 = componentFactory.createBody();
         body1.setDirection(Direction.DOWN);
-        frame.getContentPane().add(body1);
+
+//        frame.getContentPane().add(body1);
+        layeredPane.add(body1, JLayeredPane.PALETTE_LAYER);
 
         List<SnakeBody> bl = new ArrayList<>();
         bl.add(body1);
 
         List<SnakeBody> tail = new ArrayList<>();
         SnakeBody tailPart12 = componentFactory.createTailPart(12, ComponentConst.TAIL_12);
-        frame.getContentPane().add(tailPart12);
+//        frame.getContentPane().add(tailPart12);
+        layeredPane.add(tailPart12, JLayeredPane.PALETTE_LAYER);
         tail.add(tailPart12);
         SnakeBody tailPart = componentFactory.createTailPart(11, ComponentConst.TAIL_11);
-        frame.getContentPane().add(tailPart);
+//        frame.getContentPane().add(tailPart);
+        layeredPane.add(tailPart, JLayeredPane.PALETTE_LAYER);
         tail.add(tailPart);
         SnakeBody tailPart2 = componentFactory.createTailPart(10, ComponentConst.TAIL_10);
-        frame.getContentPane().add(tailPart2);
+//        frame.getContentPane().add(tailPart2);
+        layeredPane.add(tailPart2, JLayeredPane.PALETTE_LAYER);
         tail.add(tailPart2);
         SnakeBody tailPart3 = componentFactory.createTailPart(9, ComponentConst.TAIL_9);
-        frame.getContentPane().add(tailPart3);
+//        frame.getContentPane().add(tailPart3);
+        layeredPane.add(tailPart3, JLayeredPane.PALETTE_LAYER);
         tail.add(tailPart3);
         SnakeBody tailPart4 = componentFactory.createTailPart(8, ComponentConst.TAIL_8);
-        frame.getContentPane().add(tailPart4);
+//        frame.getContentPane().add(tailPart4);
+        layeredPane.add(tailPart4, JLayeredPane.PALETTE_LAYER);
         tail.add(tailPart4);
         SnakeBody tailPart5 = componentFactory.createTailPart(7, ComponentConst.TAIL_7);
-        frame.getContentPane().add(tailPart5);
+//        frame.getContentPane().add(tailPart5);
+        layeredPane.add(tailPart5, JLayeredPane.PALETTE_LAYER);
         tail.add(tailPart5);
         SnakeBody tailPart6 = componentFactory.createTailPart(5, ComponentConst.TAIL_5);
-        frame.getContentPane().add(tailPart6);
+//        frame.getContentPane().add(tailPart6);
+        layeredPane.add(tailPart6, JLayeredPane.PALETTE_LAYER);
         tail.add(tailPart6);
 
         Snake.instantiateSnake(h1, bl, tail);
@@ -122,9 +148,11 @@ public class GameManager {
 
     public synchronized void growSnake() {
         SnakeBody body = componentFactory.createBody();
-        frame.getContentPane().add(body);
+//        frame.getContentPane().add(body);
+        layeredPane.add(body, JLayeredPane.PALETTE_LAYER);
         SnakeBody body2 = componentFactory.createBody();
-        frame.getContentPane().add(body2);
+//        frame.getContentPane().add(body2);
+        layeredPane.add(body2, JLayeredPane.PALETTE_LAYER);
         snake.grow(body);
         snake.grow(body2);
     }
@@ -133,7 +161,8 @@ public class GameManager {
         this.border = new Border();
         for (int i = 0; i < border.getBorderComponents().length; i++) {
             BorderComponent bc = border.getBorderComponents()[i];
-            frame.getContentPane().add(bc);
+//            frame.getContentPane().add(bc);
+            layeredPane.add(bc, JLayeredPane.PALETTE_LAYER);
             bc.setBounds(bc.x, bc.y, bc.getPreferredSize().width, bc.getPreferredSize().height);
         }
     }
@@ -145,17 +174,19 @@ public class GameManager {
         if (snake.isPaused()) {
             snake.setPaused(false);
             try {
-                frame.setComponentZOrder(pauseElement, 1);
-                frame.getContentPane().remove(pauseElement);
+//                frame.setComponentZOrder(pauseElement, 1);
+//                frame.getContentPane().remove(pauseElement);
+                layeredPane.remove(pauseElement);
                 frame.revalidate();
                 frame.repaint();
             } catch (NullPointerException ex) {
                 ex.printStackTrace();
             }
         } else {
-            frame.getContentPane().add(pauseElement);
-            frame.setComponentZOrder(pauseElement, 0);
-            frame.repaint();
+//            frame.getContentPane().add(pauseElement);
+            layeredPane.add(pauseElement, JLayeredPane.POPUP_LAYER);
+//            frame.setComponentZOrder(pauseElement, 0);
+//            frame.repaint();
 
             // calculate bounds which will show the label in the center of the window(frame)
             int labelWidth = 300;
@@ -172,10 +203,11 @@ public class GameManager {
             gameOverElement = componentFactory.createGameOverLabel();
         }
 
-        frame.getContentPane().add(gameOverElement);
-        frame.setComponentZOrder(gameOverElement, 0);
-        frame.revalidate();
-        frame.repaint();
+//        frame.getContentPane().add(gameOverElement);
+        layeredPane.add(gameOverElement, JLayeredPane.POPUP_LAYER);
+//        frame.setComponentZOrder(gameOverElement, 0);
+//        frame.revalidate();
+//        frame.repaint();
 
         int labelWidth = 350;
         int labelHeight = 300;
@@ -189,9 +221,10 @@ public class GameManager {
 
     // maybe make a class field SmallFood sf; and use it instead ?
     public void addFood(SmallFood sf) {
-        frame.getContentPane().add(sf);
-        frame.revalidate();
-        frame.repaint();
+//        frame.getContentPane().add(sf);
+        layeredPane.add(sf, JLayeredPane.PALETTE_LAYER);
+//        frame.revalidate();
+//        frame.repaint();
     }
     public synchronized void removeFood(SmallFood sf) {
         frame.getContentPane().remove(sf);
