@@ -9,6 +9,7 @@ import com.components.snake.SnakeHead;
 import com.game_objects.Snake;
 
 import java.awt.*;
+import java.util.Arrays;
 import java.util.Random;
 
 import static java.lang.Thread.currentThread;

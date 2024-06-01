@@ -14,7 +14,7 @@ public class SnakeBody extends JComponent{
     private int size;
     private Direction direction;
 
-    Image image;
+    private Image image;
 
     private float transparency = 1.0f;
     public SnakeBody(int size, String path) {

@@ -11,9 +11,9 @@ import java.io.IOException;
 
 public class SmallFood extends JComponent {
 
-    int size;
+    private int size;
 
-    Image image;
+    private Image image;
     public SmallFood(int size, String path) {
 //        setPreferredSize(new Dimension(ComponentConst.FOOD_SIZE, ComponentConst.FOOD_SIZE));
         setPreferredSize(new Dimension(size, size));
@@ -29,6 +29,8 @@ public class SmallFood extends JComponent {
     @Override
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
+
+        // TODO: add check in case the image is null
 
         Graphics2D g2d = (Graphics2D) g;
 

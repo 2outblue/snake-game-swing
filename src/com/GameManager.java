@@ -4,16 +4,20 @@ import com.components.ComponentFactory;
 import com.components.background.BackgroundComponent;
 import com.components.constants.ComponentConst;
 import com.components.food.SmallFood;
+import com.components.menu.MenuComponent;
+import com.components.menu.PlayButton;
 import com.components.snake.SnakeBody;
 import com.components.snake.SnakeHead;
 import com.components.constants.Direction;
 import com.event_listeners.HeadDirectionChangeListener;
 import com.event_listeners.PauseListener;
+import com.event_listeners.menu_events.PlayButtonActionListener;
 import com.game_objects.Border;
 import com.game_objects.Snake;
 
 import javax.swing.*;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public class GameManager {
@@ -34,7 +38,7 @@ public class GameManager {
 
     private JComponent background;
 
-    JLayeredPane layeredPane;
+    private JLayeredPane layeredPane;
 
     private boolean gameOver = false;
 
@@ -42,20 +46,53 @@ public class GameManager {
 
     private GameManager() {
         componentFactory = ComponentFactory.getInstance();
+        this.frame = componentFactory.createFrame();
+        createLayeredPane();
     }
 
     public void createAndShowGame(){
-        this.frame = componentFactory.createFrame();
-        createLayeredPane();
+        displayStartScreen();
+//        createBackground();
+//        createSnake();
+//        threadGovernor = ThreadGovernor.getInstance();
+//        setInitialSnakePosition();
+//        addEventListeners();
+//        createBorder();
+
+//        threadGovernor.createMovementThread();
+//        threadGovernor.createFoodGenerationThread();
+
+//        growSnake();
+//        growSnake();
+//        growSnake();
+//        growSnake();
+//        growSnake();
+//        growSnake();
+//        growSnake();
+    }
+
+    private void displayStartScreen() {
+        PlayButton playButton = new PlayButton();
+        playButton.addActionListener(new PlayButtonActionListener());
+        playButton.setBounds(275, 200, 250, 75);
+        layeredPane.add(playButton, JLayeredPane.POPUP_LAYER);
+
+        MenuComponent startMenu = new MenuComponent();
+        startMenu.setBounds(0, 0, ComponentConst.FRAME_WIDTH, ComponentConst.FRAME_HEIGHT);
+        layeredPane.add(startMenu, JLayeredPane.POPUP_LAYER);
+
+    }
+
+    public void startGame() {
+
+        layeredPane.removeAll();
+
         createBackground();
         createSnake();
         threadGovernor = ThreadGovernor.getInstance();
         setInitialSnakePosition();
         addEventListeners();
-//        createBorder();
-
         threadGovernor.createMovementThread();
-//        threadGovernor.createFoodGenerationThread();
 
         growSnake();
         growSnake();
@@ -65,7 +102,9 @@ public class GameManager {
         growSnake();
         growSnake();
     }
+    private void restart() {
 
+    }
     private void setInitialSnakePosition(){
         snake.getHead().setBounds(390, 390, ComponentConst.SNAKE_HEAD_20, ComponentConst.SNAKE_HEAD_20);
     }
@@ -139,8 +178,13 @@ public class GameManager {
 
 
     private void addEventListeners() {
-        frame.addKeyListener(new HeadDirectionChangeListener());
+        HeadDirectionChangeListener arrowKeysListener = new HeadDirectionChangeListener();
+//        frame.addKeyListener(new HeadDirectionChangeListener());
+        frame.addKeyListener(arrowKeysListener);
+//        System.out.println(Arrays.toString(frame.getKeyListeners()));
         frame.addKeyListener(new PauseListener());
+        frame.requestFocusInWindow();
+
     }
 
     public synchronized void growSnake() {

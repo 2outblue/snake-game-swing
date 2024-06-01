@@ -1,15 +1,19 @@
 package com.components.constants;
 
 public class ComponentConst {
+
+    public final static int FRAME_WIDTH = 800;
+
+    public final static int FRAME_HEIGHT = 800;
     public final static int SNAKE_COMPONENT_SIZE = 12;
 
     public final static int SNAKE_HEAD_20 = 26;
     public final static int FOOD_SIZE = 23;
 
-//    public final static String BACKGROUND_1 = "src/resources/grass-background1.png";
-
-    public final static String APPLE_RED_1 = "src/resources/apple.png";
+    public final static String START_SCREEN_BACKGROUND = "src/resources/game-menu-image1.png";
     public final static String BACKGROUND_1 = "src/resources/game-background.png";
+    public final static String BUTTON_1_PLAY = "src/resources/button1-play.png";
+    public final static String APPLE_RED_1 = "src/resources/apple.png";
     public final static String BODY_13_GREEN = "src/resources/body13.png";
     public final static String BODY_13_BLUE = "src/resources/body-13-blue.png";
     public final static String BODY_13_PURPLE = "src/resources/body-13-purple.png";

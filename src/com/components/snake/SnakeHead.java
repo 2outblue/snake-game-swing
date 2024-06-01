@@ -13,7 +13,7 @@ public class SnakeHead extends JComponent{
 
     private int size;
 
-    Image image;
+    private Image image;
 
     private double angle = 3.141592653;
     private Direction direction;

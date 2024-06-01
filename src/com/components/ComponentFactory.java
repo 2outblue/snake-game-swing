@@ -13,6 +13,8 @@ public class ComponentFactory {
 
     private static ComponentFactory instance;
     private JFrame frame;
+
+    // below variables are for the snake color pattern
     private String[] pattern;
     private int repeatCounter;
     private final int patternRepeater;
