@@ -2,8 +2,11 @@ package com.components;
 
 import com.components.constants.ComponentConst;
 import com.components.food.SmallFood;
+import com.components.menu.GameOverComponent;
+import com.components.menu.MenuButton;
 import com.components.snake.SnakeBody;
 import com.components.snake.SnakeHead;
+import com.event_listeners.menu_events.PlayButtonActionListener;
 
 import javax.swing.*;
 import javax.swing.border.LineBorder;
@@ -69,6 +72,13 @@ public class ComponentFactory {
         return this.frame;
     }
 
+    public MenuButton createPlayButton() {
+        MenuButton playButton = new MenuButton(ComponentConst.BUTTON_1_PLAY);
+        playButton.addActionListener(new PlayButtonActionListener());
+        playButton.setBounds(275, 200, 250, 75);
+        return playButton;
+    }
+
     public JLabel createPauseLabel() {
         JLabel label = new JLabel("GAME PAUSED", SwingConstants.CENTER);
         label.setForeground(Color.WHITE);
@@ -87,6 +97,12 @@ public class ComponentFactory {
         label.setBorder(new LineBorder(Color.GREEN, 2));
 
         return label;
+    }
+
+    public GameOverComponent createGameOverComponent() {
+        GameOverComponent g = new GameOverComponent();
+        g.setBounds(170, 267, ComponentConst.GAME_OVER_WIDTH, ComponentConst.GAME_OVER_HEIGHT);
+        return g;
     }
 
     public SmallFood createSmallFood() {

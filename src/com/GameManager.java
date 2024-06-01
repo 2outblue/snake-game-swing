@@ -5,7 +5,7 @@ import com.components.background.BackgroundComponent;
 import com.components.constants.ComponentConst;
 import com.components.food.SmallFood;
 import com.components.menu.MenuComponent;
-import com.components.menu.PlayButton;
+import com.components.menu.MenuButton;
 import com.components.snake.SnakeBody;
 import com.components.snake.SnakeHead;
 import com.components.constants.Direction;
@@ -17,7 +17,6 @@ import com.game_objects.Snake;
 
 import javax.swing.*;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 public class GameManager {
@@ -72,10 +71,7 @@ public class GameManager {
     }
 
     private void displayStartScreen() {
-        PlayButton playButton = new PlayButton();
-        playButton.addActionListener(new PlayButtonActionListener());
-        playButton.setBounds(275, 200, 250, 75);
-        layeredPane.add(playButton, JLayeredPane.POPUP_LAYER);
+        layeredPane.add(componentFactory.createPlayButton(), JLayeredPane.POPUP_LAYER);
 
         MenuComponent startMenu = new MenuComponent();
         startMenu.setBounds(0, 0, ComponentConst.FRAME_WIDTH, ComponentConst.FRAME_HEIGHT);
@@ -94,6 +90,7 @@ public class GameManager {
         addEventListeners();
         threadGovernor.createMovementThread();
 
+        frame.requestFocusInWindow();
         growSnake();
         growSnake();
         growSnake();
@@ -183,8 +180,6 @@ public class GameManager {
         frame.addKeyListener(arrowKeysListener);
 //        System.out.println(Arrays.toString(frame.getKeyListeners()));
         frame.addKeyListener(new PauseListener());
-        frame.requestFocusInWindow();
-
     }
 
     public synchronized void growSnake() {
@@ -240,21 +235,7 @@ public class GameManager {
     }
 
     public synchronized void endGame() {
-        if (gameOverElement == null) {
-            gameOverElement = componentFactory.createGameOverLabel();
-        }
-
-//        frame.getContentPane().add(gameOverElement);
-        layeredPane.add(gameOverElement, JLayeredPane.POPUP_LAYER);
-//        frame.setComponentZOrder(gameOverElement, 0);
-//        frame.revalidate();
-//        frame.repaint();
-
-        int labelWidth = 350;
-        int labelHeight = 300;
-        int x = (frame.getWidth() - labelWidth) / 2;
-        int y = (frame.getHeight() - labelHeight) / 2;
-        gameOverElement.setBounds(x, y, labelWidth, labelHeight);
+        layeredPane.add(componentFactory.createGameOverComponent(), JLayeredPane.POPUP_LAYER);
 
         gameOver = true;
         snake.setPaused(true);
