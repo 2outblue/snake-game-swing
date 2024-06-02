@@ -1,6 +1,7 @@
 package com.event_listeners;
 
 import com.GameManager;
+import com.SoundManager;
 import com.game_objects.Snake;
 import com.components.constants.Direction;
 
@@ -26,14 +27,18 @@ public class HeadDirectionChangeListener extends KeyAdapter {
         // so this still turns the snake from up to down directly - to prevent that lastDir is needed
         Direction lastDir = snake.getPreviousDirectionInput();
 
-        if (e.getKeyCode() == KeyEvent.VK_LEFT && currentDir != Direction.RIGHT && lastDir != Direction.RIGHT) {
+        if (e.getKeyCode() == KeyEvent.VK_LEFT && currentDir != Direction.RIGHT && lastDir != Direction.RIGHT && currentDir != Direction.LEFT) {
             snake.setCurrentDirectionInput(Direction.LEFT);
-        } else if (e.getKeyCode() == KeyEvent.VK_RIGHT && currentDir != Direction.LEFT && lastDir != Direction.LEFT) {
+            SoundManager.getInstance().playTurnLeft();
+        } else if (e.getKeyCode() == KeyEvent.VK_RIGHT && currentDir != Direction.LEFT && lastDir != Direction.LEFT && currentDir != Direction.RIGHT) {
             snake.setCurrentDirectionInput(Direction.RIGHT);
-        } else if (e.getKeyCode() == KeyEvent.VK_UP && currentDir != Direction.DOWN && lastDir != Direction.DOWN) {
+            SoundManager.getInstance().playTurnRight();
+        } else if (e.getKeyCode() == KeyEvent.VK_UP && currentDir != Direction.DOWN && lastDir != Direction.DOWN && currentDir != Direction.UP) {
             snake.setCurrentDirectionInput(Direction.UP);
-        } else if (e.getKeyCode() == KeyEvent.VK_DOWN && currentDir != Direction.UP && lastDir != Direction.UP) {
+            SoundManager.getInstance().playTurnUp();
+        } else if (e.getKeyCode() == KeyEvent.VK_DOWN && currentDir != Direction.UP && lastDir != Direction.UP && currentDir != Direction.DOWN) {
             snake.setCurrentDirectionInput(Direction.DOWN);
+            SoundManager.getInstance().playTurnDown();
         }
     }
 }

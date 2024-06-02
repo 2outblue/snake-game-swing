@@ -25,23 +25,6 @@ public class SoundManager {
     // TODO: class fields are not needed, every method loads the resource anyway - delete all class fields and modify the methods accordingly
     private SoundManager() {
 
-//        loadResources();
-    }
-
-    private void loadResources() {
-
-        try {
-            AudioInputStream a5 = AudioSystem.getAudioInputStream(new File(AudioConst.TURN_UP));
-            turnUp = AudioSystem.getClip();
-            turnUp.open(a5);
-            AudioInputStream a6 = AudioSystem.getAudioInputStream(new File(AudioConst.TURN_DOWN));
-            turnDown = AudioSystem.getClip();
-            turnDown.open(a6);
-
-
-        } catch (UnsupportedAudioFileException | IOException | LineUnavailableException ex) {
-            ex.printStackTrace();
-        }
     }
 
 
@@ -96,12 +79,24 @@ public class SoundManager {
     }
 
     public void playTurnUp() {
-
+        try {
+            AudioInputStream a = AudioSystem.getAudioInputStream(new File(AudioConst.TURN_UP));
+            turnUp = AudioSystem.getClip();
+            turnUp.open(a);
+        } catch (UnsupportedAudioFileException | IOException | LineUnavailableException ex) {
+            ex.printStackTrace();
+        }
         turnUp.start();
     }
 
     public void playTurnDown() {
-
+        try {
+            AudioInputStream a = AudioSystem.getAudioInputStream(new File(AudioConst.TURN_DOWN));
+            turnDown = AudioSystem.getClip();
+            turnDown.open(a);
+        } catch (UnsupportedAudioFileException | IOException | LineUnavailableException ex) {
+            ex.printStackTrace();
+        }
         turnDown.start();
     }
 
