@@ -3,10 +3,12 @@ package com.components;
 import com.components.constants.ComponentConst;
 import com.components.food.SmallFood;
 import com.components.menu.GameOverComponent;
+import com.components.menu.GamePausedComponent;
 import com.components.menu.MenuButton;
 import com.components.snake.SnakeBody;
 import com.components.snake.SnakeHead;
 import com.event_listeners.menu_events.BackToMenuListener;
+import com.event_listeners.menu_events.ButtonHoverListener;
 import com.event_listeners.menu_events.PlayButtonActionListener;
 
 import javax.swing.*;
@@ -77,6 +79,7 @@ public class ComponentFactory {
         MenuButton playButton = new MenuButton(ComponentConst.BUTTON_1_PLAY);
         playButton.addActionListener(new PlayButtonActionListener());
         playButton.setBounds(275, 200, 250, 75);
+        playButton.addMouseListener(new ButtonHoverListener());
         return playButton;
     }
 
@@ -84,17 +87,22 @@ public class ComponentFactory {
         MenuButton button = new MenuButton(ComponentConst.BUTTON_BACK_TO_MENU);
         button.addActionListener(new BackToMenuListener());
         button.setBounds(275, 400, 250, 75);
+        button.addMouseListener(new ButtonHoverListener());
         return button;
     }
 
-    public JLabel createPauseLabel() {
-        JLabel label = new JLabel("GAME PAUSED", SwingConstants.CENTER);
-        label.setForeground(Color.WHITE);
-        label.setBackground(Color.GREEN);
-        label.setOpaque(true);
-        label.setBorder(new LineBorder(Color.GREEN, 2));
+    public GamePausedComponent createGamePauseComponent() {
+        GamePausedComponent gp = new GamePausedComponent();
+        gp.setBounds(170, 325, ComponentConst.GAME_OVER_WIDTH, ComponentConst.GAME_OVER_HEIGHT);
+        return gp;
 
-        return label;
+//        JLabel label = new JLabel("GAME PAUSED", SwingConstants.CENTER);
+//        label.setForeground(Color.WHITE);
+//        label.setBackground(Color.GREEN);
+//        label.setOpaque(true);
+//        label.setBorder(new LineBorder(Color.GREEN, 2));
+//
+//        return label;
     }
 
 //    public JLabel createGameOverLabel() {

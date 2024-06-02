@@ -12,8 +12,12 @@ public class ComponentConst {
     public final static int GAME_OVER_WIDTH = 460;
     public final static int GAME_OVER_HEIGHT = 265;
 
+    public final static int GAME_PAUSED_WIDTH = 460;
+    public final static int GAME_PAUSED_HEIGHT = 150;
+
     public final static String START_SCREEN_BACKGROUND = "src/resources/game-menu-image1.png";
     public final static String BACKGROUND_1 = "src/resources/game-background.png";
+    public final static String GAME_PAUSED_1 = "src/resources/pause-game.png";
     public final static String GAME_OVER_1 = "src/resources/game-over-component.png";
     public final static String BUTTON_1_PLAY = "src/resources/button1-play.png";
     public final static String BUTTON_BACK_TO_MENU = "src/resources/back-to-menu.png";

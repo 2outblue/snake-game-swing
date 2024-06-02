@@ -4,6 +4,7 @@ import com.components.ComponentFactory;
 import com.components.background.BackgroundComponent;
 import com.components.constants.ComponentConst;
 import com.components.food.SmallFood;
+import com.components.menu.GamePausedComponent;
 import com.components.menu.MenuComponent;
 import com.components.snake.SnakeBody;
 import com.components.snake.SnakeHead;
@@ -28,7 +29,7 @@ public class GameManager {
 
     private Border border;
 
-    private JLabel pauseElement;
+    private GamePausedComponent pauseElement;
 
     private JLabel gameOverElement;
 
@@ -39,6 +40,7 @@ public class GameManager {
     private boolean gameOver = false;
 
     private GameManager() {
+        SoundManager sm = SoundManager.getInstance();
         componentFactory = ComponentFactory.getInstance();
         this.frame = componentFactory.createFrame();
         createLayeredPane();
@@ -199,18 +201,16 @@ public class GameManager {
 //    }
 
     public synchronized void pauseGame() {
-        System.out.println("inside pauseGame()");
         if (pauseElement == null) {
-            pauseElement = componentFactory.createPauseLabel();
+            pauseElement = componentFactory.createGamePauseComponent();
         }
         if (snake.isPaused()) {
             snake.setPaused(false);
+            // TODO: is this try-catch necessary ?
             try {
-//                frame.setComponentZOrder(pauseElement, 1);
-//                frame.getContentPane().remove(pauseElement);
                 layeredPane.remove(pauseElement);
-                frame.revalidate();
-                frame.repaint();
+                layeredPane.revalidate();
+                layeredPane.repaint();
             } catch (NullPointerException ex) {
                 ex.printStackTrace();
             }
@@ -218,12 +218,6 @@ public class GameManager {
 //            frame.getContentPane().add(pauseElement);
             layeredPane.add(pauseElement, JLayeredPane.POPUP_LAYER);
 
-            // calculate bounds which will show the label in the center of the window(frame)
-            int labelWidth = 300;
-            int labelHeight = 140;
-            int x = (frame.getWidth() - labelWidth) / 2;
-            int y = (frame.getHeight() - labelHeight) / 2;
-            pauseElement.setBounds(x, y, labelWidth, labelHeight);
             snake.setPaused(true);
         }
     }

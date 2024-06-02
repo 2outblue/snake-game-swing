@@ -1,6 +1,7 @@
 package com.threads;
 
 import com.GameManager;
+import com.SoundManager;
 import com.ThreadGovernor;
 import com.components.ComponentFactory;
 import com.components.constants.ComponentConst;
@@ -76,10 +77,12 @@ public class SnakeMovementThread extends Thread {
                 }
 
                 if (borderCollision() || selfCollision()) {
+                    SoundManager.getInstance().playEndGame();
                     GameManager.getInstance().endGame();
                 }
                 // take that out to the food thread along with the relevant methods, maybe
                 if (foodCollision()) {
+                    SoundManager.getInstance().playFoodCollision();
                     GameManager.getInstance().removeFood(smallFood);
                     GameManager.getInstance().growSnake();
 
