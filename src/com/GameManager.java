@@ -5,17 +5,16 @@ import com.components.background.BackgroundComponent;
 import com.components.constants.ComponentConst;
 import com.components.food.SmallFood;
 import com.components.menu.MenuComponent;
-import com.components.menu.MenuButton;
 import com.components.snake.SnakeBody;
 import com.components.snake.SnakeHead;
 import com.components.constants.Direction;
 import com.event_listeners.HeadDirectionChangeListener;
 import com.event_listeners.PauseListener;
-import com.event_listeners.menu_events.PlayButtonActionListener;
 import com.game_objects.Border;
 import com.game_objects.Snake;
 
 import javax.swing.*;
+import java.awt.event.KeyListener;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -24,9 +23,7 @@ public class GameManager {
     private static GameManager instance;
     private ComponentFactory componentFactory;
     private JFrame frame;
-
     private ThreadGovernor threadGovernor;
-
     private Snake snake;
 
     private Border border;
@@ -40,8 +37,6 @@ public class GameManager {
     private JLayeredPane layeredPane;
 
     private boolean gameOver = false;
-
-
 
     private GameManager() {
         componentFactory = ComponentFactory.getInstance();
@@ -70,17 +65,17 @@ public class GameManager {
 //        growSnake();
     }
 
-    private void displayStartScreen() {
+    public void displayStartScreen() {
         layeredPane.add(componentFactory.createPlayButton(), JLayeredPane.POPUP_LAYER);
 
-        MenuComponent startMenu = new MenuComponent();
-        startMenu.setBounds(0, 0, ComponentConst.FRAME_WIDTH, ComponentConst.FRAME_HEIGHT);
-        layeredPane.add(startMenu, JLayeredPane.POPUP_LAYER);
+        MenuComponent startMenuBackground = new MenuComponent();
+        startMenuBackground.setBounds(0, 0, ComponentConst.FRAME_WIDTH, ComponentConst.FRAME_HEIGHT);
+        layeredPane.add(startMenuBackground, JLayeredPane.POPUP_LAYER);
 
     }
 
     public void startGame() {
-
+        gameOver = false;
         layeredPane.removeAll();
 
         createBackground();
@@ -90,8 +85,7 @@ public class GameManager {
         addEventListeners();
         threadGovernor.createMovementThread();
 
-        frame.requestFocusInWindow();
-        growSnake();
+        layeredPane.requestFocusInWindow();
         growSnake();
         growSnake();
         growSnake();
@@ -99,7 +93,15 @@ public class GameManager {
         growSnake();
         growSnake();
     }
-    private void restart() {
+    public synchronized void restart() {
+
+        layeredPane.removeAll();
+        for (KeyListener listener : layeredPane.getKeyListeners()) {
+            layeredPane.removeKeyListener(listener);
+        }
+        threadGovernor.closeAllThreads();
+        snake = null;
+        displayStartScreen();
 
     }
     private void setInitialSnakePosition(){
@@ -125,10 +127,6 @@ public class GameManager {
 
 //        frame.getContentPane().add(h1);
         layeredPane.add(h1, JLayeredPane.PALETTE_LAYER);
-
-//        frame.setComponentZOrder(h1, 0);
-        frame.revalidate();
-        frame.repaint();
 
         SnakeBody body1 = componentFactory.createBody();
         body1.setDirection(Direction.DOWN);
@@ -169,26 +167,23 @@ public class GameManager {
         layeredPane.add(tailPart6, JLayeredPane.PALETTE_LAYER);
         tail.add(tailPart6);
 
-        Snake.instantiateSnake(h1, bl, tail);
-        snake = Snake.getInstance();
+//        Snake.instantiateSnake(h1, bl, tail);
+        snake = new Snake(h1, bl, tail);
     }
 
 
     private void addEventListeners() {
-        HeadDirectionChangeListener arrowKeysListener = new HeadDirectionChangeListener();
-//        frame.addKeyListener(new HeadDirectionChangeListener());
-        frame.addKeyListener(arrowKeysListener);
-//        System.out.println(Arrays.toString(frame.getKeyListeners()));
-        frame.addKeyListener(new PauseListener());
+        layeredPane.addKeyListener(new HeadDirectionChangeListener());
+        layeredPane.addKeyListener(new PauseListener());
     }
 
     public synchronized void growSnake() {
         SnakeBody body = componentFactory.createBody();
-//        frame.getContentPane().add(body);
         layeredPane.add(body, JLayeredPane.PALETTE_LAYER);
+
         SnakeBody body2 = componentFactory.createBody();
-//        frame.getContentPane().add(body2);
         layeredPane.add(body2, JLayeredPane.PALETTE_LAYER);
+
         snake.grow(body);
         snake.grow(body2);
     }
@@ -204,6 +199,7 @@ public class GameManager {
 //    }
 
     public synchronized void pauseGame() {
+        System.out.println("inside pauseGame()");
         if (pauseElement == null) {
             pauseElement = componentFactory.createPauseLabel();
         }
@@ -221,8 +217,6 @@ public class GameManager {
         } else {
 //            frame.getContentPane().add(pauseElement);
             layeredPane.add(pauseElement, JLayeredPane.POPUP_LAYER);
-//            frame.setComponentZOrder(pauseElement, 0);
-//            frame.repaint();
 
             // calculate bounds which will show the label in the center of the window(frame)
             int labelWidth = 300;
@@ -235,6 +229,7 @@ public class GameManager {
     }
 
     public synchronized void endGame() {
+        layeredPane.add(componentFactory.createBackToMenuButton(), JLayeredPane.POPUP_LAYER);
         layeredPane.add(componentFactory.createGameOverComponent(), JLayeredPane.POPUP_LAYER);
 
         gameOver = true;
@@ -243,23 +238,16 @@ public class GameManager {
 
     // maybe make a class field SmallFood sf; and use it instead ?
     public void addFood(SmallFood sf) {
-//        frame.getContentPane().add(sf);
         layeredPane.add(sf, JLayeredPane.PALETTE_LAYER);
-//        frame.revalidate();
-//        frame.repaint();
     }
     public synchronized void removeFood(SmallFood sf) {
-        frame.getContentPane().remove(sf);
-        frame.revalidate();
-        frame.repaint();
+        layeredPane.remove(sf);
+        layeredPane.revalidate();
+        layeredPane.repaint();
     }
 
     public synchronized boolean gameOver() {
         return gameOver;
-    }
-
-    public synchronized void setGameOver(boolean stopGame) {
-        this.gameOver = stopGame;
     }
 
     public synchronized static GameManager getInstance() {
@@ -269,4 +257,7 @@ public class GameManager {
         return instance;
     }
 
+    public synchronized Snake getSnake() {
+        return snake;
+    }
 }

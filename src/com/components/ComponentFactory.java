@@ -6,6 +6,7 @@ import com.components.menu.GameOverComponent;
 import com.components.menu.MenuButton;
 import com.components.snake.SnakeBody;
 import com.components.snake.SnakeHead;
+import com.event_listeners.menu_events.BackToMenuListener;
 import com.event_listeners.menu_events.PlayButtonActionListener;
 
 import javax.swing.*;
@@ -79,6 +80,13 @@ public class ComponentFactory {
         return playButton;
     }
 
+    public MenuButton createBackToMenuButton() {
+        MenuButton button = new MenuButton(ComponentConst.BUTTON_BACK_TO_MENU);
+        button.addActionListener(new BackToMenuListener());
+        button.setBounds(275, 400, 250, 75);
+        return button;
+    }
+
     public JLabel createPauseLabel() {
         JLabel label = new JLabel("GAME PAUSED", SwingConstants.CENTER);
         label.setForeground(Color.WHITE);
@@ -89,15 +97,15 @@ public class ComponentFactory {
         return label;
     }
 
-    public JLabel createGameOverLabel() {
-        JLabel label = new JLabel("GAME OVER", SwingConstants.CENTER);
-        label.setForeground(Color.BLACK);
-        label.setBackground(Color.RED);
-        label.setOpaque(true);
-        label.setBorder(new LineBorder(Color.GREEN, 2));
-
-        return label;
-    }
+//    public JLabel createGameOverLabel() {
+//        JLabel label = new JLabel("GAME OVER", SwingConstants.CENTER);
+//        label.setForeground(Color.BLACK);
+//        label.setBackground(Color.RED);
+//        label.setOpaque(true);
+//        label.setBorder(new LineBorder(Color.GREEN, 2));
+//
+//        return label;
+//    }
 
     public GameOverComponent createGameOverComponent() {
         GameOverComponent g = new GameOverComponent();

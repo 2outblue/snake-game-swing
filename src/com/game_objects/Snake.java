@@ -9,17 +9,16 @@ import java.awt.*;
 import java.util.List;
 
 public class Snake {
+    private Snake snake;
+    private SnakeHead head;
+    private List<SnakeBody> body;
+    private List<SnakeBody> tail;
+    private Direction currentDirectionInput;
+    private Direction previousDirectionInput;
 
-    private static Snake snake;
-   private SnakeHead head;
-   private List<SnakeBody> body;
-   private List<SnakeBody> tail;
-   private Direction currentDirectionInput;
-   private Direction previousDirectionInput;
+    private boolean paused;
 
-   private boolean paused;
-
-    private Snake(SnakeHead head, List<SnakeBody> body, List<SnakeBody> tail) {
+    public Snake(SnakeHead head, List<SnakeBody> body, List<SnakeBody> tail) {
         this.head = head;
         this.body = body;
         this.tail = tail;
@@ -37,17 +36,17 @@ public class Snake {
         return tail;
     }
 
-    public synchronized static Snake getInstance(){
-        return snake;
-    }
+//    public synchronized static Snake getInstance(){
+//        return snake;
+//    }
 
-    public synchronized static void instantiateSnake(SnakeHead head, List<SnakeBody> body, List<SnakeBody> tail) {
-        if (snake == null) {
-            snake = new Snake(head, body, tail);
-        }
-    }
+//    public synchronized static void instantiateSnake(SnakeHead head, List<SnakeBody> body, List<SnakeBody> tail) {
+//        if (snake == null) {
+//            snake = new Snake(head, body, tail);
+//        }
+//    }
 
-    public synchronized void grow(SnakeBody b) {
+    public void grow(SnakeBody b) {
         b.setDirection(body.getLast().getDirection());
         body.addLast(b);
     }

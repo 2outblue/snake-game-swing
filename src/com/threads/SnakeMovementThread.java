@@ -1,6 +1,7 @@
 package com.threads;
 
 import com.GameManager;
+import com.ThreadGovernor;
 import com.components.ComponentFactory;
 import com.components.constants.ComponentConst;
 import com.components.constants.Direction;
@@ -14,7 +15,7 @@ import java.util.Random;
 
 import static java.lang.Thread.currentThread;
 
-public class SnakeMovementThread implements Runnable{
+public class SnakeMovementThread extends Thread {
 
     private int movementSpeedInverse = 33;
 
@@ -30,13 +31,14 @@ public class SnakeMovementThread implements Runnable{
     private boolean skip = false;
 
     public SnakeMovementThread() {
-        snake = Snake.getInstance();
+        snake = GameManager.getInstance().getSnake();
         isRunning = true;
         headBounds = snake.getHead().getBounds();
     }
 
     @Override
     public void run() {
+        System.out.println("Movement thread now running");
         spawnFood();
         Direction updatedDirection = snake.getHead().getDirection();
         int step = 6;
@@ -54,7 +56,6 @@ public class SnakeMovementThread implements Runnable{
             } else {
                 skip = false;
             }
-
             if (!snake.isPaused()) {
                 if (updatedDirection == Direction.UP) {
                     head.setBounds(headBounds.x, headBounds.y - step, headBounds.width, headBounds.height);
@@ -94,6 +95,8 @@ public class SnakeMovementThread implements Runnable{
                 throw new RuntimeException(e);
             }
         }
+
+        System.out.println("Movement Thread stopped");
     }
 
     private boolean borderCollision() {
@@ -142,5 +145,11 @@ public class SnakeMovementThread implements Runnable{
         return (snakeX + ComponentConst.SNAKE_HEAD_20 - 5 >= foodX && snakeX <= foodX + ComponentConst.FOOD_SIZE) &&
                 (snakeY + ComponentConst.SNAKE_HEAD_20  - 5>= foodY && snakeY <= foodY + ComponentConst.FOOD_SIZE);
     }
+
+    public void stopRunning() {
+//        this.interrupt();
+        isRunning = false;
+    }
+
 
 }

@@ -1,5 +1,6 @@
 package com.event_listeners;
 
+import com.GameManager;
 import com.game_objects.Snake;
 import com.components.constants.Direction;
 
@@ -11,7 +12,7 @@ public class HeadDirectionChangeListener extends KeyAdapter {
     private Snake snake;
 
     public HeadDirectionChangeListener() {
-        snake = Snake.getInstance();
+        snake = GameManager.getInstance().getSnake();
     }
 
     @Override

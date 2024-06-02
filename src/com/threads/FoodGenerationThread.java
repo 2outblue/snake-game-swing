@@ -33,7 +33,7 @@ public class FoodGenerationThread implements Runnable {
         System.out.println("FoodGenerationThread --> " + currentThread().getName());
         spawnFood();
         while (running) {
-            if (foodCollision()) {
+            if (true) { // - if (foodCollision())
                 GameManager.getInstance().removeFood(smallFood);
                 GameManager.getInstance().growSnake();
 
@@ -60,16 +60,16 @@ public class FoodGenerationThread implements Runnable {
         GameManager.getInstance().addFood(smallFood);
     }
 
-    private boolean foodCollision() {
-        Rectangle headBounds = Snake.getInstance().getHead().getBounds();
-        //can headBounds.x/y cause issues? (not .get, so its not going through a synch method?)
-        int snakeX = headBounds.x;
-        int snakeY = headBounds.y;
-        int foodX = smallFood.getBounds().x;
-        int foodY = smallFood.getBounds().y;
-
-        //            System.out.println("Food collision");
-        return (snakeX + ComponentConst.SNAKE_COMPONENT_SIZE >= foodX && snakeX <= foodX + ComponentConst.FOOD_SIZE) &&
-                (snakeY + ComponentConst.SNAKE_COMPONENT_SIZE >= foodY && snakeY <= foodY + ComponentConst.FOOD_SIZE);
-    }
+//    private boolean foodCollision() {
+//        Rectangle headBounds = Snake.getInstance().getHead().getBounds();
+//        //can headBounds.x/y cause issues? (not .get, so its not going through a synch method?)
+//        int snakeX = headBounds.x;
+//        int snakeY = headBounds.y;
+//        int foodX = smallFood.getBounds().x;
+//        int foodY = smallFood.getBounds().y;
+//
+//        //            System.out.println("Food collision");
+//        return (snakeX + ComponentConst.SNAKE_COMPONENT_SIZE >= foodX && snakeX <= foodX + ComponentConst.FOOD_SIZE) &&
+//                (snakeY + ComponentConst.SNAKE_COMPONENT_SIZE >= foodY && snakeY <= foodY + ComponentConst.FOOD_SIZE);
+//    }
 }
