@@ -1,4 +1,4 @@
-package com.components.food;
+package com.game_objects;
 
 import com.components.constants.ComponentConst;
 import com.components.constants.Direction;

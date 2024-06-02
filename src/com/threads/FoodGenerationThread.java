@@ -2,12 +2,8 @@ package com.threads;
 
 import com.GameManager;
 import com.components.ComponentFactory;
-import com.components.constants.ComponentConst;
-import com.components.food.SmallFood;
-import com.components.snake.SnakeHead;
-import com.game_objects.Snake;
+import com.game_objects.SmallFood;
 
-import java.awt.*;
 import java.util.Random;
 
 import static java.lang.Thread.currentThread;

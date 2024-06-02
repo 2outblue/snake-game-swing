@@ -2,23 +2,21 @@ package com.threads;
 
 import com.GameManager;
 import com.SoundManager;
-import com.ThreadGovernor;
 import com.components.ComponentFactory;
 import com.components.constants.ComponentConst;
 import com.components.constants.Direction;
-import com.components.food.SmallFood;
+import com.game_objects.SmallFood;
 import com.components.snake.SnakeHead;
 import com.game_objects.Snake;
+import com.game_utility.CoordinateStore;
 
 import java.awt.*;
-import java.util.Arrays;
 import java.util.Random;
 
-import static java.lang.Thread.currentThread;
 
 public class SnakeMovementThread extends Thread {
 
-    private int movementSpeedInverse = 33;
+    private final int movementSpeedInverse = 33;
 
     private final Snake snake;
 
@@ -78,6 +76,11 @@ public class SnakeMovementThread extends Thread {
 
                 if (borderCollision() || selfCollision()) {
                     SoundManager.getInstance().playEndGame();
+                    try {
+                        sleep(600);
+                    } catch (InterruptedException e) {
+                        throw new RuntimeException(e);
+                    }
                     GameManager.getInstance().endGame();
                 }
                 // take that out to the food thread along with the relevant methods, maybe
@@ -91,7 +94,6 @@ public class SnakeMovementThread extends Thread {
                 snake.paintBody(headBounds);
 //                System.out.println(headBounds);
             }
-
             try {
                 Thread.sleep(movementSpeedInverse);
             } catch (InterruptedException e) {
@@ -106,7 +108,8 @@ public class SnakeMovementThread extends Thread {
         int snakeX = snake.getHead().getBounds().x;
         int snakeY = snake.getHead().getBounds().y;
         // collision if x < 100 or x > 690 // if y > 670 or y < 80 - previous values with the border components
-        return snakeX < 96 || snakeX > 680 || snakeY < 78 || snakeY > 660;
+        return snakeX < CoordinateStore.borderMinX || snakeX > CoordinateStore.borderMaxX ||
+                snakeY < CoordinateStore.borderMinY || snakeY > CoordinateStore.borderMaxY;
     }
 
     private boolean selfCollision() {
@@ -131,8 +134,8 @@ public class SnakeMovementThread extends Thread {
     private void spawnFood() {
         Random random = new Random();
         smallFood = ComponentFactory.getInstance().createSmallFood();
-        int randomX = random.nextInt(100, 680);
-        int randomY = random.nextInt(80, 660);
+        int randomX = random.nextInt(CoordinateStore.foodMinX, CoordinateStore.foodMaxX);
+        int randomY = random.nextInt(CoordinateStore.foodMinY, CoordinateStore.foodMaxY);
 
         smallFood.setBounds(randomX, randomY, smallFood.getPreferredSize().width, smallFood.getPreferredSize().height);
         GameManager.getInstance().addFood(smallFood);

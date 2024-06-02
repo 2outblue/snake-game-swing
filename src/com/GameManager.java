@@ -3,7 +3,9 @@ package com;
 import com.components.ComponentFactory;
 import com.components.background.BackgroundComponent;
 import com.components.constants.ComponentConst;
-import com.components.food.SmallFood;
+import com.components.menu.DifficultyMark;
+import com.components.menu.MenuButton;
+import com.game_objects.SmallFood;
 import com.components.menu.GamePausedComponent;
 import com.components.menu.MenuComponent;
 import com.components.snake.SnakeBody;
@@ -13,6 +15,8 @@ import com.event_listeners.HeadDirectionChangeListener;
 import com.event_listeners.PauseListener;
 import com.game_objects.Border;
 import com.game_objects.Snake;
+import com.game_utility.CoordinateStore;
+import com.game_utility.Difficulty;
 
 import javax.swing.*;
 import java.awt.event.KeyListener;
@@ -24,6 +28,7 @@ public class GameManager {
     private static GameManager instance;
     private ComponentFactory componentFactory;
     private JFrame frame;
+    private JLayeredPane layeredPane;
     private ThreadGovernor threadGovernor;
     private Snake snake;
 
@@ -35,52 +40,37 @@ public class GameManager {
 
     private JComponent background;
 
-    private JLayeredPane layeredPane;
+    private DifficultyMark difficultyMark;
 
     private boolean gameOver = false;
 
+    private Difficulty gameDifficulty;
+
     private GameManager() {
-        SoundManager sm = SoundManager.getInstance();
+//        SoundManager sm = SoundManager.getInstance();
         componentFactory = ComponentFactory.getInstance();
         this.frame = componentFactory.createFrame();
         createLayeredPane();
+        gameDifficulty = Difficulty.EASY;
     }
 
     public void createAndShowGame(){
         displayStartScreen();
-//        createBackground();
-//        createSnake();
-//        threadGovernor = ThreadGovernor.getInstance();
-//        setInitialSnakePosition();
-//        addEventListeners();
-//        createBorder();
-
-//        threadGovernor.createMovementThread();
-//        threadGovernor.createFoodGenerationThread();
-
-//        growSnake();
-//        growSnake();
-//        growSnake();
-//        growSnake();
-//        growSnake();
-//        growSnake();
-//        growSnake();
     }
 
     public void displayStartScreen() {
-        layeredPane.add(componentFactory.createPlayButton(), JLayeredPane.POPUP_LAYER);
-
-        MenuComponent startMenuBackground = new MenuComponent();
-        startMenuBackground.setBounds(0, 0, ComponentConst.FRAME_WIDTH, ComponentConst.FRAME_HEIGHT);
-        layeredPane.add(startMenuBackground, JLayeredPane.POPUP_LAYER);
-
+        createMenu();
+        setDifficulty(Difficulty.EASY);
     }
 
     public void startGame() {
         gameOver = false;
         layeredPane.removeAll();
+        layeredPane.revalidate();
+        layeredPane.repaint();
 
-        createBackground();
+
+        createMap();
         createSnake();
         threadGovernor = ThreadGovernor.getInstance();
         setInitialSnakePosition();
@@ -108,12 +98,6 @@ public class GameManager {
     }
     private void setInitialSnakePosition(){
         snake.getHead().setBounds(390, 390, ComponentConst.SNAKE_HEAD_20, ComponentConst.SNAKE_HEAD_20);
-    }
-
-    private void createBackground() {
-        background = new BackgroundComponent();
-        background.setBounds(0, 0, 800, 800);
-        layeredPane.add(background, JLayeredPane.DEFAULT_LAYER);
     }
 
     private void createLayeredPane() {
@@ -172,13 +156,10 @@ public class GameManager {
 //        Snake.instantiateSnake(h1, bl, tail);
         snake = new Snake(h1, bl, tail);
     }
-
-
     private void addEventListeners() {
         layeredPane.addKeyListener(new HeadDirectionChangeListener());
         layeredPane.addKeyListener(new PauseListener());
     }
-
     public synchronized void growSnake() {
         SnakeBody body = componentFactory.createBody();
         layeredPane.add(body, JLayeredPane.PALETTE_LAYER);
@@ -189,17 +170,6 @@ public class GameManager {
         snake.grow(body);
         snake.grow(body2);
     }
-
-//    private void createBorder() {
-//        this.border = new Border();
-//        for (int i = 0; i < border.getBorderComponents().length; i++) {
-//            BorderComponent bc = border.getBorderComponents()[i];
-////            frame.getContentPane().add(bc);
-//            layeredPane.add(bc, JLayeredPane.PALETTE_LAYER);
-//            bc.setBounds(bc.x, bc.y, bc.getPreferredSize().width, bc.getPreferredSize().height);
-//        }
-//    }
-
     public synchronized void pauseGame() {
         if (pauseElement == null) {
             pauseElement = componentFactory.createGamePauseComponent();
@@ -221,7 +191,6 @@ public class GameManager {
             snake.setPaused(true);
         }
     }
-
     public synchronized void endGame() {
         layeredPane.add(componentFactory.createBackToMenuButton(), JLayeredPane.POPUP_LAYER);
         layeredPane.add(componentFactory.createGameOverComponent(), JLayeredPane.POPUP_LAYER);
@@ -240,8 +209,43 @@ public class GameManager {
         layeredPane.repaint();
     }
 
+    private void createMap() {
+        layeredPane.revalidate();
+        layeredPane.repaint();
+        background = componentFactory.createGameBackground(gameDifficulty);
+        layeredPane.add(background, JLayeredPane.DEFAULT_LAYER);
+    }
+
+    public void setDifficulty(Difficulty dif) {
+        CoordinateStore.setDifficulty(dif);
+        difficultyMark.set(dif);
+        gameDifficulty = dif;
+
+    }
+
+    private void createMenu() {
+        // event listeners for button clicks are automatically attached in the component factory
+        layeredPane.add(componentFactory.createPlayButton(), JLayeredPane.POPUP_LAYER);
+        layeredPane.add(componentFactory.createEasyButton(), JLayeredPane.POPUP_LAYER);
+        layeredPane.add(componentFactory.createMediumButton(), JLayeredPane.POPUP_LAYER);
+        layeredPane.add(componentFactory.createHardButton(), JLayeredPane.POPUP_LAYER);
+        layeredPane.add(componentFactory.createQuitButton(), JLayeredPane.POPUP_LAYER);
+
+        difficultyMark = new DifficultyMark();
+        difficultyMark.set(Difficulty.EASY);
+        layeredPane.add(difficultyMark, JLayeredPane.POPUP_LAYER);
+
+        MenuComponent startMenuBackground = new MenuComponent();
+        startMenuBackground.setBounds(0, 0, ComponentConst.FRAME_WIDTH, ComponentConst.FRAME_HEIGHT);
+        layeredPane.add(startMenuBackground, JLayeredPane.POPUP_LAYER);
+    }
+
     public synchronized boolean gameOver() {
         return gameOver;
+    }
+
+    public void quitGame() {
+        frame.dispose();
     }
 
     public synchronized static GameManager getInstance() {

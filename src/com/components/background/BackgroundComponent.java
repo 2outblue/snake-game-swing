@@ -12,9 +12,9 @@ public class BackgroundComponent extends JComponent {
 
     private Image image;
 
-    public BackgroundComponent() {
+    public BackgroundComponent(String path) {
         try {
-            this.image = ImageIO.read(new File(ComponentConst.BACKGROUND_1));
+            this.image = ImageIO.read(new File(path));
         } catch (IOException e) {
             e.printStackTrace();
         }

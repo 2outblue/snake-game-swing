@@ -1,7 +1,6 @@
 package com;
 
 import com.threads.CollisionCheckerThread;
-import com.threads.FoodGenerationThread;
 import com.threads.SnakeMovementThread;
 
 public class ThreadGovernor {

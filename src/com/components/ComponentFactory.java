@@ -1,7 +1,8 @@
 package com.components;
 
+import com.components.background.BackgroundComponent;
 import com.components.constants.ComponentConst;
-import com.components.food.SmallFood;
+import com.game_objects.SmallFood;
 import com.components.menu.GameOverComponent;
 import com.components.menu.GamePausedComponent;
 import com.components.menu.MenuButton;
@@ -9,11 +10,10 @@ import com.components.snake.SnakeBody;
 import com.components.snake.SnakeHead;
 import com.event_listeners.menu_events.BackToMenuListener;
 import com.event_listeners.menu_events.ButtonHoverListener;
-import com.event_listeners.menu_events.PlayButtonActionListener;
+import com.event_listeners.menu_events.MenuButtonActionListener;
+import com.game_utility.Difficulty;
 
 import javax.swing.*;
-import javax.swing.border.LineBorder;
-import java.awt.*;
 
 public class ComponentFactory {
 
@@ -26,6 +26,10 @@ public class ComponentFactory {
     private final int patternRepeater;
     private int patternPointer;
 
+    // one instance per event listener to attach to all menu buttons
+
+    private MenuButtonActionListener menuButtonLister;
+    private ButtonHoverListener buttonHoverListener;
 //    private TailComponent snakeTail;
 
     private ComponentFactory() {
@@ -33,6 +37,8 @@ public class ComponentFactory {
         patternPointer = 0;
         patternRepeater = 2;
         makePattern();
+        menuButtonLister = new MenuButtonActionListener();
+        buttonHoverListener = new ButtonHoverListener();
     }
 
     public SnakeBody createTailPart(int size, String path) {
@@ -75,11 +81,23 @@ public class ComponentFactory {
         return this.frame;
     }
 
+    public BackgroundComponent createGameBackground(Difficulty dif) {
+        BackgroundComponent bc = new BackgroundComponent(ComponentConst.BACKGROUND_1);
+        if (dif == Difficulty.MEDIUM) {
+            bc = new BackgroundComponent(ComponentConst.BACKGROUND_2);
+        } else if (dif == Difficulty.HARD) {
+            bc = new BackgroundComponent(ComponentConst.BACKGROUND_2);
+        }
+        bc.setBounds(0, 0, 800, 800);
+
+        return bc;
+    }
     public MenuButton createPlayButton() {
         MenuButton playButton = new MenuButton(ComponentConst.BUTTON_1_PLAY);
-        playButton.addActionListener(new PlayButtonActionListener());
-        playButton.setBounds(275, 200, 250, 75);
-        playButton.addMouseListener(new ButtonHoverListener());
+        playButton.setBounds(275, 125, 250, 75);
+        playButton.setActionCommand("play");
+        playButton.addMouseListener(buttonHoverListener);
+        playButton.addActionListener(menuButtonLister);
         return playButton;
     }
 
@@ -87,13 +105,49 @@ public class ComponentFactory {
         MenuButton button = new MenuButton(ComponentConst.BUTTON_BACK_TO_MENU);
         button.addActionListener(new BackToMenuListener());
         button.setBounds(275, 400, 250, 75);
-        button.addMouseListener(new ButtonHoverListener());
+        button.addMouseListener(buttonHoverListener);
+        return button;
+    }
+
+    public MenuButton createEasyButton() {
+        MenuButton button = new MenuButton(ComponentConst.BUTTON_EASY);
+        button.setBounds(275, 336, 250, 75);
+        button.setActionCommand("easy");
+        button.addActionListener(menuButtonLister);
+        button.addMouseListener(buttonHoverListener);
+        return button;
+    }
+
+    public MenuButton createMediumButton() {
+        MenuButton button = new MenuButton(ComponentConst.BUTTON_MEDIUM);
+        button.setBounds(275, 451, 250, 75);
+        button.setActionCommand("medium");
+        button.addActionListener(menuButtonLister);
+        button.addMouseListener(buttonHoverListener);
+        return button;
+    }
+
+    public MenuButton createHardButton() {
+        MenuButton button = new MenuButton(ComponentConst.BUTTON_HARD);
+        button.setBounds(275, 566, 250, 75);
+        button.setActionCommand("hard");
+        button.addActionListener(menuButtonLister);
+        button.addMouseListener(buttonHoverListener);
+        return button;
+    }
+
+    public MenuButton createQuitButton() {
+        MenuButton button = new MenuButton(ComponentConst.BUTTON_QUIT);
+        button.setBounds(275, 670, 250, 75);
+        button.setActionCommand("quit");
+        button.addActionListener(menuButtonLister);
+        button.addMouseListener(buttonHoverListener);
         return button;
     }
 
     public GamePausedComponent createGamePauseComponent() {
         GamePausedComponent gp = new GamePausedComponent();
-        gp.setBounds(170, 325, ComponentConst.GAME_OVER_WIDTH, ComponentConst.GAME_OVER_HEIGHT);
+        gp.setBounds(170, 325, ComponentConst.GAME_PAUSED_WIDTH, ComponentConst.GAME_PAUSED_HEIGHT);
         return gp;
 
 //        JLabel label = new JLabel("GAME PAUSED", SwingConstants.CENTER);
@@ -117,7 +171,7 @@ public class ComponentFactory {
 
     public GameOverComponent createGameOverComponent() {
         GameOverComponent g = new GameOverComponent();
-        g.setBounds(170, 267, ComponentConst.GAME_OVER_WIDTH, ComponentConst.GAME_OVER_HEIGHT);
+        g.setBounds(316, 339, ComponentConst.GAME_OVER_WIDTH, ComponentConst.GAME_OVER_HEIGHT);
         return g;
     }
 
