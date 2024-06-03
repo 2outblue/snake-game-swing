@@ -3,8 +3,9 @@ package com.threads;
 import com.GameManager;
 import com.SoundManager;
 import com.components.ComponentFactory;
-import com.components.constants.ComponentConst;
-import com.components.constants.Direction;
+import com.ScoreManager;
+import com.constants.ComponentConst;
+import com.constants.Direction;
 import com.game_objects.SmallFood;
 import com.components.snake.SnakeHead;
 import com.game_objects.Snake;
@@ -13,8 +14,6 @@ import com.game_utility.Difficulty;
 
 import java.awt.*;
 import java.util.Random;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 
 
 // Rename to InGameThread, or GameTickThread, PhysicsAndRenderThread ? GameLoopThread
@@ -44,7 +43,7 @@ public class SnakeMovementThread extends Thread {
 
     @Override
     public void run() {
-        ExecutorService executor = Executors.newSingleThreadExecutor();
+//        ExecutorService executor = Executors.newSingleThreadExecutor();
         spawnFood();
         Direction updatedDirection = snake.getHead().getDirection();
         int step = 6;
@@ -97,6 +96,7 @@ public class SnakeMovementThread extends Thread {
                     SoundManager.getInstance().playFoodCollision();
                     GameManager.getInstance().removeFood(smallFood);
                     GameManager.getInstance().growSnake();
+                    ScoreManager.increaseScore();
 
                     spawnFood();
                 }

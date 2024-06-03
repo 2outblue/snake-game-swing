@@ -1,6 +1,6 @@
 package com.components.snake;
 
-import com.components.constants.Direction;
+import com.constants.Direction;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;

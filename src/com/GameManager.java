@@ -1,16 +1,14 @@
 package com;
 
 import com.components.ComponentFactory;
-import com.components.background.BackgroundComponent;
-import com.components.constants.ComponentConst;
+import com.constants.ComponentConst;
 import com.components.menu.DifficultyMark;
-import com.components.menu.MenuButton;
 import com.game_objects.SmallFood;
 import com.components.menu.GamePausedComponent;
 import com.components.menu.MenuComponent;
 import com.components.snake.SnakeBody;
 import com.components.snake.SnakeHead;
-import com.components.constants.Direction;
+import com.constants.Direction;
 import com.event_listeners.HeadDirectionChangeListener;
 import com.event_listeners.PauseListener;
 import com.game_objects.Border;
@@ -47,6 +45,8 @@ public class GameManager {
 
     private Difficulty gameDifficulty;
 
+    private JLabel score;
+
     private GameManager() {
 //        SoundManager sm = SoundManager.getInstance();
         componentFactory = ComponentFactory.getInstance();
@@ -54,6 +54,7 @@ public class GameManager {
         createLayeredPane();
         gameDifficulty = Difficulty.EASY;
         threadGovernor = ThreadGovernor.getInstance();
+        score = componentFactory.createScoreComponent();
     }
 
     public void createAndShowGame(){
@@ -68,14 +69,15 @@ public class GameManager {
     public void startGame() {
         gameOver = false;
         layeredPane.removeAll();
-        layeredPane.revalidate();
-        layeredPane.repaint();
+//        layeredPane.revalidate();
+//        layeredPane.repaint();
 
 
         createMap();
         createSnake();
         setInitialSnakePosition();
         addEventListeners();
+        displayScore();
         threadGovernor.createMovementThread();
 
         layeredPane.requestFocusInWindow();
@@ -95,6 +97,7 @@ public class GameManager {
         }
         threadGovernor.closeAllThreads();
         snake = null;
+        ScoreManager.resetScore();
 
         displayStartScreen();
     }
@@ -240,6 +243,14 @@ public class GameManager {
         MenuComponent startMenuBackground = new MenuComponent();
         startMenuBackground.setBounds(0, 0, ComponentConst.FRAME_WIDTH, ComponentConst.FRAME_HEIGHT);
         layeredPane.add(startMenuBackground, JLayeredPane.POPUP_LAYER);
+    }
+
+    private void displayScore() {
+        layeredPane.add(score, JLayeredPane.PALETTE_LAYER);
+    }
+
+    public void updateScore(String value){
+        score.setText(value);
     }
 
     public synchronized boolean gameOver() {

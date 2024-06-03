@@ -1,9 +1,8 @@
 package com.game_objects;
 
-import com.components.constants.ComponentConst;
 import com.components.snake.SnakeBody;
 import com.components.snake.SnakeHead;
-import com.components.constants.Direction;
+import com.constants.Direction;
 
 import java.awt.*;
 import java.util.List;

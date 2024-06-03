@@ -1,7 +1,7 @@
 package com.components;
 
 import com.components.background.BackgroundComponent;
-import com.components.constants.ComponentConst;
+import com.constants.ComponentConst;
 import com.game_objects.SmallFood;
 import com.components.menu.GameOverComponent;
 import com.components.menu.GamePausedComponent;
@@ -14,6 +14,7 @@ import com.event_listeners.menu_events.MenuButtonActionListener;
 import com.game_utility.Difficulty;
 
 import javax.swing.*;
+import java.awt.*;
 
 public class ComponentFactory {
 
@@ -180,6 +181,14 @@ public class ComponentFactory {
         return new SmallFood(ComponentConst.FOOD_SIZE, ComponentConst.APPLE_RED_1);
     }
 
+    public JLabel createScoreComponent() {
+        JLabel scoreLabel = new JLabel("0");
+        scoreLabel.setHorizontalAlignment(SwingConstants.CENTER);
+        scoreLabel.setFont(new Font("Luckiest guy", Font.BOLD, 24));
+        scoreLabel.setForeground(Color.BLUE);
+        scoreLabel.setBounds(350, 15, 100, 50);
+        return scoreLabel;
+    }
     public static ComponentFactory getInstance() {
             if (instance == null) {
                 instance = new ComponentFactory();

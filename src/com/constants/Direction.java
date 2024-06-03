@@ -1,4 +1,4 @@
-package com.components.constants;
+package com.constants;
 
 public enum Direction {
 //    public static final String UP = "up";

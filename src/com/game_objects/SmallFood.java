@@ -1,8 +1,5 @@
 package com.game_objects;
 
-import com.components.constants.ComponentConst;
-import com.components.constants.Direction;
-
 import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;

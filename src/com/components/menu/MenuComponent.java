@@ -1,6 +1,6 @@
 package com.components.menu;
 
-import com.components.constants.ComponentConst;
+import com.constants.ComponentConst;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;

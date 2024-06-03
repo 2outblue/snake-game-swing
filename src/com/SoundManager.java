@@ -1,6 +1,6 @@
 package com;
 
-import com.components.constants.AudioConst;
+import com.constants.AudioConst;
 
 import javax.sound.sampled.*;
 import java.io.File;
@@ -10,7 +10,6 @@ public class SoundManager {
 
     private static SoundManager soundManager;
 
-    // TODO: class fields are not needed, every method loads the resource anyway - delete all class fields and modify the methods accordingly
     private SoundManager() {
 
     }

@@ -1,8 +1,7 @@
 package com.components.snake;
 
-import com.components.constants.Direction;
+import com.constants.Direction;
 
-import javax.swing.*;
 import java.awt.*;
 
 public abstract class SnakeComponent{

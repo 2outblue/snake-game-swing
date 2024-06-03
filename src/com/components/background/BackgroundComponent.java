@@ -1,7 +1,5 @@
 package com.components.background;
 
-import com.components.constants.ComponentConst;
-
 import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;

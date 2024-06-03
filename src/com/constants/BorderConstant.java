@@ -1,4 +1,4 @@
-package com.components.constants;
+package com.constants;
 
 public class BorderConstant {
 

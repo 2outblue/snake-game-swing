@@ -1,6 +1,6 @@
 package com.components.menu;
 
-import com.components.constants.ComponentConst;
+import com.constants.ComponentConst;
 import com.game_utility.Difficulty;
 
 import javax.imageio.ImageIO;

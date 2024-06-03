@@ -1,10 +1,6 @@
 package com.components.border;
 
-import com.components.constants.BorderConstant;
 import com.game_objects.Border;
-
-import javax.swing.*;
-import java.awt.*;
 
 public class BorderRight extends BorderComponent {
 

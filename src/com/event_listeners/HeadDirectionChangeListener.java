@@ -3,7 +3,7 @@ package com.event_listeners;
 import com.GameManager;
 import com.SoundManager;
 import com.game_objects.Snake;
-import com.components.constants.Direction;
+import com.constants.Direction;
 
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;

@@ -1,13 +1,11 @@
 package com;
 
-import com.threads.CollisionCheckerThread;
 import com.threads.SnakeMovementThread;
 
 public class ThreadGovernor {
 
     private static ThreadGovernor instance;
     private SnakeMovementThread movementThread;
-    private CollisionCheckerThread ct;
     private Thread foodThread;
     private ThreadGovernor() {
 //        movementThread = new Thread(new SnakeMovementThread());
