@@ -2,6 +2,7 @@ package com.game_utility;
 
 // updates coordinate values for where the border is and where the food should spawn
 // doesn't update coords of any game objects
+// TODO: CoordinateStore is not a good name for this class
 public class CoordinateStore {
 
     public static Difficulty difficulty;

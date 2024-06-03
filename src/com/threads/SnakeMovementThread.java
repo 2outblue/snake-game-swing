@@ -17,6 +17,7 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 
+// Rename to InGameThread, or GameTickThread, PhysicsAndRenderThread ? GameLoopThread
 public class SnakeMovementThread extends Thread {
 
     private final int movementSpeedInverse = 33;
@@ -145,6 +146,7 @@ public class SnakeMovementThread extends Thread {
         return false;
     }
 
+    // TODO: Add checking for tail collision as there none currently
     private boolean selfCollision() {
         int headX = headBounds.x;
         int headY = headBounds.y;

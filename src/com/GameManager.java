@@ -19,6 +19,7 @@ import com.game_utility.CoordinateStore;
 import com.game_utility.Difficulty;
 
 import javax.swing.*;
+import java.awt.*;
 import java.awt.event.KeyListener;
 import java.util.ArrayList;
 import java.util.List;
@@ -94,8 +95,8 @@ public class GameManager {
         }
         threadGovernor.closeAllThreads();
         snake = null;
-        displayStartScreen();
 
+        displayStartScreen();
     }
     private void setInitialSnakePosition(){
         snake.getHead().setBounds(390, 390, ComponentConst.SNAKE_HEAD_20, ComponentConst.SNAKE_HEAD_20);
@@ -110,15 +111,10 @@ public class GameManager {
     private void createSnake() {
         SnakeHead h1 = componentFactory.createHead();
         h1.setDirection(Direction.UP);
-//        h1.setBounds(390, 390, ComponentConst.SNAKE_COMPONENT_SIZE, ComponentConst.SNAKE_COMPONENT_SIZE);
-
-//        frame.getContentPane().add(h1);
         layeredPane.add(h1, JLayeredPane.PALETTE_LAYER);
 
         SnakeBody body1 = componentFactory.createBody();
         body1.setDirection(Direction.DOWN);
-
-//        frame.getContentPane().add(body1);
         layeredPane.add(body1, JLayeredPane.PALETTE_LAYER);
 
         List<SnakeBody> bl = new ArrayList<>();
@@ -180,6 +176,10 @@ public class GameManager {
             // TODO: is this try-catch necessary ?
             try {
                 layeredPane.remove(pauseElement);
+
+                for (Component comp : layeredPane.getComponentsInLayer(JLayeredPane.POPUP_LAYER)) {
+                    layeredPane.remove(comp);
+                }
                 layeredPane.revalidate();
                 layeredPane.repaint();
             } catch (NullPointerException ex) {
@@ -187,6 +187,7 @@ public class GameManager {
             }
         } else {
 //            frame.getContentPane().add(pauseElement);
+            layeredPane.add(componentFactory.createBackToMenuButton(), JLayeredPane.POPUP_LAYER);
             layeredPane.add(pauseElement, JLayeredPane.POPUP_LAYER);
 
             snake.setPaused(true);
@@ -204,7 +205,7 @@ public class GameManager {
     public void addFood(SmallFood sf) {
         layeredPane.add(sf, JLayeredPane.PALETTE_LAYER);
     }
-    public synchronized void removeFood(SmallFood sf) {
+    public void removeFood(SmallFood sf) {
         layeredPane.remove(sf);
         layeredPane.revalidate();
         layeredPane.repaint();

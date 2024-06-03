@@ -15,7 +15,7 @@ public class PauseListener extends KeyAdapter {
 
     @Override
     public void keyPressed(KeyEvent e) {
-        if (e.getKeyCode() == KeyEvent.VK_SPACE) {
+        if (e.getKeyCode() == KeyEvent.VK_SPACE || e.getKeyCode() == KeyEvent.VK_ESCAPE) {
             if (!GameManager.getInstance().gameOver()) {
                 GameManager.getInstance().pauseGame();
             }

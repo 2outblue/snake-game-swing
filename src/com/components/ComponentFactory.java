@@ -105,7 +105,7 @@ public class ComponentFactory {
     public MenuButton createBackToMenuButton() {
         MenuButton button = new MenuButton(ComponentConst.BUTTON_BACK_TO_MENU);
         button.addActionListener(new BackToMenuListener());
-        button.setBounds(275, 400, 250, 75);
+        button.setBounds(275, 430, 250, 75);
         button.addMouseListener(buttonHoverListener);
         return button;
     }
