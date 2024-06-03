@@ -19,6 +19,7 @@ public class ComponentConst {
     public final static String BACKGROUND_1 = "src/resources/game-background.png";
     public final static String BACKGROUND_2 = "src/resources/game-background-2.png";
     public final static String BACKGROUND_3 = "src/resources/game-background-3.png";
+    public final static String BEST_SCORE = "src/resources/best.png";
     public final static String GAME_PAUSED_1 = "src/resources/pause-game.png";
     public final static String GAME_OVER_1 = "src/resources/game-over-text.png";
     public final static String BUTTON_1_PLAY = "src/resources/button1-play.png";

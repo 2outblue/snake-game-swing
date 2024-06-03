@@ -1,6 +1,7 @@
 package com.components;
 
 import com.components.background.BackgroundComponent;
+import com.components.background.BestComponent;
 import com.constants.ComponentConst;
 import com.game_objects.SmallFood;
 import com.components.menu.GameOverComponent;
@@ -15,6 +16,8 @@ import com.game_utility.Difficulty;
 
 import javax.swing.*;
 import java.awt.*;
+import java.io.File;
+import java.io.IOException;
 
 public class ComponentFactory {
 
@@ -183,11 +186,24 @@ public class ComponentFactory {
 
     public JLabel createScoreComponent() {
         JLabel scoreLabel = new JLabel("0");
+        try {
+            Font customFont = Font.createFont(Font.TRUETYPE_FONT, new File("src/resources/font/LuckiestGuy-Regular.ttf")).deriveFont(Font.BOLD, 36);
+            GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
+            ge.registerFont(customFont);
+            scoreLabel.setFont(customFont);
+        } catch (IOException | FontFormatException e) {
+            e.printStackTrace();
+        }
         scoreLabel.setHorizontalAlignment(SwingConstants.CENTER);
-        scoreLabel.setFont(new Font("Luckiest guy", Font.BOLD, 24));
-        scoreLabel.setForeground(Color.BLUE);
-        scoreLabel.setBounds(350, 15, 100, 50);
+        scoreLabel.setForeground(Color.MAGENTA);
+        scoreLabel.setBounds(375, 15, 50, 50);
         return scoreLabel;
+    }
+
+    public BestComponent createBestComponent() {
+        BestComponent bc = new BestComponent();
+        bc.setBounds(15, 15, bc.getPreferredSize().width, bc.getPreferredSize().height);
+        return bc;
     }
     public static ComponentFactory getInstance() {
             if (instance == null) {

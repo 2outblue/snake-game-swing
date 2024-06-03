@@ -84,6 +84,7 @@ public class SnakeMovementThread extends Thread {
 
                 if (borderCollision() || selfCollision()) {
                     SoundManager.getInstance().playEndGame();
+                    ScoreManager.getInstance().saveScore();
                     try {
                         sleep(600);
                     } catch (InterruptedException e) {
@@ -96,7 +97,7 @@ public class SnakeMovementThread extends Thread {
                     SoundManager.getInstance().playFoodCollision();
                     GameManager.getInstance().removeFood(smallFood);
                     GameManager.getInstance().growSnake();
-                    ScoreManager.increaseScore();
+                    ScoreManager.getInstance().increaseScore();
 
                     spawnFood();
                 }

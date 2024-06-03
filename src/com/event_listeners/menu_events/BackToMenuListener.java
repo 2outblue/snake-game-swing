@@ -1,6 +1,7 @@
 package com.event_listeners.menu_events;
 
 import com.GameManager;
+import com.ScoreManager;
 import com.SoundManager;
 
 import java.awt.event.ActionEvent;
@@ -11,8 +12,8 @@ public class BackToMenuListener implements ActionListener {
 
     @Override
     public void actionPerformed(ActionEvent e) {
+        ScoreManager.getInstance().saveScore();
         SoundManager.getInstance().playButtonClick();
-        // TODO: this doesn't work
         GameManager.getInstance().restart();
     }
 }

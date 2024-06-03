@@ -29,6 +29,8 @@ public class GameManager {
     private JFrame frame;
     private JLayeredPane layeredPane;
     private ThreadGovernor threadGovernor;
+
+    private ScoreManager scoreManager;
     private Snake snake;
 
     private Border border;
@@ -47,14 +49,16 @@ public class GameManager {
 
     private JLabel score;
 
+    private JLabel bestScore;
+
     private GameManager() {
-//        SoundManager sm = SoundManager.getInstance();
         componentFactory = ComponentFactory.getInstance();
         this.frame = componentFactory.createFrame();
         createLayeredPane();
         gameDifficulty = Difficulty.EASY;
         threadGovernor = ThreadGovernor.getInstance();
         score = componentFactory.createScoreComponent();
+        scoreManager = ScoreManager.getInstance();
     }
 
     public void createAndShowGame(){
@@ -72,12 +76,13 @@ public class GameManager {
 //        layeredPane.revalidate();
 //        layeredPane.repaint();
 
-
+        scoreManager.resetScore();
         createMap();
         createSnake();
         setInitialSnakePosition();
         addEventListeners();
-        displayScore();
+        displayBestScore();
+        displayCurrentScore();
         threadGovernor.createMovementThread();
 
         layeredPane.requestFocusInWindow();
@@ -97,7 +102,6 @@ public class GameManager {
         }
         threadGovernor.closeAllThreads();
         snake = null;
-        ScoreManager.resetScore();
 
         displayStartScreen();
     }
@@ -245,7 +249,16 @@ public class GameManager {
         layeredPane.add(startMenuBackground, JLayeredPane.POPUP_LAYER);
     }
 
-    private void displayScore() {
+    private void displayBestScore() {
+        layeredPane.add(componentFactory.createBestComponent(), JLayeredPane.POPUP_LAYER);
+        bestScore = componentFactory.createScoreComponent();
+        bestScore.setHorizontalAlignment(SwingConstants.LEFT);
+        bestScore.setBounds(150, 15, 100, 50);
+        bestScore.setText(scoreManager.getCurrentBest());
+        layeredPane.add(bestScore, JLayeredPane.POPUP_LAYER);
+    }
+
+    private void displayCurrentScore() {
         layeredPane.add(score, JLayeredPane.PALETTE_LAYER);
     }
 
@@ -253,6 +266,9 @@ public class GameManager {
         score.setText(value);
     }
 
+    public void updateBestScore(String value) {
+        bestScore.setText(value);
+    }
     public synchronized boolean gameOver() {
         return gameOver;
     }
