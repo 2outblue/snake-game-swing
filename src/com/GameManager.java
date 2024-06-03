@@ -52,6 +52,7 @@ public class GameManager {
         this.frame = componentFactory.createFrame();
         createLayeredPane();
         gameDifficulty = Difficulty.EASY;
+        threadGovernor = ThreadGovernor.getInstance();
     }
 
     public void createAndShowGame(){
@@ -72,12 +73,12 @@ public class GameManager {
 
         createMap();
         createSnake();
-        threadGovernor = ThreadGovernor.getInstance();
         setInitialSnakePosition();
         addEventListeners();
         threadGovernor.createMovementThread();
 
         layeredPane.requestFocusInWindow();
+
         growSnake();
         growSnake();
         growSnake();

@@ -68,6 +68,7 @@ public class ComponentFactory {
         if (this.frame == null) {
             JFrame frame = new JFrame("Snake");
             frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+//            frame.setUndecorated(true);
             frame.setLayout(null);
 
             frame.pack();
@@ -86,7 +87,7 @@ public class ComponentFactory {
         if (dif == Difficulty.MEDIUM) {
             bc = new BackgroundComponent(ComponentConst.BACKGROUND_2);
         } else if (dif == Difficulty.HARD) {
-            bc = new BackgroundComponent(ComponentConst.BACKGROUND_2);
+            bc = new BackgroundComponent(ComponentConst.BACKGROUND_3);
         }
         bc.setBounds(0, 0, 800, 800);
 

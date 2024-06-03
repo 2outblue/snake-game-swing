@@ -11,7 +11,7 @@ public class ThreadGovernor {
     private Thread foodThread;
     private ThreadGovernor() {
 //        movementThread = new Thread(new SnakeMovementThread());
-        movementThread = new SnakeMovementThread();
+//        movementThread = new SnakeMovementThread();
 //        foodThread = new Thread(new FoodGenerationThread());
     }
 

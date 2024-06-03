@@ -4,6 +4,7 @@ package com.game_utility;
 // doesn't update coords of any game objects
 public class CoordinateStore {
 
+    public static Difficulty difficulty;
     public static int borderMinX;
     public static int borderMaxX;
     public static int borderMinY;
@@ -14,7 +15,8 @@ public class CoordinateStore {
     public static int foodMinY;
     public static int foodMaxY;
 
-    public static synchronized void setDifficulty(Difficulty dif) {
+    public static void setDifficulty(Difficulty dif) {
+        difficulty = dif;
         if (dif == Difficulty.EASY) {
             borderMinX = 96;
             borderMaxX = 680;
@@ -37,15 +39,19 @@ public class CoordinateStore {
             foodMaxY = 550;
         } else if (dif == Difficulty.HARD) {
             // same values as for medium for now
-            borderMinX = 230;
-            borderMaxX = 550;
-            borderMinY = 226;
-            borderMaxY = 550;
+            borderMinX = 110;
+            borderMaxX = 670;
+            borderMinY = 110;
+            borderMaxY = 670;
 
             foodMinX = 232;
             foodMaxX = 546;
             foodMinY = 228;
             foodMaxY = 550;
         }
+    }
+
+    public static Difficulty getDifficulty() {
+        return difficulty;
     }
 }

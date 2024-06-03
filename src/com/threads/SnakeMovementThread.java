@@ -9,9 +9,12 @@ import com.game_objects.SmallFood;
 import com.components.snake.SnakeHead;
 import com.game_objects.Snake;
 import com.game_utility.CoordinateStore;
+import com.game_utility.Difficulty;
 
 import java.awt.*;
 import java.util.Random;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 
 public class SnakeMovementThread extends Thread {
@@ -27,17 +30,20 @@ public class SnakeMovementThread extends Thread {
 
     private Rectangle headBounds;
 
+    private Difficulty dif;
+
     private boolean skip = false;
 
     public SnakeMovementThread() {
         snake = GameManager.getInstance().getSnake();
         isRunning = true;
         headBounds = snake.getHead().getBounds();
+        dif = CoordinateStore.getDifficulty();
     }
 
     @Override
     public void run() {
-        System.out.println("Movement thread now running");
+        ExecutorService executor = Executors.newSingleThreadExecutor();
         spawnFood();
         Direction updatedDirection = snake.getHead().getDirection();
         int step = 6;
@@ -74,6 +80,8 @@ public class SnakeMovementThread extends Thread {
                     snake.setPreviousDirectionInput(Direction.RIGHT);
                 }
 
+
+
                 if (borderCollision() || selfCollision()) {
                     SoundManager.getInstance().playEndGame();
                     try {
@@ -107,14 +115,35 @@ public class SnakeMovementThread extends Thread {
     private boolean borderCollision() {
         int snakeX = snake.getHead().getBounds().x;
         int snakeY = snake.getHead().getBounds().y;
-        // collision if x < 100 or x > 690 // if y > 670 or y < 80 - previous values with the border components
-        return snakeX < CoordinateStore.borderMinX || snakeX > CoordinateStore.borderMaxX ||
-                snakeY < CoordinateStore.borderMinY || snakeY > CoordinateStore.borderMaxY;
+        if (dif == Difficulty.EASY || dif == Difficulty.MEDIUM) {
+            // collision if x < 100 or x > 690 // if y > 670 or y < 80 - previous values with the border components
+            return snakeX < CoordinateStore.borderMinX || snakeX > CoordinateStore.borderMaxX ||
+                    snakeY < CoordinateStore.borderMinY || snakeY > CoordinateStore.borderMaxY;
+        } else if (dif == Difficulty.HARD) {
+            if ((snakeX < CoordinateStore.borderMinX || snakeX > CoordinateStore.borderMaxX) ||
+                    (snakeY < CoordinateStore.borderMinY || snakeY > CoordinateStore.borderMaxY) ||
+                    // middle wall upper left corner
+                    (snakeX > 170 && snakeX < 376) && (snakeY > 170 && snakeY < 240) ||
+                    (snakeX > 170 && snakeX < 238) && (snakeY > 220 && snakeY < 370) ||
+                    // middle wall upper right corner
+                    (snakeX > 402 && snakeX < 610) && (snakeY > 170 && snakeY < 240) ||
+                    (snakeX > 540 && snakeX < 610) && (snakeY > 170 && snakeY < 370) ||
+                    // middle wall bottom left corner
+                    (snakeX > 170 && snakeX < 376) && (snakeY > 540 && snakeY < 610) ||
+                    (snakeX > 170 && snakeX < 240) && (snakeY > 410 && snakeY < 560) ||
+                    // middle wall bottom right corner
+                    (snakeX > 402 && snakeX < 610) && (snakeY > 540 && snakeY < 610) ||
+                    (snakeX > 540 && snakeX < 610) && (snakeY > 410 && snakeY < 560)) {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     private boolean selfCollision() {
-        int headX = snake.getHead().getBounds().x;
-        int headY = snake.getHead().getBounds().y;
+        int headX = headBounds.x;
+        int headY = headBounds.y;
         //doesn't check for the first two blocks (the first one always collides since there is a 5px overlap
         // with the snakeHead, doesn't check for the second and third for safety)
         for (int i = 3; i < snake.getBody().size(); i++) {
@@ -136,8 +165,12 @@ public class SnakeMovementThread extends Thread {
         smallFood = ComponentFactory.getInstance().createSmallFood();
         int randomX = random.nextInt(CoordinateStore.foodMinX, CoordinateStore.foodMaxX);
         int randomY = random.nextInt(CoordinateStore.foodMinY, CoordinateStore.foodMaxY);
-
         smallFood.setBounds(randomX, randomY, smallFood.getPreferredSize().width, smallFood.getPreferredSize().height);
+//        if (dif == Difficulty.EASY || dif == Difficulty.MEDIUM) {
+//
+//        } else if (dif == Difficulty.HARD) {
+//
+//        }
         GameManager.getInstance().addFood(smallFood);
     }
     private boolean foodCollision() {
