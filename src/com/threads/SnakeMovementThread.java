@@ -133,7 +133,11 @@ public class SnakeMovementThread extends Thread {
                     (snakeX > 170 && snakeX < 240) && (snakeY > 410 && snakeY < 560) ||
                     // middle wall bottom right corner
                     (snakeX > 402 && snakeX < 610) && (snakeY > 540 && snakeY < 610) ||
-                    (snakeX > 540 && snakeX < 610) && (snakeY > 410 && snakeY < 560)) {
+                    (snakeX > 540 && snakeX < 610) && (snakeY > 410 && snakeY < 560) ||
+                    // middle left pillar
+                    (snakeX > 288 && snakeX < 357) && (snakeY > 280 && snakeY < 495) ||
+                    // middle right pillar
+                    (snakeX > 421 && snakeX < 491) && (snakeY > 280 && snakeY < 495)) {
                 return true;
             }
         }
@@ -163,14 +167,38 @@ public class SnakeMovementThread extends Thread {
     private void spawnFood() {
         Random random = new Random();
         smallFood = ComponentFactory.getInstance().createSmallFood();
-        int randomX = random.nextInt(CoordinateStore.foodMinX, CoordinateStore.foodMaxX);
-        int randomY = random.nextInt(CoordinateStore.foodMinY, CoordinateStore.foodMaxY);
-        smallFood.setBounds(randomX, randomY, smallFood.getPreferredSize().width, smallFood.getPreferredSize().height);
-//        if (dif == Difficulty.EASY || dif == Difficulty.MEDIUM) {
-//
-//        } else if (dif == Difficulty.HARD) {
-//
-//        }
+        if (dif == Difficulty.EASY || dif == Difficulty.MEDIUM) {
+            int randomX = random.nextInt(CoordinateStore.foodMinX, CoordinateStore.foodMaxX);
+            int randomY = random.nextInt(CoordinateStore.foodMinY, CoordinateStore.foodMaxY);
+            smallFood.setBounds(randomX, randomY, smallFood.getPreferredSize().width, smallFood.getPreferredSize().height);
+        } else if (dif == Difficulty.HARD) {
+            boolean outOfBounds = true;
+
+            while (outOfBounds) {
+                int randomX = random.nextInt(CoordinateStore.foodMinX, CoordinateStore.foodMaxX);
+                int randomY = random.nextInt(CoordinateStore.foodMinY, CoordinateStore.foodMaxY);
+
+                if ((randomX > 170 && randomX < 376) && (randomY > 170 && randomY < 240) ||
+                        (randomX > 170 && randomX < 238) && (randomY > 220 && randomY < 370) ||
+                        // middle wall upper right corner
+                        (randomX > 402 && randomX < 610) && (randomY > 170 && randomY < 240) ||
+                        (randomX > 540 && randomX < 610) && (randomY > 170 && randomY < 370) ||
+                        // middle wall bottom left corner
+                        (randomX > 170 && randomX < 376) && (randomY > 540 && randomY < 610) ||
+                        (randomX > 170 && randomX < 240) && (randomY > 410 && randomY < 560) ||
+                        // middle wall bottom right corner
+                        (randomX > 402 && randomX < 610) && (randomY > 540 && randomY < 610) ||
+                        (randomX > 540 && randomX < 610) && (randomY > 410 && randomY < 560) ||
+                        // middle left pillar
+                        (randomX > 288 && randomX < 357) && (randomY > 280 && randomY < 495) ||
+                        // middle right pillar
+                        (randomX > 421 && randomX < 491) && (randomY > 280 && randomY < 495)) {
+                } else {
+                    smallFood.setBounds(randomX, randomY, smallFood.getPreferredSize().width, smallFood.getPreferredSize().height);
+                    break;
+                }
+            }
+        }
         GameManager.getInstance().addFood(smallFood);
     }
     private boolean foodCollision() {

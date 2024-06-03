@@ -38,16 +38,15 @@ public class CoordinateStore {
             foodMinY = 228;
             foodMaxY = 550;
         } else if (dif == Difficulty.HARD) {
-            // same values as for medium for now
             borderMinX = 110;
             borderMaxX = 670;
             borderMinY = 110;
             borderMaxY = 670;
 
-            foodMinX = 232;
-            foodMaxX = 546;
-            foodMinY = 228;
-            foodMaxY = 550;
+            foodMinX = 120;
+            foodMaxX = 660;
+            foodMinY = 112;
+            foodMaxY = 670;
         }
     }
 
