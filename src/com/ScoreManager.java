@@ -98,7 +98,7 @@ public class ScoreManager {
         bestEasy = Integer.parseInt(properties.getProperty("easy"));
         bestMedium = Integer.parseInt(properties.getProperty("medium"));
         bestHard = Integer.parseInt(properties.getProperty("hard"));
-        System.out.println(Integer.valueOf(bestEasy));
+//        System.out.println(Integer.valueOf(bestEasy));
     }
     public static ScoreManager getInstance() {
         if (instance == null) {

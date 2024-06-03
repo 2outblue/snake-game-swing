@@ -174,6 +174,7 @@ public class GameManager {
         snake.grow(body);
         snake.grow(body2);
     }
+    // TODO: when you unpause the game the score elements are also removed - fix.
     public synchronized void pauseGame() {
         if (pauseElement == null) {
             pauseElement = componentFactory.createGamePauseComponent();
@@ -250,16 +251,16 @@ public class GameManager {
     }
 
     private void displayBestScore() {
-        layeredPane.add(componentFactory.createBestComponent(), JLayeredPane.POPUP_LAYER);
+        layeredPane.add(componentFactory.createBestComponent(), JLayeredPane.MODAL_LAYER);
         bestScore = componentFactory.createScoreComponent();
         bestScore.setHorizontalAlignment(SwingConstants.LEFT);
         bestScore.setBounds(150, 15, 100, 50);
         bestScore.setText(scoreManager.getCurrentBest());
-        layeredPane.add(bestScore, JLayeredPane.POPUP_LAYER);
+        layeredPane.add(bestScore, JLayeredPane.MODAL_LAYER);
     }
 
     private void displayCurrentScore() {
-        layeredPane.add(score, JLayeredPane.PALETTE_LAYER);
+        layeredPane.add(score, JLayeredPane.MODAL_LAYER);
     }
 
     public void updateScore(String value){
