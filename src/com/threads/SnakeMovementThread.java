@@ -158,11 +158,25 @@ public class SnakeMovementThread extends Thread {
             int compX = compBounds.x;
             int compY = compBounds.y;
 //            System.out.println(String.format("Component %d - coords x:%d--y:%d",i, compX, compY));
-            if ((headX > compX && headX < compX + ComponentConst.SNAKE_COMPONENT_SIZE) &&
-                    (headY > compY && headY < compY + ComponentConst.SNAKE_COMPONENT_SIZE)) {
+            if ((headX + 12 > compX && headX < compX + ComponentConst.SNAKE_COMPONENT_SIZE) &&
+                    (headY + 12> compY && headY < compY + ComponentConst.SNAKE_COMPONENT_SIZE)) {
                 return true;
             }
         }
+
+        for (int i = 1; i < snake.getTail().size() - 2; i++) {
+            Rectangle compBounds = snake.getTail().get(i).getBounds();
+            Dimension compSize = snake.getTail().get(i).getPreferredSize();
+
+            int compX = compBounds.x;
+            int compY = compBounds.y;
+            if ((headX + 12 > compX && headX < compX + compSize.width) &&
+                    (headY + 12> compY && headY < compY + compSize.height)) {
+                return true;
+            }
+        }
+
+
 //        System.out.println(snakeX + "<-X snake Y->" + snakeY);
         return false;
     }
@@ -212,8 +226,8 @@ public class SnakeMovementThread extends Thread {
         int foodY = smallFood.getBounds().y;
 
         //            System.out.println("Food collision");
-        return (snakeX + ComponentConst.SNAKE_HEAD_20 - 5 >= foodX && snakeX <= foodX + ComponentConst.FOOD_SIZE) &&
-                (snakeY + ComponentConst.SNAKE_HEAD_20  - 5>= foodY && snakeY <= foodY + ComponentConst.FOOD_SIZE);
+        return (snakeX + ComponentConst.SNAKE_HEAD_20 - 10 >= foodX && snakeX <= foodX + ComponentConst.FOOD_SIZE) &&
+                (snakeY + ComponentConst.SNAKE_HEAD_20  - 10>= foodY && snakeY <= foodY + ComponentConst.FOOD_SIZE);
     }
 
     public void stopRunning() {

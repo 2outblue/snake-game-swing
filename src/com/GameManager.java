@@ -92,7 +92,7 @@ public class GameManager {
         growSnake();
         growSnake();
         growSnake();
-        growSnake();
+
     }
     public synchronized void restart() {
 
