@@ -2,11 +2,10 @@ package com.components;
 
 import com.components.background.BackgroundComponent;
 import com.components.background.BestComponent;
+import com.components.menu.*;
+import com.components.menu.MenuBackgroundComponent;
 import com.constants.ComponentConst;
 import com.game_objects.SmallFood;
-import com.components.menu.GameOverComponent;
-import com.components.menu.GamePausedComponent;
-import com.components.menu.MenuButton;
 import com.components.snake.SnakeBody;
 import com.components.snake.SnakeHead;
 import com.event_listeners.menu_events.BackToMenuListener;
@@ -82,6 +81,18 @@ public class ComponentFactory {
         return this.frame;
     }
 
+    public MenuBackgroundComponent createMenuBackground() {
+        MenuBackgroundComponent mb = new MenuBackgroundComponent();
+        mb.setBounds(0, 0, ComponentConst.FRAME_WIDTH, ComponentConst.FRAME_HEIGHT);
+        return mb;
+    }
+
+    public DifficultyMark createDifficultyMark() {
+        DifficultyMark dfm = new DifficultyMark();
+        dfm.set(Difficulty.EASY);
+        return dfm;
+    }
+
     public BackgroundComponent createGameBackground(Difficulty dif) {
         BackgroundComponent bc = new BackgroundComponent(ComponentConst.BACKGROUND_1);
         if (dif == Difficulty.MEDIUM) {
@@ -89,7 +100,7 @@ public class ComponentFactory {
         } else if (dif == Difficulty.HARD) {
             bc = new BackgroundComponent(ComponentConst.BACKGROUND_3);
         }
-        bc.setBounds(0, 0, 800, 800);
+        bc.setBounds(0, 0, ComponentConst.FRAME_WIDTH, ComponentConst.FRAME_HEIGHT);
 
         return bc;
     }

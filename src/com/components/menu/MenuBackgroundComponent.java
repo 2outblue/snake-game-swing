@@ -8,14 +8,12 @@ import java.awt.*;
 import java.io.File;
 import java.io.IOException;
 
-public class MenuComponent extends JComponent {
+public class MenuBackgroundComponent extends JComponent {
 
     private Image image;
 
-    private final int size = ComponentConst.FRAME_WIDTH;
-
-    public MenuComponent() {
-        setPreferredSize(new Dimension(size, size));
+    public MenuBackgroundComponent() {
+        setPreferredSize(new Dimension(ComponentConst.FRAME_WIDTH, ComponentConst.FRAME_HEIGHT));
         try {
             this.image = ImageIO.read(new File(ComponentConst.START_SCREEN_BACKGROUND));
 //            System.out.println("loaded");

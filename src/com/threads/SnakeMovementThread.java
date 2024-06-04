@@ -140,7 +140,6 @@ public class SnakeMovementThread extends Thread {
         }
         return false;
     }
-
     private boolean selfCollision() {
         int headX = headBounds.x;
         int headY = headBounds.y;
@@ -169,6 +168,17 @@ public class SnakeMovementThread extends Thread {
             }
         }
         return false;
+    }
+    private boolean foodCollision() {
+        //can headBounds.x/y cause issues? (not .get, so its not going through a synch method?)
+        int snakeX = headBounds.x;
+        int snakeY = headBounds.y;
+        int foodX = smallFood.getBounds().x;
+        int foodY = smallFood.getBounds().y;
+
+        //            System.out.println("Food collision");
+        return (snakeX + ComponentConst.SNAKE_HEAD_20 - 10 >= foodX && snakeX <= foodX + ComponentConst.FOOD_SIZE) &&
+                (snakeY + ComponentConst.SNAKE_HEAD_20  - 10>= foodY && snakeY <= foodY + ComponentConst.FOOD_SIZE);
     }
 
     private void spawnFood() {
@@ -207,17 +217,6 @@ public class SnakeMovementThread extends Thread {
             }
         }
         GameManager.getInstance().addFood(smallFood);
-    }
-    private boolean foodCollision() {
-        //can headBounds.x/y cause issues? (not .get, so its not going through a synch method?)
-        int snakeX = headBounds.x;
-        int snakeY = headBounds.y;
-        int foodX = smallFood.getBounds().x;
-        int foodY = smallFood.getBounds().y;
-
-        //            System.out.println("Food collision");
-        return (snakeX + ComponentConst.SNAKE_HEAD_20 - 10 >= foodX && snakeX <= foodX + ComponentConst.FOOD_SIZE) &&
-                (snakeY + ComponentConst.SNAKE_HEAD_20  - 10>= foodY && snakeY <= foodY + ComponentConst.FOOD_SIZE);
     }
 
     public void stopRunning() {

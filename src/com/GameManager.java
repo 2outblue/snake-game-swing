@@ -5,7 +5,6 @@ import com.constants.ComponentConst;
 import com.components.menu.DifficultyMark;
 import com.game_objects.SmallFood;
 import com.components.menu.GamePausedComponent;
-import com.components.menu.MenuComponent;
 import com.components.snake.SnakeBody;
 import com.components.snake.SnakeHead;
 import com.constants.Direction;
@@ -39,7 +38,7 @@ public class GameManager {
 
     private JLabel gameOverElement;
 
-    private JComponent background;
+    private JComponent gameMap;
 
     private DifficultyMark difficultyMark;
 
@@ -59,6 +58,7 @@ public class GameManager {
         threadGovernor = ThreadGovernor.getInstance();
         score = componentFactory.createScoreComponent();
         scoreManager = ScoreManager.getInstance();
+        difficultyMark = componentFactory.createDifficultyMark();
     }
 
     public void createAndShowGame(){
@@ -66,7 +66,7 @@ public class GameManager {
     }
 
     public void displayStartScreen() {
-        createMenu();
+        showMainMenu();
         setDifficulty(Difficulty.EASY);
     }
 
@@ -77,7 +77,7 @@ public class GameManager {
 //        layeredPane.repaint();
 
         scoreManager.resetScore();
-        createMap();
+        displayMap();
         createSnake();
         setInitialSnakePosition();
         addEventListeners();
@@ -224,11 +224,11 @@ public class GameManager {
 
     // TODO: again, the creating part probably shouldn't be here. Maybe keep a method to just showMap or
     // something like that and the creation should be in the component factory ?
-    private void createMap() {
+    private void displayMap() {
         layeredPane.revalidate();
         layeredPane.repaint();
-        background = componentFactory.createGameBackground(gameDifficulty);
-        layeredPane.add(background, JLayeredPane.DEFAULT_LAYER);
+        gameMap = componentFactory.createGameBackground(gameDifficulty);
+        layeredPane.add(gameMap, JLayeredPane.DEFAULT_LAYER);
     }
 
     public void setDifficulty(Difficulty dif) {
@@ -238,10 +238,7 @@ public class GameManager {
 
     }
 
-    // TODO:
-    // also rename this to showMenu or displayMenu or whatever and take out the instantiation of the menu
-    // background to the component factory
-    private void createMenu() {
+    private void showMainMenu() {
         // event listeners for button clicks are automatically attached in the component factory
         layeredPane.add(componentFactory.createPlayButton(), JLayeredPane.POPUP_LAYER);
         layeredPane.add(componentFactory.createEasyButton(), JLayeredPane.POPUP_LAYER);
@@ -249,13 +246,9 @@ public class GameManager {
         layeredPane.add(componentFactory.createHardButton(), JLayeredPane.POPUP_LAYER);
         layeredPane.add(componentFactory.createQuitButton(), JLayeredPane.POPUP_LAYER);
 
-        difficultyMark = new DifficultyMark();
-        difficultyMark.set(Difficulty.EASY);
         layeredPane.add(difficultyMark, JLayeredPane.POPUP_LAYER);
 
-        MenuComponent startMenuBackground = new MenuComponent();
-        startMenuBackground.setBounds(0, 0, ComponentConst.FRAME_WIDTH, ComponentConst.FRAME_HEIGHT);
-        layeredPane.add(startMenuBackground, JLayeredPane.POPUP_LAYER);
+        layeredPane.add(componentFactory.createMenuBackground(), JLayeredPane.POPUP_LAYER);
     }
 
     private void displayBestScore() {

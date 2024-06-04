@@ -22,12 +22,12 @@ public class CoordinateStore {
         if (dif == Difficulty.EASY) {
             borderMinX = 96;
             borderMaxX = 680;
-            borderMinY = 78;
+            borderMinY = 126;
             borderMaxY = 660;
 
             foodMinX = 100;
             foodMaxX = 680;
-            foodMinY = 80;
+            foodMinY = 130;
             foodMaxY = 660;
         } else if (dif == Difficulty.MEDIUM) {
             borderMinX = 230;
