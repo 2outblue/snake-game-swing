@@ -30,11 +30,9 @@ public class ComponentFactory {
     private final int patternRepeater;
     private int patternPointer;
 
-    // one instance per event listener to attach to all menu buttons
-
+    // one instance per event listener to attach to all menu buttons (instead of new event listener for each button)
     private MenuButtonActionListener menuButtonLister;
     private ButtonHoverListener buttonHoverListener;
-//    private TailComponent snakeTail;
 
     private ComponentFactory() {
         repeatCounter = 1;
@@ -63,9 +61,7 @@ public class ComponentFactory {
     }
 
     public SnakeHead createHead() {
-
         return new SnakeHead(ComponentConst.SNAKE_HEAD_20);
-
     }
 
     public JFrame createFrame() {
@@ -150,29 +146,12 @@ public class ComponentFactory {
         return button;
     }
 
+    // TODO: MOVE ALL BOUND VALUES TO CONSTANTS
     public GamePausedComponent createGamePauseComponent() {
         GamePausedComponent gp = new GamePausedComponent();
         gp.setBounds(170, 325, ComponentConst.GAME_PAUSED_WIDTH, ComponentConst.GAME_PAUSED_HEIGHT);
         return gp;
-
-//        JLabel label = new JLabel("GAME PAUSED", SwingConstants.CENTER);
-//        label.setForeground(Color.WHITE);
-//        label.setBackground(Color.GREEN);
-//        label.setOpaque(true);
-//        label.setBorder(new LineBorder(Color.GREEN, 2));
-//
-//        return label;
     }
-
-//    public JLabel createGameOverLabel() {
-//        JLabel label = new JLabel("GAME OVER", SwingConstants.CENTER);
-//        label.setForeground(Color.BLACK);
-//        label.setBackground(Color.RED);
-//        label.setOpaque(true);
-//        label.setBorder(new LineBorder(Color.GREEN, 2));
-//
-//        return label;
-//    }
 
     public GameOverComponent createGameOverComponent() {
         GameOverComponent g = new GameOverComponent();

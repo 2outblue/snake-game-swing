@@ -16,7 +16,6 @@ public class GamePausedComponent extends JComponent {
         setPreferredSize(new Dimension(ComponentConst.GAME_PAUSED_WIDTH, ComponentConst.GAME_PAUSED_HEIGHT));
         try {
             this.image = ImageIO.read(new File(ComponentConst.GAME_PAUSED_1));
-//            System.out.println("loaded");
         } catch (IOException e) {
             e.printStackTrace();
         }

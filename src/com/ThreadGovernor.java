@@ -2,15 +2,13 @@ package com;
 
 import com.threads.SnakeMovementThread;
 
+// TODO: Is this class even needed?
 public class ThreadGovernor {
 
     private static ThreadGovernor instance;
     private SnakeMovementThread movementThread;
     private Thread foodThread;
     private ThreadGovernor() {
-//        movementThread = new Thread(new SnakeMovementThread());
-//        movementThread = new SnakeMovementThread();
-//        foodThread = new Thread(new FoodGenerationThread());
     }
 
     public void startAllThreads() {
@@ -26,7 +24,6 @@ public class ThreadGovernor {
     public void createMovementThread() {
         movementThread = new SnakeMovementThread();
         movementThread.start();
-        System.out.println("Thread created");
     }
     public void createFoodGenerationThread(){
         foodThread.start();

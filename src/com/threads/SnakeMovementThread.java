@@ -43,7 +43,6 @@ public class SnakeMovementThread extends Thread {
 
     @Override
     public void run() {
-//        ExecutorService executor = Executors.newSingleThreadExecutor();
         spawnFood();
         Direction updatedDirection = snake.getHead().getDirection();
         int step = 6;
@@ -92,7 +91,7 @@ public class SnakeMovementThread extends Thread {
                     }
                     GameManager.getInstance().endGame();
                 }
-                // take that out to the food thread along with the relevant methods, maybe
+
                 if (foodCollision()) {
                     SoundManager.getInstance().playFoodCollision();
                     GameManager.getInstance().removeFood(smallFood);
@@ -102,7 +101,6 @@ public class SnakeMovementThread extends Thread {
                     spawnFood();
                 }
                 snake.paintBody(headBounds);
-//                System.out.println(headBounds);
             }
             try {
                 Thread.sleep(movementSpeedInverse);
@@ -110,15 +108,12 @@ public class SnakeMovementThread extends Thread {
                 throw new RuntimeException(e);
             }
         }
-
-        System.out.println("Movement Thread stopped");
     }
 
     private boolean borderCollision() {
         int snakeX = snake.getHead().getBounds().x;
         int snakeY = snake.getHead().getBounds().y;
         if (dif == Difficulty.EASY || dif == Difficulty.MEDIUM) {
-            // collision if x < 100 or x > 690 // if y > 670 or y < 80 - previous values with the border components
             return snakeX < CoordinateStore.borderMinX || snakeX > CoordinateStore.borderMaxX ||
                     snakeY < CoordinateStore.borderMinY || snakeY > CoordinateStore.borderMaxY;
         } else if (dif == Difficulty.HARD) {
@@ -143,11 +138,9 @@ public class SnakeMovementThread extends Thread {
                 return true;
             }
         }
-
         return false;
     }
 
-    // TODO: Add checking for tail collision as there none currently
     private boolean selfCollision() {
         int headX = headBounds.x;
         int headY = headBounds.y;
@@ -175,9 +168,6 @@ public class SnakeMovementThread extends Thread {
                 return true;
             }
         }
-
-
-//        System.out.println(snakeX + "<-X snake Y->" + snakeY);
         return false;
     }
 

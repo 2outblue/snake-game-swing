@@ -9,6 +9,7 @@ import java.util.Random;
 import static java.lang.Thread.currentThread;
 
 // Currently does nothing - not even started by the ThreadGovernor
+// at this point i dont think this has much potential for future use - delete probably
 public class FoodGenerationThread implements Runnable {
     boolean running;
 //    private SnakeHead head;

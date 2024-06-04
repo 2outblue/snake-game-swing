@@ -6,6 +6,7 @@ import java.awt.*;
 import java.io.File;
 import java.io.IOException;
 
+// TODO: REFACTOR TO GameMap ?? IN ANY CASE RENAME THIS TO SOMETHING BETTER
 public class BackgroundComponent extends JComponent {
 
     private Image image;

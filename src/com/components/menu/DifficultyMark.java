@@ -9,6 +9,7 @@ import java.awt.*;
 import java.io.File;
 import java.io.IOException;
 
+// Should it be DifficultyCheckMark ?
 public class DifficultyMark extends JComponent {
 
     private Image image;

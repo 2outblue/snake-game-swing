@@ -25,7 +25,7 @@ import java.util.List;
 public class GameManager {
 
     private static GameManager instance;
-    private ComponentFactory componentFactory;
+    private final ComponentFactory componentFactory;
     private JFrame frame;
     private JLayeredPane layeredPane;
     private ThreadGovernor threadGovernor;
@@ -109,6 +109,7 @@ public class GameManager {
         snake.getHead().setBounds(390, 390, ComponentConst.SNAKE_HEAD_20, ComponentConst.SNAKE_HEAD_20);
     }
 
+    // TODO: the create methods probably shouldn't be here
     private void createLayeredPane() {
         this.layeredPane = new JLayeredPane();
         layeredPane.setPreferredSize(frame.getPreferredSize());
@@ -160,6 +161,8 @@ public class GameManager {
 //        Snake.instantiateSnake(h1, bl, tail);
         snake = new Snake(h1, bl, tail);
     }
+
+    // TODO: remove this ugly method - maybe attach the event listeners in the factory?
     private void addEventListeners() {
         layeredPane.addKeyListener(new HeadDirectionChangeListener());
         layeredPane.addKeyListener(new PauseListener());
@@ -219,6 +222,8 @@ public class GameManager {
         layeredPane.repaint();
     }
 
+    // TODO: again, the creating part probably shouldn't be here. Maybe keep a method to just showMap or
+    // something like that and the creation should be in the component factory ?
     private void createMap() {
         layeredPane.revalidate();
         layeredPane.repaint();
@@ -233,6 +238,9 @@ public class GameManager {
 
     }
 
+    // TODO:
+    // also rename this to showMenu or displayMenu or whatever and take out the instantiation of the menu
+    // background to the component factory
     private void createMenu() {
         // event listeners for button clicks are automatically attached in the component factory
         layeredPane.add(componentFactory.createPlayButton(), JLayeredPane.POPUP_LAYER);
@@ -258,17 +266,15 @@ public class GameManager {
         bestScore.setText(scoreManager.getCurrentBest());
         layeredPane.add(bestScore, JLayeredPane.MODAL_LAYER);
     }
+    public void updateBestScore(String value) {
+        bestScore.setText(value);
+    }
 
     private void displayCurrentScore() {
         layeredPane.add(score, JLayeredPane.MODAL_LAYER);
     }
-
-    public void updateScore(String value){
+    public void updateCurrentScore(String value){
         score.setText(value);
-    }
-
-    public void updateBestScore(String value) {
-        bestScore.setText(value);
     }
     public synchronized boolean gameOver() {
         return gameOver;

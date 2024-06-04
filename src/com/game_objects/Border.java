@@ -2,7 +2,7 @@ package com.game_objects;
 
 import com.components.border.*;
 
-
+// TODO: remove all border stuff
 public class Border {
 
     public static final int INSET = 50;
