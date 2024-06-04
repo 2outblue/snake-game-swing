@@ -54,7 +54,7 @@ public class FoodGenerationThread implements Runnable {
         int randomY = random.nextInt(80, 670);
 
         smallFood.setBounds(randomX, randomY, smallFood.getPreferredSize().width, smallFood.getPreferredSize().height);
-        GameManager.getInstance().addFood(smallFood);
+        GameManager.getInstance().renderFood(smallFood);
     }
 
 //    private boolean foodCollision() {

@@ -6,43 +6,30 @@ import com.components.menu.DifficultyMark;
 import com.game_objects.SmallFood;
 import com.components.menu.GamePausedComponent;
 import com.components.snake.SnakeBody;
-import com.components.snake.SnakeHead;
-import com.constants.Direction;
-import com.event_listeners.HeadDirectionChangeListener;
-import com.event_listeners.PauseListener;
-import com.game_objects.Border;
 import com.game_objects.Snake;
 import com.game_utility.CoordinateStore;
 import com.game_utility.Difficulty;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.KeyListener;
-import java.util.ArrayList;
-import java.util.List;
 
 public class GameManager {
 
     private static GameManager instance;
     private final ComponentFactory componentFactory;
-    private JFrame frame;
-    private JLayeredPane layeredPane;
-    private ThreadGovernor threadGovernor;
-
-    private ScoreManager scoreManager;
+    private final JFrame frame;
+    private final JLayeredPane layeredPane;
+    private final ThreadGovernor threadGovernor;
+    private final ScoreManager scoreManager;
     private Snake snake;
-
-    private Border border;
 
     private GamePausedComponent pauseElement;
 
-    private JLabel gameOverElement;
-
     private JComponent gameMap;
 
-    private DifficultyMark difficultyMark;
+    private final DifficultyMark difficultyMark;
 
-    private boolean gameOver = false;
+    private boolean inGame = true;
 
     private Difficulty gameDifficulty;
 
@@ -52,41 +39,37 @@ public class GameManager {
 
     private GameManager() {
         componentFactory = ComponentFactory.getInstance();
-        this.frame = componentFactory.createFrame();
-        createLayeredPane();
+        frame = componentFactory.createFrame();
+        layeredPane = frame.getLayeredPane();
+
         gameDifficulty = Difficulty.EASY;
+        difficultyMark = componentFactory.createDifficultyMark();
         threadGovernor = ThreadGovernor.getInstance();
         score = componentFactory.createScoreComponent();
         scoreManager = ScoreManager.getInstance();
-        difficultyMark = componentFactory.createDifficultyMark();
     }
 
     public void createAndShowGame(){
-        displayStartScreen();
-    }
-
-    public void displayStartScreen() {
-        showMainMenu();
-        setDifficulty(Difficulty.EASY);
+        renderMainMenu();
     }
 
     public void startGame() {
-        gameOver = false;
+        inGame = true;
         layeredPane.removeAll();
 //        layeredPane.revalidate();
 //        layeredPane.repaint();
 
-        scoreManager.resetScore();
-        displayMap();
-        createSnake();
+        scoreManager.resetCurrentScore();
+        renderMap();
+        renderSnake();
         setInitialSnakePosition();
-        addEventListeners();
         displayBestScore();
         displayCurrentScore();
         threadGovernor.createMovementThread();
 
         layeredPane.requestFocusInWindow();
 
+        // initially the snake has only one body part (excluding the tail) - this makes the snake a bit longer when starting a game
         growSnake();
         growSnake();
         growSnake();
@@ -95,77 +78,26 @@ public class GameManager {
 
     }
     public synchronized void restart() {
-
         layeredPane.removeAll();
-        for (KeyListener listener : layeredPane.getKeyListeners()) {
-            layeredPane.removeKeyListener(listener);
-        }
         threadGovernor.closeAllThreads();
         snake = null;
 
-        displayStartScreen();
+        renderMainMenu();
     }
+
     private void setInitialSnakePosition(){
         snake.getHead().setBounds(390, 390, ComponentConst.SNAKE_HEAD_20, ComponentConst.SNAKE_HEAD_20);
     }
+    private void renderSnake() {
+        snake = componentFactory.createSnake();
 
-    // TODO: the create methods probably shouldn't be here
-    private void createLayeredPane() {
-        this.layeredPane = new JLayeredPane();
-        layeredPane.setPreferredSize(frame.getPreferredSize());
-        frame.setContentPane(layeredPane);
-    }
+        layeredPane.add(snake.getHead(), JLayeredPane.PALETTE_LAYER);
+        // createSnake() adds only one body part to the snake
+        layeredPane.add(snake.getBody().getFirst(), JLayeredPane.PALETTE_LAYER);
 
-    private void createSnake() {
-        SnakeHead h1 = componentFactory.createHead();
-        h1.setDirection(Direction.UP);
-        layeredPane.add(h1, JLayeredPane.PALETTE_LAYER);
-
-        SnakeBody body1 = componentFactory.createBody();
-        body1.setDirection(Direction.DOWN);
-        layeredPane.add(body1, JLayeredPane.PALETTE_LAYER);
-
-        List<SnakeBody> bl = new ArrayList<>();
-        bl.add(body1);
-
-        List<SnakeBody> tail = new ArrayList<>();
-        SnakeBody tailPart12 = componentFactory.createTailPart(12, ComponentConst.TAIL_12);
-//        frame.getContentPane().add(tailPart12);
-        layeredPane.add(tailPart12, JLayeredPane.PALETTE_LAYER);
-        tail.add(tailPart12);
-        SnakeBody tailPart = componentFactory.createTailPart(11, ComponentConst.TAIL_11);
-//        frame.getContentPane().add(tailPart);
-        layeredPane.add(tailPart, JLayeredPane.PALETTE_LAYER);
-        tail.add(tailPart);
-        SnakeBody tailPart2 = componentFactory.createTailPart(10, ComponentConst.TAIL_10);
-//        frame.getContentPane().add(tailPart2);
-        layeredPane.add(tailPart2, JLayeredPane.PALETTE_LAYER);
-        tail.add(tailPart2);
-        SnakeBody tailPart3 = componentFactory.createTailPart(9, ComponentConst.TAIL_9);
-//        frame.getContentPane().add(tailPart3);
-        layeredPane.add(tailPart3, JLayeredPane.PALETTE_LAYER);
-        tail.add(tailPart3);
-        SnakeBody tailPart4 = componentFactory.createTailPart(8, ComponentConst.TAIL_8);
-//        frame.getContentPane().add(tailPart4);
-        layeredPane.add(tailPart4, JLayeredPane.PALETTE_LAYER);
-        tail.add(tailPart4);
-        SnakeBody tailPart5 = componentFactory.createTailPart(7, ComponentConst.TAIL_7);
-//        frame.getContentPane().add(tailPart5);
-        layeredPane.add(tailPart5, JLayeredPane.PALETTE_LAYER);
-        tail.add(tailPart5);
-        SnakeBody tailPart6 = componentFactory.createTailPart(5, ComponentConst.TAIL_5);
-//        frame.getContentPane().add(tailPart6);
-        layeredPane.add(tailPart6, JLayeredPane.PALETTE_LAYER);
-        tail.add(tailPart6);
-
-//        Snake.instantiateSnake(h1, bl, tail);
-        snake = new Snake(h1, bl, tail);
-    }
-
-    // TODO: remove this ugly method - maybe attach the event listeners in the factory?
-    private void addEventListeners() {
-        layeredPane.addKeyListener(new HeadDirectionChangeListener());
-        layeredPane.addKeyListener(new PauseListener());
+        for (SnakeBody tailPart : snake.getTail()) {
+            layeredPane.add(tailPart, JLayeredPane.PALETTE_LAYER);
+        }
     }
     public synchronized void growSnake() {
         SnakeBody body = componentFactory.createBody();
@@ -177,7 +109,6 @@ public class GameManager {
         snake.grow(body);
         snake.grow(body2);
     }
-    // TODO: when you unpause the game the score elements are also removed - fix.
     public synchronized void pauseGame() {
         if (pauseElement == null) {
             pauseElement = componentFactory.createGamePauseComponent();
@@ -204,16 +135,16 @@ public class GameManager {
             snake.setPaused(true);
         }
     }
-    public synchronized void endGame() {
+    public void endGame() {
         layeredPane.add(componentFactory.createBackToMenuButton(), JLayeredPane.POPUP_LAYER);
         layeredPane.add(componentFactory.createGameOverComponent(), JLayeredPane.POPUP_LAYER);
 
-        gameOver = true;
+        inGame = false;
         snake.setPaused(true);
     }
 
     // maybe make a class field SmallFood sf; and use it instead ?
-    public void addFood(SmallFood sf) {
+    public void renderFood(SmallFood sf) {
         layeredPane.add(sf, JLayeredPane.PALETTE_LAYER);
     }
     public void removeFood(SmallFood sf) {
@@ -221,10 +152,7 @@ public class GameManager {
         layeredPane.revalidate();
         layeredPane.repaint();
     }
-
-    // TODO: again, the creating part probably shouldn't be here. Maybe keep a method to just showMap or
-    // something like that and the creation should be in the component factory ?
-    private void displayMap() {
+    private void renderMap() {
         layeredPane.revalidate();
         layeredPane.repaint();
         gameMap = componentFactory.createGameBackground(gameDifficulty);
@@ -238,8 +166,13 @@ public class GameManager {
 
     }
 
-    private void showMainMenu() {
+    private void renderMainMenu() {
+        // set the difficulty in the menu since the check mark gets its position data based on
+        // which difficulty is currently selected (obviously)
+        setDifficulty(Difficulty.EASY);
+
         // event listeners for button clicks are automatically attached in the component factory
+        // component bounds and size are also set in the factory
         layeredPane.add(componentFactory.createPlayButton(), JLayeredPane.POPUP_LAYER);
         layeredPane.add(componentFactory.createEasyButton(), JLayeredPane.POPUP_LAYER);
         layeredPane.add(componentFactory.createMediumButton(), JLayeredPane.POPUP_LAYER);
@@ -269,8 +202,8 @@ public class GameManager {
     public void updateCurrentScore(String value){
         score.setText(value);
     }
-    public synchronized boolean gameOver() {
-        return gameOver;
+    public synchronized boolean inGame() {
+        return inGame;
     }
 
     public void quitGame() {

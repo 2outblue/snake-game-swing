@@ -40,7 +40,7 @@ public class ScoreManager {
         };
     }
 
-    public void resetScore() {
+    public void resetCurrentScore() {
         score = 0;
         GameManager.getInstance().updateCurrentScore("0");
     }

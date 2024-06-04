@@ -1,6 +1,7 @@
 package com.components.menu;
 
 import com.constants.ComponentConst;
+import com.constants.Resources;
 import com.game_utility.Difficulty;
 
 import javax.imageio.ImageIO;
@@ -17,7 +18,7 @@ public class DifficultyMark extends JComponent {
     public DifficultyMark() {
         setPreferredSize(new Dimension(55, 50));
         try {
-            this.image = ImageIO.read(new File(ComponentConst.DIFFICULTY_MARK));
+            this.image = ImageIO.read(new File(Resources.DIFFICULTY_MARK));
 //            System.out.println("loaded");
         } catch (IOException e) {
             e.printStackTrace();

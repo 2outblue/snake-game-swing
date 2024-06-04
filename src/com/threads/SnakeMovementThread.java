@@ -85,7 +85,7 @@ public class SnakeMovementThread extends Thread {
                     SoundManager.getInstance().playEndGame();
                     ScoreManager.getInstance().saveScore();
                     try {
-                        sleep(600);
+                        sleep(500);
                     } catch (InterruptedException e) {
                         throw new RuntimeException(e);
                     }
@@ -216,7 +216,7 @@ public class SnakeMovementThread extends Thread {
                 }
             }
         }
-        GameManager.getInstance().addFood(smallFood);
+        GameManager.getInstance().renderFood(smallFood);
     }
 
     public void stopRunning() {

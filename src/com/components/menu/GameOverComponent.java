@@ -1,6 +1,7 @@
 package com.components.menu;
 
 import com.constants.ComponentConst;
+import com.constants.Resources;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
@@ -18,7 +19,7 @@ public class GameOverComponent extends JComponent {
     public GameOverComponent() {
         setPreferredSize(new Dimension(width, height));
         try {
-            this.image = ImageIO.read(new File(ComponentConst.GAME_OVER_1));
+            this.image = ImageIO.read(new File(Resources.GAME_OVER_1));
 //            System.out.println("loaded");
         } catch (IOException e) {
             e.printStackTrace();

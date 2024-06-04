@@ -1,6 +1,7 @@
 package com.components.background;
 
 import com.constants.ComponentConst;
+import com.constants.Resources;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
@@ -13,9 +14,9 @@ public class BestComponent extends JComponent {
     private Image image;
 
     public BestComponent() {
-        setPreferredSize(new Dimension(121, 30));
+        setPreferredSize(new Dimension(ComponentConst.BEST_SCORE_WIDTH, ComponentConst.BEST_SCORE_HEIGHT));
         try {
-            this.image = ImageIO.read(new File(ComponentConst.BEST_SCORE));
+            this.image = ImageIO.read(new File(Resources.BEST_SCORE));
         } catch (IOException e) {
             e.printStackTrace();
         }

@@ -13,12 +13,11 @@ public class MenuButtonActionListener implements ActionListener {
     @Override
     public void actionPerformed(ActionEvent e) {
         SoundManager.getInstance().playButtonClick();
-
         String command = e.getActionCommand();
 
         switch (command) {
             case "play":
-                SoundManager.getInstance().playButtonClick();
+//                SoundManager.getInstance().playButtonClick();
                 GameManager gameManager = GameManager.getInstance();
                 gameManager.startGame();
                 break;
