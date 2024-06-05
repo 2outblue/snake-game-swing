@@ -1,6 +1,5 @@
 package com.components.menu;
 
-import com.constants.ComponentConst;
 import com.constants.Resources;
 import com.game_utility.Difficulty;
 

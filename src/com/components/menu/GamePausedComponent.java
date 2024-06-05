@@ -1,6 +1,6 @@
 package com.components.menu;
 
-import com.constants.ComponentConst;
+import com.constants.ComponentBounds;
 import com.constants.Resources;
 
 import javax.imageio.ImageIO;
@@ -14,7 +14,7 @@ public class GamePausedComponent extends JComponent {
     private Image image;
 
     public GamePausedComponent() {
-        setPreferredSize(new Dimension(ComponentConst.GAME_PAUSED_WIDTH, ComponentConst.GAME_PAUSED_HEIGHT));
+        setPreferredSize(new Dimension(ComponentBounds.GAME_PAUSED_WIDTH, ComponentBounds.GAME_PAUSED_HEIGHT));
         try {
             this.image = ImageIO.read(new File(Resources.GAME_PAUSED_1));
         } catch (IOException e) {

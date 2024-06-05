@@ -1,12 +1,12 @@
 package com;
 
-import com.threads.SnakeMovementThread;
+import com.threads.GameLoopThread;
 
 // TODO: Is this class even needed?
 public class ThreadGovernor {
 
     private static ThreadGovernor instance;
-    private SnakeMovementThread movementThread;
+    private GameLoopThread movementThread;
     private Thread foodThread;
     private ThreadGovernor() {
     }
@@ -22,7 +22,7 @@ public class ThreadGovernor {
     }
 
     public void createMovementThread() {
-        movementThread = new SnakeMovementThread();
+        movementThread = new GameLoopThread();
         movementThread.start();
     }
     public void createFoodGenerationThread(){

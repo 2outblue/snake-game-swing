@@ -1,10 +1,10 @@
 package com.components;
 
-import com.components.background.BackgroundComponent;
-import com.components.background.BestComponent;
+import com.components.background.GameMapComponent;
+import com.components.background.BestScoreLabel;
 import com.components.menu.*;
 import com.components.menu.MenuBackgroundComponent;
-import com.constants.ComponentConst;
+import com.constants.ComponentBounds;
 import com.constants.Direction;
 import com.constants.Resources;
 import com.event_listeners.HeadDirectionChangeListener;
@@ -61,11 +61,11 @@ public class ComponentFactory {
             patternPointer++;
             if (patternPointer > 4) {patternPointer = 0;}
         }
-        return new SnakeBody(ComponentConst.SNAKE_COMPONENT_SIZE, pattern[patternPointer]);
+        return new SnakeBody(ComponentBounds.SNAKE_COMPONENT_SIZE, pattern[patternPointer]);
     }
 
     public SnakeHead createHead() {
-        SnakeHead sh = new SnakeHead(ComponentConst.SNAKE_HEAD_20);
+        SnakeHead sh = new SnakeHead(ComponentBounds.SNAKE_HEAD_20);
         sh.setDirection(Direction.UP);
         return sh;
     }
@@ -111,7 +111,7 @@ public class ComponentFactory {
 
             frame.pack();
             frame.setVisible(true);
-            frame.setSize(ComponentConst.FRAME_WIDTH, ComponentConst.FRAME_HEIGHT);
+            frame.setSize(ComponentBounds.FRAME_WIDTH, ComponentBounds.FRAME_HEIGHT);
             frame.setResizable(false);
             //sets the window location in the center of the screen
             frame.setLocationRelativeTo(null);
@@ -127,7 +127,7 @@ public class ComponentFactory {
 
     public MenuBackgroundComponent createMenuBackground() {
         MenuBackgroundComponent mb = new MenuBackgroundComponent();
-        mb.setBounds(0, 0, ComponentConst.FRAME_WIDTH, ComponentConst.FRAME_HEIGHT);
+        mb.setBounds(0, 0, ComponentBounds.FRAME_WIDTH, ComponentBounds.FRAME_HEIGHT);
         return mb;
     }
 
@@ -137,37 +137,29 @@ public class ComponentFactory {
         return dfm;
     }
 
-    public BackgroundComponent createGameBackground(Difficulty dif) {
-        BackgroundComponent bc = new BackgroundComponent(Resources.BACKGROUND_1);
+    public GameMapComponent createMap(Difficulty dif) {
+        GameMapComponent bc = new GameMapComponent(Resources.MAP_EASY);
         if (dif == Difficulty.MEDIUM) {
-            bc = new BackgroundComponent(Resources.BACKGROUND_2);
+            bc = new GameMapComponent(Resources.MAP_MEDIUM);
         } else if (dif == Difficulty.HARD) {
-            bc = new BackgroundComponent(Resources.BACKGROUND_3);
+            bc = new GameMapComponent(Resources.MAP_HARD);
         }
-        bc.setBounds(0, 0, ComponentConst.FRAME_WIDTH, ComponentConst.FRAME_HEIGHT);
+        bc.setBounds(0, 0, ComponentBounds.FRAME_WIDTH, ComponentBounds.FRAME_HEIGHT);
 
         return bc;
     }
     public MenuButton createPlayButton() {
-        MenuButton playButton = new MenuButton(Resources.BUTTON_1_PLAY);
-        playButton.setBounds(275, 125, 250, 75);
-        playButton.setActionCommand("play");
-        playButton.addMouseListener(buttonHoverListener);
-        playButton.addActionListener(menuButtonLister);
-        return playButton;
-    }
-
-    public MenuButton createBackToMenuButton() {
-        MenuButton button = new MenuButton(Resources.BUTTON_BACK_TO_MENU);
-        button.addActionListener(new BackToMenuListener());
-        button.setBounds(275, 430, 250, 75);
+        MenuButton button = new MenuButton(Resources.BUTTON_1_PLAY);
+        button.setBounds(ComponentBounds.MENU_BUTTON_X, ComponentBounds.BUTTON_PLAY_Y, ComponentBounds.BUTTON_WIDTH, ComponentBounds.BUTTON_HEIGHT);
+        button.setActionCommand("play");
         button.addMouseListener(buttonHoverListener);
+        button.addActionListener(menuButtonLister);
         return button;
     }
 
     public MenuButton createEasyButton() {
         MenuButton button = new MenuButton(Resources.BUTTON_EASY);
-        button.setBounds(275, 336, 250, 75);
+        button.setBounds(ComponentBounds.MENU_BUTTON_X, ComponentBounds.BUTTON_EASY_Y, ComponentBounds.BUTTON_WIDTH, ComponentBounds.BUTTON_HEIGHT);
         button.setActionCommand("easy");
         button.addActionListener(menuButtonLister);
         button.addMouseListener(buttonHoverListener);
@@ -176,7 +168,7 @@ public class ComponentFactory {
 
     public MenuButton createMediumButton() {
         MenuButton button = new MenuButton(Resources.BUTTON_MEDIUM);
-        button.setBounds(275, 451, 250, 75);
+        button.setBounds(ComponentBounds.MENU_BUTTON_X, ComponentBounds.BUTTON_MEDIUM_Y, ComponentBounds.BUTTON_WIDTH, ComponentBounds.BUTTON_HEIGHT);
         button.setActionCommand("medium");
         button.addActionListener(menuButtonLister);
         button.addMouseListener(buttonHoverListener);
@@ -185,7 +177,7 @@ public class ComponentFactory {
 
     public MenuButton createHardButton() {
         MenuButton button = new MenuButton(Resources.BUTTON_HARD);
-        button.setBounds(275, 566, 250, 75);
+        button.setBounds(ComponentBounds.MENU_BUTTON_X, ComponentBounds.BUTTON_HARD_Y, ComponentBounds.BUTTON_WIDTH, ComponentBounds.BUTTON_HEIGHT);
         button.setActionCommand("hard");
         button.addActionListener(menuButtonLister);
         button.addMouseListener(buttonHoverListener);
@@ -194,9 +186,17 @@ public class ComponentFactory {
 
     public MenuButton createQuitButton() {
         MenuButton button = new MenuButton(Resources.BUTTON_QUIT);
-        button.setBounds(275, 670, 250, 75);
+        button.setBounds(ComponentBounds.MENU_BUTTON_X, ComponentBounds.BUTTON_QUIT_Y, ComponentBounds.BUTTON_WIDTH, ComponentBounds.BUTTON_HEIGHT);
         button.setActionCommand("quit");
         button.addActionListener(menuButtonLister);
+        button.addMouseListener(buttonHoverListener);
+        return button;
+    }
+
+    public MenuButton createBackToMenuButton() {
+        MenuButton button = new MenuButton(Resources.BUTTON_BACK_TO_MENU);
+        button.addActionListener(new BackToMenuListener());
+        button.setBounds(ComponentBounds.BUTTON_BACK_TO_MENU_X, ComponentBounds.BUTTON_BACK_TO_MENU_Y, ComponentBounds.BUTTON_WIDTH, ComponentBounds.BUTTON_HEIGHT);
         button.addMouseListener(buttonHoverListener);
         return button;
     }
@@ -204,24 +204,25 @@ public class ComponentFactory {
     // TODO: MOVE ALL BOUND VALUES TO CONSTANTS
     public GamePausedComponent createGamePauseComponent() {
         GamePausedComponent gp = new GamePausedComponent();
-        gp.setBounds(170, 325, ComponentConst.GAME_PAUSED_WIDTH, ComponentConst.GAME_PAUSED_HEIGHT);
+        gp.setBounds(ComponentBounds.GAME_PAUSED_X, ComponentBounds.GAME_PAUSED_Y, ComponentBounds.GAME_PAUSED_WIDTH, ComponentBounds.GAME_PAUSED_HEIGHT);
         return gp;
     }
 
     public GameOverComponent createGameOverComponent() {
         GameOverComponent g = new GameOverComponent();
-        g.setBounds(316, 339, ComponentConst.GAME_OVER_WIDTH, ComponentConst.GAME_OVER_HEIGHT);
+        g.setBounds(ComponentBounds.GAME_OVER_X, ComponentBounds.GAME_OVER_Y, ComponentBounds.GAME_OVER_WIDTH, ComponentBounds.GAME_OVER_HEIGHT);
         return g;
     }
 
     public SmallFood createSmallFood() {
-        return new SmallFood(ComponentConst.FOOD_SIZE, Resources.APPLE_RED_1);
+        return new SmallFood(ComponentBounds.FOOD_SIZE, Resources.APPLE_RED_1);
     }
 
-    public JLabel createScoreComponent() {
+    // creates the label which holds a number to show the score (both current AND best score)
+    public JLabel createScoreValueComponent() {
         JLabel scoreLabel = new JLabel("0");
         try {
-            Font customFont = Font.createFont(Font.TRUETYPE_FONT, new File("src/resources/font/LuckiestGuy-Regular.ttf")).deriveFont(Font.BOLD, 36);
+            Font customFont = Font.createFont(Font.TRUETYPE_FONT, new File(Resources.TEXT_FONT)).deriveFont(Font.BOLD, 36);
             GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
             ge.registerFont(customFont);
             scoreLabel.setFont(customFont);
@@ -234,8 +235,9 @@ public class ComponentFactory {
         return scoreLabel;
     }
 
-    public BestComponent createBestComponent() {
-        BestComponent bc = new BestComponent();
+    // creates the BEST + the apple component - not the actual dynamic best score value
+    public BestScoreLabel createBestScoreLabel() {
+        BestScoreLabel bc = new BestScoreLabel();
         bc.setBounds(15, 15, bc.getPreferredSize().width, bc.getPreferredSize().height);
         return bc;
     }

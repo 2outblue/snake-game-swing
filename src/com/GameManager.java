@@ -1,7 +1,7 @@
 package com;
 
 import com.components.ComponentFactory;
-import com.constants.ComponentConst;
+import com.constants.ComponentBounds;
 import com.components.menu.DifficultyMark;
 import com.game_objects.SmallFood;
 import com.components.menu.GamePausedComponent;
@@ -45,12 +45,26 @@ public class GameManager {
         gameDifficulty = Difficulty.EASY;
         difficultyMark = componentFactory.createDifficultyMark();
         threadGovernor = ThreadGovernor.getInstance();
-        score = componentFactory.createScoreComponent();
+        score = componentFactory.createScoreValueComponent();
         scoreManager = ScoreManager.getInstance();
     }
 
-    public void createAndShowGame(){
-        renderMainMenu();
+    public void renderMainMenu() {
+        // set the difficulty in the menu since the check mark gets its position data based on
+        // which difficulty is currently selected (obviously)
+        setDifficulty(Difficulty.EASY);
+
+        // event listeners for button clicks are automatically attached in the component factory
+        // component bounds and size are also set in the factory
+        layeredPane.add(componentFactory.createPlayButton(), JLayeredPane.POPUP_LAYER);
+        layeredPane.add(componentFactory.createEasyButton(), JLayeredPane.POPUP_LAYER);
+        layeredPane.add(componentFactory.createMediumButton(), JLayeredPane.POPUP_LAYER);
+        layeredPane.add(componentFactory.createHardButton(), JLayeredPane.POPUP_LAYER);
+        layeredPane.add(componentFactory.createQuitButton(), JLayeredPane.POPUP_LAYER);
+
+        layeredPane.add(difficultyMark, JLayeredPane.POPUP_LAYER);
+
+        layeredPane.add(componentFactory.createMenuBackground(), JLayeredPane.POPUP_LAYER);
     }
 
     public void startGame() {
@@ -63,8 +77,8 @@ public class GameManager {
         renderMap();
         renderSnake();
         setInitialSnakePosition();
-        displayBestScore();
-        displayCurrentScore();
+        renderBestScore();
+        renderCurrentScore();
         threadGovernor.createMovementThread();
 
         layeredPane.requestFocusInWindow();
@@ -86,7 +100,7 @@ public class GameManager {
     }
 
     private void setInitialSnakePosition(){
-        snake.getHead().setBounds(390, 390, ComponentConst.SNAKE_HEAD_20, ComponentConst.SNAKE_HEAD_20);
+        snake.getHead().setBounds(390, 390, ComponentBounds.SNAKE_HEAD_20, ComponentBounds.SNAKE_HEAD_20);
     }
     private void renderSnake() {
         snake = componentFactory.createSnake();
@@ -155,7 +169,7 @@ public class GameManager {
     private void renderMap() {
         layeredPane.revalidate();
         layeredPane.repaint();
-        gameMap = componentFactory.createGameBackground(gameDifficulty);
+        gameMap = componentFactory.createMap(gameDifficulty);
         layeredPane.add(gameMap, JLayeredPane.DEFAULT_LAYER);
     }
 
@@ -166,37 +180,21 @@ public class GameManager {
 
     }
 
-    private void renderMainMenu() {
-        // set the difficulty in the menu since the check mark gets its position data based on
-        // which difficulty is currently selected (obviously)
-        setDifficulty(Difficulty.EASY);
+    private void renderBestScore() {
+        layeredPane.add(componentFactory.createBestScoreLabel(), JLayeredPane.MODAL_LAYER);
 
-        // event listeners for button clicks are automatically attached in the component factory
-        // component bounds and size are also set in the factory
-        layeredPane.add(componentFactory.createPlayButton(), JLayeredPane.POPUP_LAYER);
-        layeredPane.add(componentFactory.createEasyButton(), JLayeredPane.POPUP_LAYER);
-        layeredPane.add(componentFactory.createMediumButton(), JLayeredPane.POPUP_LAYER);
-        layeredPane.add(componentFactory.createHardButton(), JLayeredPane.POPUP_LAYER);
-        layeredPane.add(componentFactory.createQuitButton(), JLayeredPane.POPUP_LAYER);
-
-        layeredPane.add(difficultyMark, JLayeredPane.POPUP_LAYER);
-
-        layeredPane.add(componentFactory.createMenuBackground(), JLayeredPane.POPUP_LAYER);
-    }
-
-    private void displayBestScore() {
-        layeredPane.add(componentFactory.createBestComponent(), JLayeredPane.MODAL_LAYER);
-        bestScore = componentFactory.createScoreComponent();
+        bestScore = componentFactory.createScoreValueComponent();
         bestScore.setHorizontalAlignment(SwingConstants.LEFT);
         bestScore.setBounds(150, 15, 100, 50);
         bestScore.setText(scoreManager.getCurrentBest());
+
         layeredPane.add(bestScore, JLayeredPane.MODAL_LAYER);
     }
     public void updateBestScore(String value) {
         bestScore.setText(value);
     }
 
-    private void displayCurrentScore() {
+    private void renderCurrentScore() {
         layeredPane.add(score, JLayeredPane.MODAL_LAYER);
     }
     public void updateCurrentScore(String value){

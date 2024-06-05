@@ -9,7 +9,7 @@ import java.awt.event.ActionListener;
 
 public class MenuButtonActionListener implements ActionListener {
 
-
+// Should the listeners be actionPerformed or something else ?
     @Override
     public void actionPerformed(ActionEvent e) {
         SoundManager.getInstance().playButtonClick();

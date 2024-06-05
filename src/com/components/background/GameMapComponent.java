@@ -6,12 +6,11 @@ import java.awt.*;
 import java.io.File;
 import java.io.IOException;
 
-// TODO: REFACTOR TO GameMap ?? IN ANY CASE RENAME THIS TO SOMETHING BETTER
-public class BackgroundComponent extends JComponent {
+public class GameMapComponent extends JComponent {
 
     private Image image;
 
-    public BackgroundComponent(String path) {
+    public GameMapComponent(String path) {
         try {
             this.image = ImageIO.read(new File(path));
         } catch (IOException e) {

@@ -1,6 +1,6 @@
 package com.components.background;
 
-import com.constants.ComponentConst;
+import com.constants.ComponentBounds;
 import com.constants.Resources;
 
 import javax.imageio.ImageIO;
@@ -9,12 +9,13 @@ import java.awt.*;
 import java.io.File;
 import java.io.IOException;
 
-public class BestComponent extends JComponent {
+public class BestScoreLabel extends JComponent {
 
     private Image image;
 
-    public BestComponent() {
-        setPreferredSize(new Dimension(ComponentConst.BEST_SCORE_WIDTH, ComponentConst.BEST_SCORE_HEIGHT));
+    // this is the BEST + the apple component - not the actual dynamic best score value
+    public BestScoreLabel() {
+        setPreferredSize(new Dimension(ComponentBounds.BEST_SCORE_WIDTH, ComponentBounds.BEST_SCORE_HEIGHT));
         try {
             this.image = ImageIO.read(new File(Resources.BEST_SCORE));
         } catch (IOException e) {

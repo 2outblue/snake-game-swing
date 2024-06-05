@@ -1,6 +1,6 @@
 package com.components.menu;
 
-import com.constants.ComponentConst;
+import com.constants.ComponentBounds;
 import com.constants.Resources;
 
 import javax.imageio.ImageIO;
@@ -12,8 +12,8 @@ import java.io.IOException;
 public class GameOverComponent extends JComponent {
     private Image image;
 
-    private final int width = ComponentConst.GAME_OVER_WIDTH;
-    private final int height = ComponentConst.GAME_OVER_HEIGHT;
+    private final int width = ComponentBounds.GAME_OVER_WIDTH;
+    private final int height = ComponentBounds.GAME_OVER_HEIGHT;
 
 
     public GameOverComponent() {

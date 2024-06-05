@@ -7,9 +7,8 @@ public class Main {
 
         javax.swing.SwingUtilities.invokeLater(new Runnable() {
             public void run() {
-                gameManager.createAndShowGame();
+                gameManager.renderMainMenu();
             }
         });
-
     }
 }

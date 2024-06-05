@@ -1,6 +1,6 @@
 package com.components.menu;
 
-import com.constants.ComponentConst;
+import com.constants.ComponentBounds;
 import com.constants.Resources;
 
 import javax.imageio.ImageIO;
@@ -14,7 +14,7 @@ public class MenuBackgroundComponent extends JComponent {
     private Image image;
 
     public MenuBackgroundComponent() {
-        setPreferredSize(new Dimension(ComponentConst.FRAME_WIDTH, ComponentConst.FRAME_HEIGHT));
+        setPreferredSize(new Dimension(ComponentBounds.FRAME_WIDTH, ComponentBounds.FRAME_HEIGHT));
         try {
             this.image = ImageIO.read(new File(Resources.START_SCREEN_BACKGROUND));
 //            System.out.println("loaded");

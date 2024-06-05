@@ -4,7 +4,7 @@ import com.GameManager;
 import com.SoundManager;
 import com.components.ComponentFactory;
 import com.ScoreManager;
-import com.constants.ComponentConst;
+import com.constants.ComponentBounds;
 import com.constants.Direction;
 import com.game_objects.SmallFood;
 import com.components.snake.SnakeHead;
@@ -17,7 +17,7 @@ import java.util.Random;
 
 
 // Rename to InGameThread, or GameTickThread, PhysicsAndRenderThread ? GameLoopThread
-public class SnakeMovementThread extends Thread {
+public class GameLoopThread extends Thread {
 
     private final int movementSpeedInverse = 33;
 
@@ -34,7 +34,7 @@ public class SnakeMovementThread extends Thread {
 
     private boolean skip = false;
 
-    public SnakeMovementThread() {
+    public GameLoopThread() {
         snake = GameManager.getInstance().getSnake();
         isRunning = true;
         headBounds = snake.getHead().getBounds();
@@ -150,8 +150,8 @@ public class SnakeMovementThread extends Thread {
             int compX = compBounds.x;
             int compY = compBounds.y;
 //            System.out.println(String.format("Component %d - coords x:%d--y:%d",i, compX, compY));
-            if ((headX + 12 > compX && headX < compX + ComponentConst.SNAKE_COMPONENT_SIZE) &&
-                    (headY + 12> compY && headY < compY + ComponentConst.SNAKE_COMPONENT_SIZE)) {
+            if ((headX + 12 > compX && headX < compX + ComponentBounds.SNAKE_COMPONENT_SIZE) &&
+                    (headY + 12> compY && headY < compY + ComponentBounds.SNAKE_COMPONENT_SIZE)) {
                 return true;
             }
         }
@@ -177,8 +177,8 @@ public class SnakeMovementThread extends Thread {
         int foodY = smallFood.getBounds().y;
 
         //            System.out.println("Food collision");
-        return (snakeX + ComponentConst.SNAKE_HEAD_20 - 10 >= foodX && snakeX <= foodX + ComponentConst.FOOD_SIZE) &&
-                (snakeY + ComponentConst.SNAKE_HEAD_20  - 10>= foodY && snakeY <= foodY + ComponentConst.FOOD_SIZE);
+        return (snakeX + ComponentBounds.SNAKE_HEAD_20 - 10 >= foodX && snakeX <= foodX + ComponentBounds.FOOD_SIZE) &&
+                (snakeY + ComponentBounds.SNAKE_HEAD_20  - 10>= foodY && snakeY <= foodY + ComponentBounds.FOOD_SIZE);
     }
 
     private void spawnFood() {
