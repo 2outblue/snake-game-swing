@@ -30,7 +30,4 @@ public class Resources {
     public final static String TAIL_7 = "src/resources/tail-7.png";
     public final static String TAIL_6 = "src/resources/tail-6.png";
     public final static String TAIL_5 = "src/resources/tail-5.png";
-    public final static String TAIL_4 = "src/resources/tail-4.png";
-    public final static String TAIL_3 = "src/resources/tail-3.png";
-
 }

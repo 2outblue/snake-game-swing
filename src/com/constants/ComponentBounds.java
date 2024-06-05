@@ -1,8 +1,5 @@
 package com.constants;
 
-import com.components.menu.GameOverComponent;
-import com.components.menu.GamePausedComponent;
-
 public class ComponentBounds {
     // Component (excluding buttons) sizes:
     public final static int FRAME_WIDTH = 800;

@@ -9,6 +9,7 @@ import java.awt.geom.AffineTransform;
 import java.io.File;
 import java.io.IOException;
 
+// TODO: Refactor this
 public class SnakeHead extends JComponent{
 
     private int size;

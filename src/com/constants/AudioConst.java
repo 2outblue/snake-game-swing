@@ -1,7 +1,6 @@
 package com.constants;
 
 public class AudioConst {
-
     public final static String BUTTON_CLICK =  "src/resources/sfx/button-click.wav";
     public final static String BUTTON_HOVER =  "src/resources/sfx/hover-silly.wav";
 

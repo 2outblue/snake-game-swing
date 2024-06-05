@@ -1,6 +1,5 @@
 package com;
 
-import com.game_utility.CoordinateStore;
 import com.game_utility.Difficulty;
 
 import java.io.FileInputStream;
@@ -31,7 +30,7 @@ public class ScoreManager {
         }
     }
     public String getCurrentBest() {
-        Difficulty dif = CoordinateStore.getDifficulty();
+        Difficulty dif = GameManager.getInstance().getDifficulty();
         // fancy switch :O
         return switch (dif) {
             case EASY -> String.valueOf(bestEasy);
@@ -46,7 +45,7 @@ public class ScoreManager {
     }
 
     public synchronized void saveScore() {
-        Difficulty dif = CoordinateStore.getDifficulty();
+        Difficulty dif = GameManager.getInstance().getDifficulty();
         switch (dif) {
             case EASY -> {
                 if(bestEasy < score) {

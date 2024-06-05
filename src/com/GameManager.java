@@ -7,7 +7,7 @@ import com.game_objects.SmallFood;
 import com.components.menu.GamePausedComponent;
 import com.components.snake.SnakeBody;
 import com.game_objects.Snake;
-import com.game_utility.CoordinateStore;
+import com.game_utility.CollisionData;
 import com.game_utility.Difficulty;
 
 import javax.swing.*;
@@ -21,28 +21,23 @@ public class GameManager {
     private final JLayeredPane layeredPane;
     private final ThreadGovernor threadGovernor;
     private final ScoreManager scoreManager;
+
     private Snake snake;
-
     private GamePausedComponent pauseElement;
-
-    private JComponent gameMap;
+    private final JLabel score;
+    private JLabel bestScore;
 
     private final DifficultyMark difficultyMark;
+    private boolean inGame = false;
+    private Difficulty selectedDifficulty;
 
-    private boolean inGame = true;
-
-    private Difficulty gameDifficulty;
-
-    private JLabel score;
-
-    private JLabel bestScore;
 
     private GameManager() {
         componentFactory = ComponentFactory.getInstance();
         frame = componentFactory.createFrame();
         layeredPane = frame.getLayeredPane();
 
-        gameDifficulty = Difficulty.EASY;
+        selectedDifficulty = Difficulty.EASY;
         difficultyMark = componentFactory.createDifficultyMark();
         threadGovernor = ThreadGovernor.getInstance();
         score = componentFactory.createScoreValueComponent();
@@ -72,13 +67,14 @@ public class GameManager {
         layeredPane.removeAll();
 //        layeredPane.revalidate();
 //        layeredPane.repaint();
-
         scoreManager.resetCurrentScore();
+
         renderMap();
         renderSnake();
-        setInitialSnakePosition();
         renderBestScore();
         renderCurrentScore();
+        setInitialSnakePosition();
+
         threadGovernor.createMovementThread();
 
         layeredPane.requestFocusInWindow();
@@ -142,7 +138,6 @@ public class GameManager {
                 ex.printStackTrace();
             }
         } else {
-//            frame.getContentPane().add(pauseElement);
             layeredPane.add(componentFactory.createBackToMenuButton(), JLayeredPane.POPUP_LAYER);
             layeredPane.add(pauseElement, JLayeredPane.POPUP_LAYER);
 
@@ -169,15 +164,19 @@ public class GameManager {
     private void renderMap() {
         layeredPane.revalidate();
         layeredPane.repaint();
-        gameMap = componentFactory.createMap(gameDifficulty);
-        layeredPane.add(gameMap, JLayeredPane.DEFAULT_LAYER);
+
+        layeredPane.add(componentFactory.createMap(selectedDifficulty), JLayeredPane.DEFAULT_LAYER);
     }
 
     public void setDifficulty(Difficulty dif) {
-        CoordinateStore.setDifficulty(dif);
+        CollisionData.setDifficulty(dif);
         difficultyMark.set(dif);
-        gameDifficulty = dif;
+        selectedDifficulty = dif;
 
+    }
+
+    public synchronized Difficulty getDifficulty() {
+        return selectedDifficulty;
     }
 
     private void renderBestScore() {
@@ -193,7 +192,6 @@ public class GameManager {
     public void updateBestScore(String value) {
         bestScore.setText(value);
     }
-
     private void renderCurrentScore() {
         layeredPane.add(score, JLayeredPane.MODAL_LAYER);
     }
@@ -208,7 +206,7 @@ public class GameManager {
         frame.dispose();
     }
 
-    public synchronized static GameManager getInstance() {
+    public static GameManager getInstance() {
         if (instance == null) {
             instance = new GameManager();
         }

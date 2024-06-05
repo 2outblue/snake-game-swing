@@ -12,12 +12,8 @@ import java.io.IOException;
 public class GameOverComponent extends JComponent {
     private Image image;
 
-    private final int width = ComponentBounds.GAME_OVER_WIDTH;
-    private final int height = ComponentBounds.GAME_OVER_HEIGHT;
-
-
     public GameOverComponent() {
-        setPreferredSize(new Dimension(width, height));
+        setPreferredSize(new Dimension(ComponentBounds.GAME_OVER_WIDTH, ComponentBounds.GAME_OVER_HEIGHT));
         try {
             this.image = ImageIO.read(new File(Resources.GAME_OVER_1));
 //            System.out.println("loaded");

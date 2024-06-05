@@ -9,6 +9,7 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 
+// TODO fghfgh
 public class SnakeBody extends JComponent{
 
     private int size;

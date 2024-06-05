@@ -9,17 +9,18 @@ import com.constants.Direction;
 import com.game_objects.SmallFood;
 import com.components.snake.SnakeHead;
 import com.game_objects.Snake;
-import com.game_utility.CoordinateStore;
+import com.game_utility.CollisionData;
 import com.game_utility.Difficulty;
 
 import java.awt.*;
 import java.util.Random;
 
 
-// Rename to InGameThread, or GameTickThread, PhysicsAndRenderThread ? GameLoopThread
+// Rename to InGameThread, or GameTickThread ?
+// Started only when startGame() is called in the GameManager, takes care of movement, the food and collision checking
 public class GameLoopThread extends Thread {
 
-    private final int movementSpeedInverse = 33;
+    private final int TICK_RATE = 33;
 
     private final Snake snake;
 
@@ -30,15 +31,16 @@ public class GameLoopThread extends Thread {
 
     private Rectangle headBounds;
 
-    private Difficulty dif;
+    private final Difficulty dif;
 
     private boolean skip = false;
 
     public GameLoopThread() {
-        snake = GameManager.getInstance().getSnake();
+        GameManager gm = GameManager.getInstance();
+        snake = gm.getSnake();
         isRunning = true;
         headBounds = snake.getHead().getBounds();
-        dif = CoordinateStore.getDifficulty();
+        dif = gm.getDifficulty();
     }
 
     @Override
@@ -103,7 +105,7 @@ public class GameLoopThread extends Thread {
                 snake.paintBody(headBounds);
             }
             try {
-                Thread.sleep(movementSpeedInverse);
+                Thread.sleep(TICK_RATE);
             } catch (InterruptedException e) {
                 throw new RuntimeException(e);
             }
@@ -114,11 +116,11 @@ public class GameLoopThread extends Thread {
         int snakeX = snake.getHead().getBounds().x;
         int snakeY = snake.getHead().getBounds().y;
         if (dif == Difficulty.EASY || dif == Difficulty.MEDIUM) {
-            return snakeX < CoordinateStore.borderMinX || snakeX > CoordinateStore.borderMaxX ||
-                    snakeY < CoordinateStore.borderMinY || snakeY > CoordinateStore.borderMaxY;
+            return snakeX < CollisionData.borderMinX || snakeX > CollisionData.borderMaxX ||
+                    snakeY < CollisionData.borderMinY || snakeY > CollisionData.borderMaxY;
         } else if (dif == Difficulty.HARD) {
-            if ((snakeX < CoordinateStore.borderMinX || snakeX > CoordinateStore.borderMaxX) ||
-                    (snakeY < CoordinateStore.borderMinY || snakeY > CoordinateStore.borderMaxY) ||
+            return (snakeX < CollisionData.borderMinX || snakeX > CollisionData.borderMaxX) ||
+                    (snakeY < CollisionData.borderMinY || snakeY > CollisionData.borderMaxY) ||
                     // middle wall upper left corner
                     (snakeX > 170 && snakeX < 376) && (snakeY > 170 && snakeY < 240) ||
                     (snakeX > 170 && snakeX < 238) && (snakeY > 220 && snakeY < 370) ||
@@ -134,9 +136,7 @@ public class GameLoopThread extends Thread {
                     // middle left pillar
                     (snakeX > 288 && snakeX < 357) && (snakeY > 280 && snakeY < 495) ||
                     // middle right pillar
-                    (snakeX > 421 && snakeX < 491) && (snakeY > 280 && snakeY < 495)) {
-                return true;
-            }
+                    (snakeX > 421 && snakeX < 491) && (snakeY > 280 && snakeY < 495);
         }
         return false;
     }
@@ -144,7 +144,7 @@ public class GameLoopThread extends Thread {
         int headX = headBounds.x;
         int headY = headBounds.y;
         //doesn't check for the first two blocks (the first one always collides since there is a 5px overlap
-        // with the snakeHead, doesn't check for the second and third for safety)
+        // with the snakeHead, doesn't check for the third and fourth for safety)
         for (int i = 3; i < snake.getBody().size(); i++) {
             Rectangle compBounds = snake.getBody().get(i).getBounds();
             int compX = compBounds.x;
@@ -155,7 +155,7 @@ public class GameLoopThread extends Thread {
                 return true;
             }
         }
-
+        // checks for collision with the tail - doesn't check the last tail part because it's kinda too small to see (and avoid)
         for (int i = 1; i < snake.getTail().size() - 2; i++) {
             Rectangle compBounds = snake.getTail().get(i).getBounds();
             Dimension compSize = snake.getTail().get(i).getPreferredSize();
@@ -175,7 +175,6 @@ public class GameLoopThread extends Thread {
         int snakeY = headBounds.y;
         int foodX = smallFood.getBounds().x;
         int foodY = smallFood.getBounds().y;
-
         //            System.out.println("Food collision");
         return (snakeX + ComponentBounds.SNAKE_HEAD_20 - 10 >= foodX && snakeX <= foodX + ComponentBounds.FOOD_SIZE) &&
                 (snakeY + ComponentBounds.SNAKE_HEAD_20  - 10>= foodY && snakeY <= foodY + ComponentBounds.FOOD_SIZE);
@@ -185,15 +184,16 @@ public class GameLoopThread extends Thread {
         Random random = new Random();
         smallFood = ComponentFactory.getInstance().createSmallFood();
         if (dif == Difficulty.EASY || dif == Difficulty.MEDIUM) {
-            int randomX = random.nextInt(CoordinateStore.foodMinX, CoordinateStore.foodMaxX);
-            int randomY = random.nextInt(CoordinateStore.foodMinY, CoordinateStore.foodMaxY);
+            int randomX = random.nextInt(CollisionData.foodMinX, CollisionData.foodMaxX);
+            int randomY = random.nextInt(CollisionData.foodMinY, CollisionData.foodMaxY);
             smallFood.setBounds(randomX, randomY, smallFood.getPreferredSize().width, smallFood.getPreferredSize().height);
         } else if (dif == Difficulty.HARD) {
-            boolean outOfBounds = true;
 
-            while (outOfBounds) {
-                int randomX = random.nextInt(CoordinateStore.foodMinX, CoordinateStore.foodMaxX);
-                int randomY = random.nextInt(CoordinateStore.foodMinY, CoordinateStore.foodMaxY);
+            // generates values for the food until the values are not within the
+            // inner walls of map_3 (hard difficulty) - could be done smarter but it works for now
+            while (true) {
+                int randomX = random.nextInt(CollisionData.foodMinX, CollisionData.foodMaxX);
+                int randomY = random.nextInt(CollisionData.foodMinY, CollisionData.foodMaxY);
 
                 if ((randomX > 170 && randomX < 376) && (randomY > 170 && randomY < 240) ||
                         (randomX > 170 && randomX < 238) && (randomY > 220 && randomY < 370) ||
@@ -206,14 +206,14 @@ public class GameLoopThread extends Thread {
                         // middle wall bottom right corner
                         (randomX > 402 && randomX < 610) && (randomY > 540 && randomY < 610) ||
                         (randomX > 540 && randomX < 610) && (randomY > 410 && randomY < 560) ||
-                        // middle left pillar
+                        // center left pillar
                         (randomX > 288 && randomX < 357) && (randomY > 280 && randomY < 495) ||
-                        // middle right pillar
+                        // center right pillar
                         (randomX > 421 && randomX < 491) && (randomY > 280 && randomY < 495)) {
-                } else {
-                    smallFood.setBounds(randomX, randomY, smallFood.getPreferredSize().width, smallFood.getPreferredSize().height);
-                    break;
+                    continue;
                 }
+                smallFood.setBounds(randomX, randomY, smallFood.getPreferredSize().width, smallFood.getPreferredSize().height);
+                break;
             }
         }
         GameManager.getInstance().renderFood(smallFood);

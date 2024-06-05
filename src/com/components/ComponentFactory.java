@@ -35,8 +35,8 @@ public class ComponentFactory {
     private int patternPointer;
 
     // one instance per event listener to attach to all menu buttons (instead of new event listener for each button)
-    private MenuButtonActionListener menuButtonLister;
-    private ButtonHoverListener buttonHoverListener;
+    private final MenuButtonActionListener menuButtonLister;
+    private final ButtonHoverListener buttonHoverListener;
 
     private ComponentFactory() {
         repeatCounter = 1;

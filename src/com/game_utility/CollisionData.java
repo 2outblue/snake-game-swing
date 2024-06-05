@@ -3,10 +3,8 @@ package com.game_utility;
 // updates coordinate values for where the border is and where the food should spawn
 // doesn't update coords of any game objects
 
-// TODO: CoordinateStore is not a good name for this class - or move the getDifficulty method somewhere else
-public class CoordinateStore {
-
-    public static Difficulty difficulty;
+// TODO: Rename?
+public class CollisionData {
     public static int borderMinX;
     public static int borderMaxX;
     public static int borderMinY;
@@ -18,7 +16,6 @@ public class CoordinateStore {
     public static int foodMaxY;
 
     public static void setDifficulty(Difficulty dif) {
-        difficulty = dif;
         if (dif == Difficulty.EASY) {
             borderMinX = 96;
             borderMaxX = 680;
@@ -50,9 +47,5 @@ public class CoordinateStore {
             foodMinY = 112;
             foodMaxY = 670;
         }
-    }
-
-    public static Difficulty getDifficulty() {
-        return difficulty;
     }
 }
