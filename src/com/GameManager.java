@@ -4,7 +4,6 @@ import com.components.ComponentFactory;
 import com.constants.ComponentBounds;
 import com.components.menu.DifficultyMark;
 import com.game_objects.SmallFood;
-import com.components.menu.GamePausedComponent;
 import com.components.snake.SnakeBody;
 import com.game_objects.Snake;
 import com.game_utility.CollisionData;
@@ -23,7 +22,6 @@ public class GameManager {
     private final ScoreManager scoreManager;
 
     private Snake snake;
-    private GamePausedComponent pauseElement;
     private final JLabel score;
     private JLabel bestScore;
 
@@ -75,7 +73,7 @@ public class GameManager {
         renderCurrentScore();
         setInitialSnakePosition();
 
-        threadGovernor.createMovementThread();
+        threadGovernor.startGameLoopThread();
 
         layeredPane.requestFocusInWindow();
 
@@ -102,7 +100,7 @@ public class GameManager {
         snake = componentFactory.createSnake();
 
         layeredPane.add(snake.getHead(), JLayeredPane.PALETTE_LAYER);
-        // createSnake() adds only one body part to the snake
+        // createSnake() adds only one body part to the snake, so no need to loop through the body-list (prob better with a loop regardless)
         layeredPane.add(snake.getBody().getFirst(), JLayeredPane.PALETTE_LAYER);
 
         for (SnakeBody tailPart : snake.getTail()) {
@@ -110,6 +108,7 @@ public class GameManager {
         }
     }
     public synchronized void growSnake() {
+        // Ads two body parts per call of this method
         SnakeBody body = componentFactory.createBody();
         layeredPane.add(body, JLayeredPane.PALETTE_LAYER);
 
@@ -120,15 +119,10 @@ public class GameManager {
         snake.grow(body2);
     }
     public synchronized void pauseGame() {
-        if (pauseElement == null) {
-            pauseElement = componentFactory.createGamePauseComponent();
-        }
         if (snake.isPaused()) {
             snake.setPaused(false);
             // TODO: is this try-catch necessary ?
             try {
-                layeredPane.remove(pauseElement);
-
                 for (Component comp : layeredPane.getComponentsInLayer(JLayeredPane.POPUP_LAYER)) {
                     layeredPane.remove(comp);
                 }
@@ -139,7 +133,7 @@ public class GameManager {
             }
         } else {
             layeredPane.add(componentFactory.createBackToMenuButton(), JLayeredPane.POPUP_LAYER);
-            layeredPane.add(pauseElement, JLayeredPane.POPUP_LAYER);
+            layeredPane.add(componentFactory.createGamePauseComponent(), JLayeredPane.POPUP_LAYER);
 
             snake.setPaused(true);
         }
@@ -179,6 +173,7 @@ public class GameManager {
         return selectedDifficulty;
     }
 
+    // Scores are rendered on the modal layer, since when un-pausing the game, everything on the popup layer is removed
     private void renderBestScore() {
         layeredPane.add(componentFactory.createBestScoreLabel(), JLayeredPane.MODAL_LAYER);
 

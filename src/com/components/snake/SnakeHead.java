@@ -2,71 +2,42 @@ package com.components.snake;
 
 import com.constants.Direction;
 
-import javax.imageio.ImageIO;
-import javax.swing.*;
 import java.awt.*;
 import java.awt.geom.AffineTransform;
-import java.io.File;
-import java.io.IOException;
 
-// TODO: Refactor this
-public class SnakeHead extends JComponent{
-
-    private int size;
-
-    private Image image;
-
+public class SnakeHead extends SnakeComponent{
     private double angle = 3.141592653;
-    private Direction direction;
 
-    public SnakeHead(int size) {
-        setPreferredSize(new Dimension(size, size));
-        this.size = size;
+    public SnakeHead(int size, String path) {
+        super(size, path);
+        // Head points always in the direction that it is moving (unlike the body parts - they point in the opposite direction of movement)
         this.direction = Direction.UP;
-        try {
-            this.image = ImageIO.read(new File("src/resources/snake-head-20.png"));
-//            System.out.println("loaded");
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
     }
 
     @Override
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
         Graphics2D g2d = (Graphics2D) g.create();
-//        g.setColor(Color.BLACK);
-//        g.fillRect(0, 0, this.size, this.size);
-//        g.drawRect(270, 370, 10,10);
 
         if (image != null) {
-            int x = (getWidth() - image.getWidth(this)) / 2;
-            int y = (getHeight() - image.getHeight(this)) / 2;
-//            g.drawImage(image, x, y, this);
 //            System.out.println(getBounds().x + "<---X----Y--->" + getBounds().y);
                 AffineTransform transform = new AffineTransform();
                 // Translate to the center of the component
-                transform.translate(getWidth() / 2, getHeight() / 2);
+                transform.translate(getWidth() / 2.0, getHeight() / 2.0);
                 // Rotate around the center
                 transform.rotate(angle);
                 // Translate back to the top-left corner
-                transform.translate(-image.getWidth(this) / 2, -image.getHeight(this) / 2);
-            g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+                transform.translate(-image.getWidth(this) / 2.0, -image.getHeight(this) / 2.0);
+                g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
                 g2d.drawImage(image, transform, this);
         }
         g2d.dispose();
     }
 
-    public synchronized Direction getDirection() {
-        return this.direction;
-    }
-
-    public synchronized Direction getReverseDirection() {
+    // Used for the first body part when painting(rendering) the body, since all body parts point in the opposite
+    // direction of the head
+    public Direction getReverseDirection() {
         switch (this.direction) {
-            case UP -> {
-                return Direction.DOWN;
-            }
             case DOWN -> {
                 return Direction.UP;
             }
@@ -80,20 +51,6 @@ public class SnakeHead extends JComponent{
                 return Direction.DOWN;
             }
         }
-    }
-
-    @Override
-    public synchronized void setBounds(Rectangle r) {
-        super.setBounds(r);
-    }
-
-    @Override
-    public synchronized Rectangle getBounds(Rectangle rv) {
-        return super.getBounds(rv);
-    }
-
-    public synchronized void setDirection(Direction direction) {
-        this.direction = direction;
     }
 
     public synchronized void setAngle(double angle) {

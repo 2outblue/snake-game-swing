@@ -17,6 +17,7 @@ public class Resources {
     public final static String BUTTON_QUIT = "src/resources/button1-quit.png";
     public final static String DIFFICULTY_MARK = "src/resources/difficulty-mark.png";
     public final static String APPLE_RED_1 = "src/resources/apple.png";
+    public final static String SNAKE_HEAD_20 = "src/resources/snake-head-20.png";
     public final static String BODY_13_GREEN = "src/resources/body13.png";
     public final static String BODY_13_BLUE = "src/resources/body-13-blue.png";
     public final static String BODY_13_PURPLE = "src/resources/body-13-purple.png";
@@ -30,4 +31,7 @@ public class Resources {
     public final static String TAIL_7 = "src/resources/tail-7.png";
     public final static String TAIL_6 = "src/resources/tail-6.png";
     public final static String TAIL_5 = "src/resources/tail-5.png";
+
+    public final static String SAVE_FILE_PATH = "src/save/score.properties";
+
 }

@@ -65,7 +65,7 @@ public class ComponentFactory {
     }
 
     public SnakeHead createHead() {
-        SnakeHead sh = new SnakeHead(ComponentBounds.SNAKE_HEAD_20);
+        SnakeHead sh = new SnakeHead(ComponentBounds.SNAKE_HEAD_20, Resources.SNAKE_HEAD_20);
         sh.setDirection(Direction.UP);
         return sh;
     }

@@ -6,32 +6,19 @@ import com.threads.GameLoopThread;
 public class ThreadGovernor {
 
     private static ThreadGovernor instance;
-    private GameLoopThread movementThread;
-    private Thread foodThread;
+    private GameLoopThread gameLoopThread;
+
     private ThreadGovernor() {
     }
 
-    public void startAllThreads() {
-
-    }
-
     public void closeAllThreads() {
-        movementThread.stopRunning();
-
-//        movementThread = new Thread(new SnakeMovementThread());
+        gameLoopThread.stopRunning();
     }
 
-    public void createMovementThread() {
-        movementThread = new GameLoopThread();
-        movementThread.start();
+    public void startGameLoopThread() {
+        gameLoopThread = new GameLoopThread();
+        gameLoopThread.start();
     }
-    public void createFoodGenerationThread(){
-        foodThread.start();
-    }
-
-
-
-
 
     public static ThreadGovernor getInstance() {
         if (instance == null) {

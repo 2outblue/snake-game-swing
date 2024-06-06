@@ -8,10 +8,9 @@ import java.awt.*;
 import java.util.List;
 
 public class Snake {
-    private Snake snake;
-    private SnakeHead head;
-    private List<SnakeBody> body;
-    private List<SnakeBody> tail;
+    private final SnakeHead head;
+    private final List<SnakeBody> body;
+    private final List<SnakeBody> tail;
     private Direction currentDirectionInput;
     private Direction previousDirectionInput;
 
@@ -34,17 +33,6 @@ public class Snake {
     public synchronized List<SnakeBody> getTail() {
         return tail;
     }
-
-//    public synchronized static Snake getInstance(){
-//        return snake;
-//    }
-
-//    public synchronized static void instantiateSnake(SnakeHead head, List<SnakeBody> body, List<SnakeBody> tail) {
-//        if (snake == null) {
-//            snake = new Snake(head, body, tail);
-//        }
-//    }
-
     public void grow(SnakeBody b) {
         b.setDirection(body.getLast().getDirection());
         body.addLast(b);
@@ -86,11 +74,11 @@ public class Snake {
         this.currentDirectionInput = currentDirectionInput;
     }
 
-    public synchronized boolean isPaused() {
+    public boolean isPaused() {
         return paused;
     }
 
-    public synchronized void setPaused(boolean paused) {
+    public void setPaused(boolean paused) {
         this.paused = paused;
     }
 

@@ -2,32 +2,16 @@ package com.components.snake;
 
 import com.constants.Direction;
 
-import javax.imageio.ImageIO;
-import javax.swing.*;
 import java.awt.*;
 import java.awt.image.BufferedImage;
-import java.io.File;
-import java.io.IOException;
 
-// TODO fghfgh
-public class SnakeBody extends JComponent{
 
-    private int size;
-    private Direction direction;
-
-    private Image image;
-
+public class SnakeBody extends SnakeComponent{
     private float transparency = 1.0f;
     public SnakeBody(int size, String path) {
-        setPreferredSize(new Dimension(size, size));
-        this.size = size;
+        super(size, path);
+        // All body parts point in the opposite direction of movement (unlike the head - the head points in the direction that it is moving)
         this.direction = Direction.DOWN;
-        try {
-            this.image = ImageIO.read(new File(path));
-//            System.out.println("loaded");
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
     }
 
     @Override
@@ -46,27 +30,6 @@ public class SnakeBody extends JComponent{
             int y = (getHeight() - image2.getHeight(this)) / 2;
             g2d.drawImage(image2, x, y, this);
         }
-
-//        g2d.setColor(Color.BLACK);
-//        g2d.fillRect(0, 0, this.size, this.size);
-    }
-
-    public synchronized Direction getDirection() {
-        return this.direction;
-    }
-
-    public synchronized void setDirection(Direction direction) {
-        this.direction = direction;
-    }
-
-    @Override
-    public void setBounds(Rectangle r) {
-        super.setBounds(r);
-    }
-
-    @Override
-    public Rectangle getBounds(Rectangle rv) {
-        return super.getBounds(rv);
     }
 
     public synchronized void setSquareTransparency(float transparency) {
