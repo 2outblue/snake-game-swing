@@ -27,7 +27,6 @@ public class SoundManager {
     }
 
     public void playButtonHover() {
-
         try {
             AudioInputStream a = AudioSystem.getAudioInputStream(new File(AudioConst.BUTTON_HOVER));
             Clip c = AudioSystem.getClip();

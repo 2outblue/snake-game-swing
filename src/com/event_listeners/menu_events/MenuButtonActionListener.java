@@ -13,25 +13,25 @@ public class MenuButtonActionListener implements ActionListener {
     @Override
     public void actionPerformed(ActionEvent e) {
         SoundManager.getInstance().playButtonClick();
-        String command = e.getActionCommand();
 
+        GameManager gameManager = GameManager.getInstance();
+
+        String command = e.getActionCommand();
         switch (command) {
             case "play":
-//                SoundManager.getInstance().playButtonClick();
-                GameManager gameManager = GameManager.getInstance();
                 gameManager.startGame();
                 break;
             case "easy":
-                GameManager.getInstance().setDifficulty(Difficulty.EASY);
+                gameManager.setDifficulty(Difficulty.EASY);
                 break;
             case "medium":
-                GameManager.getInstance().setDifficulty(Difficulty.MEDIUM);
+                gameManager.setDifficulty(Difficulty.MEDIUM);
                 break;
             case "hard":
-                GameManager.getInstance().setDifficulty(Difficulty.HARD);
+                gameManager.setDifficulty(Difficulty.HARD);
                 break;
             case "quit":
-                GameManager.getInstance().quitGame();
+                gameManager.quitGame();
                 break;
         }
 

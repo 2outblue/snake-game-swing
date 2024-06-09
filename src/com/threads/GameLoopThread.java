@@ -9,7 +9,7 @@ import com.constants.Direction;
 import com.game_objects.SmallFood;
 import com.components.snake.SnakeHead;
 import com.game_objects.Snake;
-import com.game_utility.CollisionData;
+import com.game_utility.MapCollisionData;
 import com.game_utility.Difficulty;
 
 import java.awt.*;
@@ -116,11 +116,11 @@ public class GameLoopThread extends Thread {
         int snakeX = snake.getHead().getBounds().x;
         int snakeY = snake.getHead().getBounds().y;
         if (dif == Difficulty.EASY || dif == Difficulty.MEDIUM) {
-            return snakeX < CollisionData.borderMinX || snakeX > CollisionData.borderMaxX ||
-                    snakeY < CollisionData.borderMinY || snakeY > CollisionData.borderMaxY;
+            return snakeX < MapCollisionData.borderMinX || snakeX > MapCollisionData.borderMaxX ||
+                    snakeY < MapCollisionData.borderMinY || snakeY > MapCollisionData.borderMaxY;
         } else if (dif == Difficulty.HARD) {
-            return (snakeX < CollisionData.borderMinX || snakeX > CollisionData.borderMaxX) ||
-                    (snakeY < CollisionData.borderMinY || snakeY > CollisionData.borderMaxY) ||
+            return (snakeX < MapCollisionData.borderMinX || snakeX > MapCollisionData.borderMaxX) ||
+                    (snakeY < MapCollisionData.borderMinY || snakeY > MapCollisionData.borderMaxY) ||
                     // middle wall upper left corner
                     (snakeX > 170 && snakeX < 376) && (snakeY > 170 && snakeY < 240) ||
                     (snakeX > 170 && snakeX < 238) && (snakeY > 220 && snakeY < 370) ||
@@ -184,16 +184,16 @@ public class GameLoopThread extends Thread {
         Random random = new Random();
         smallFood = ComponentFactory.getInstance().createSmallFood();
         if (dif == Difficulty.EASY || dif == Difficulty.MEDIUM) {
-            int randomX = random.nextInt(CollisionData.foodMinX, CollisionData.foodMaxX);
-            int randomY = random.nextInt(CollisionData.foodMinY, CollisionData.foodMaxY);
+            int randomX = random.nextInt(MapCollisionData.foodMinX, MapCollisionData.foodMaxX);
+            int randomY = random.nextInt(MapCollisionData.foodMinY, MapCollisionData.foodMaxY);
             smallFood.setBounds(randomX, randomY, smallFood.getPreferredSize().width, smallFood.getPreferredSize().height);
         } else if (dif == Difficulty.HARD) {
 
             // generates values for the food until the values are not within the
             // inner walls of map_3 (hard difficulty) - could be done smarter but it works for now
             while (true) {
-                int randomX = random.nextInt(CollisionData.foodMinX, CollisionData.foodMaxX);
-                int randomY = random.nextInt(CollisionData.foodMinY, CollisionData.foodMaxY);
+                int randomX = random.nextInt(MapCollisionData.foodMinX, MapCollisionData.foodMaxX);
+                int randomY = random.nextInt(MapCollisionData.foodMinY, MapCollisionData.foodMaxY);
 
                 if ((randomX > 170 && randomX < 376) && (randomY > 170 && randomY < 240) ||
                         (randomX > 170 && randomX < 238) && (randomY > 220 && randomY < 370) ||

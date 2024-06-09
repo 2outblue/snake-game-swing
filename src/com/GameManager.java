@@ -6,7 +6,7 @@ import com.components.menu.DifficultyMark;
 import com.game_objects.SmallFood;
 import com.components.snake.SnakeBody;
 import com.game_objects.Snake;
-import com.game_utility.CollisionData;
+import com.game_utility.MapCollisionData;
 import com.game_utility.Difficulty;
 
 import javax.swing.*;
@@ -48,7 +48,7 @@ public class GameManager {
         setDifficulty(Difficulty.EASY);
 
         // event listeners for button clicks are automatically attached in the component factory
-        // component bounds and size are also set in the factory
+        // component bounds are also set in the factory
         layeredPane.add(componentFactory.createPlayButton(), JLayeredPane.POPUP_LAYER);
         layeredPane.add(componentFactory.createEasyButton(), JLayeredPane.POPUP_LAYER);
         layeredPane.add(componentFactory.createMediumButton(), JLayeredPane.POPUP_LAYER);
@@ -66,7 +66,6 @@ public class GameManager {
 //        layeredPane.revalidate();
 //        layeredPane.repaint();
         scoreManager.resetCurrentScore();
-
         renderMap();
         renderSnake();
         renderBestScore();
@@ -83,7 +82,6 @@ public class GameManager {
         growSnake();
         growSnake();
         growSnake();
-
     }
     public synchronized void restart() {
         layeredPane.removeAll();
@@ -100,7 +98,7 @@ public class GameManager {
         snake = componentFactory.createSnake();
 
         layeredPane.add(snake.getHead(), JLayeredPane.PALETTE_LAYER);
-        // createSnake() adds only one body part to the snake, so no need to loop through the body-list (prob better with a loop regardless)
+        // createSnake() adds only one body part to the snake, so no need to loop through the body-list //(prob better with a loop regardless)
         layeredPane.add(snake.getBody().getFirst(), JLayeredPane.PALETTE_LAYER);
 
         for (SnakeBody tailPart : snake.getTail()) {
@@ -109,10 +107,10 @@ public class GameManager {
     }
     public synchronized void growSnake() {
         // Ads two body parts per call of this method
-        SnakeBody body = componentFactory.createBody();
+        SnakeBody body = componentFactory.createBodyPart();
         layeredPane.add(body, JLayeredPane.PALETTE_LAYER);
 
-        SnakeBody body2 = componentFactory.createBody();
+        SnakeBody body2 = componentFactory.createBodyPart();
         layeredPane.add(body2, JLayeredPane.PALETTE_LAYER);
 
         snake.grow(body);
@@ -163,7 +161,7 @@ public class GameManager {
     }
 
     public void setDifficulty(Difficulty dif) {
-        CollisionData.setDifficulty(dif);
+        MapCollisionData.setDifficulty(dif);
         difficultyMark.set(dif);
         selectedDifficulty = dif;
 

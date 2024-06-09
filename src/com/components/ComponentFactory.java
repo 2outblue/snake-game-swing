@@ -52,7 +52,7 @@ public class ComponentFactory {
 
     }
 
-    public SnakeBody createBody() {
+    public SnakeBody createBodyPart() {
         repeatCounter++;
 
         if (repeatCounter > patternRepeater) {
@@ -71,7 +71,7 @@ public class ComponentFactory {
     }
 
     public Snake createSnake() {
-        SnakeBody body1 = createBody();
+        SnakeBody body1 = createBodyPart();
         body1.setDirection(Direction.DOWN);
 
         List<SnakeBody> bl = new ArrayList<>();
@@ -201,7 +201,6 @@ public class ComponentFactory {
         return button;
     }
 
-    // TODO: MOVE ALL BOUND VALUES TO CONSTANTS
     public GamePausedComponent createGamePauseComponent() {
         GamePausedComponent gp = new GamePausedComponent();
         gp.setBounds(ComponentBounds.GAME_PAUSED_X, ComponentBounds.GAME_PAUSED_Y, ComponentBounds.GAME_PAUSED_WIDTH, ComponentBounds.GAME_PAUSED_HEIGHT);
@@ -231,6 +230,8 @@ public class ComponentFactory {
         }
         scoreLabel.setHorizontalAlignment(SwingConstants.CENTER);
         scoreLabel.setForeground(Color.MAGENTA);
+        // These are the default bounds for the current in-game score, for the best score
+        // new bounds are set
         scoreLabel.setBounds(375, 15, 50, 50);
         return scoreLabel;
     }

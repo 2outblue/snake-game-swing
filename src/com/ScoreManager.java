@@ -70,7 +70,7 @@ public class ScoreManager {
         // TODO:
         // doesn't need to save if the current score is not bigger, but it works for now...
         // also the path should be a constant
-        try (FileOutputStream output = new FileOutputStream(Resources.SAVE_FILE_PATH)) {
+        try (FileOutputStream output = new FileOutputStream(Resources.SAVE_FILE)) {
             properties.store(output, "Save of best scores");
         } catch (IOException e) {
             e.printStackTrace();
@@ -78,7 +78,7 @@ public class ScoreManager {
     }
 
     private void loadSavedScores() {
-        try (FileInputStream input = new FileInputStream(Resources.SAVE_FILE_PATH)) {
+        try (FileInputStream input = new FileInputStream(Resources.SAVE_FILE)) {
             properties.load(input);
         } catch (IOException e) {
             e.printStackTrace();

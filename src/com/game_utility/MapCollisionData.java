@@ -1,10 +1,6 @@
 package com.game_utility;
 
-// updates coordinate values for where the border is and where the food should spawn
-// doesn't update coords of any game objects
-
-// TODO: Rename?
-public class CollisionData {
+public class MapCollisionData {
     public static int borderMinX;
     public static int borderMaxX;
     public static int borderMinY;

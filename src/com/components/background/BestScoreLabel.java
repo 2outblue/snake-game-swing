@@ -13,7 +13,7 @@ public class BestScoreLabel extends JComponent {
 
     private Image image;
 
-    // this is the BEST + the apple component - not the actual dynamic best score value
+    // this is the BEST + the apple component - not the actual dynamic number
     public BestScoreLabel() {
         setPreferredSize(new Dimension(ComponentBounds.BEST_SCORE_WIDTH, ComponentBounds.BEST_SCORE_HEIGHT));
         try {

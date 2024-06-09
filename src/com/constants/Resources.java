@@ -32,6 +32,6 @@ public class Resources {
     public final static String TAIL_6 = "src/resources/tail-6.png";
     public final static String TAIL_5 = "src/resources/tail-5.png";
 
-    public final static String SAVE_FILE_PATH = "src/save/score.properties";
+    public final static String SAVE_FILE = "src/save/score.properties";
 
 }
