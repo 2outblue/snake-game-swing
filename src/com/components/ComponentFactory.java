@@ -7,7 +7,7 @@ import com.components.menu.MenuBackgroundComponent;
 import com.constants.ComponentBounds;
 import com.constants.Direction;
 import com.constants.Resources;
-import com.event_listeners.HeadDirectionChangeListener;
+import com.event_listeners.ArrowKeysListener;
 import com.event_listeners.PauseListener;
 import com.game_objects.SmallFood;
 import com.components.snake.SnakeBody;
@@ -118,7 +118,7 @@ public class ComponentFactory {
 
             JLayeredPane lp = new JLayeredPane();
             lp.setPreferredSize(frame.getPreferredSize());
-            lp.addKeyListener(new HeadDirectionChangeListener());
+            lp.addKeyListener(new ArrowKeysListener());
             lp.addKeyListener(new PauseListener());
             frame.setLayeredPane(lp);
 

@@ -8,6 +8,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.Properties;
 
+// Holds the value of the current score and loads/saves the values of the best scores for each map (from/to a properties file)
 public class ScoreManager {
 
     private static ScoreManager instance;

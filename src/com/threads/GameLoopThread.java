@@ -20,7 +20,7 @@ import java.util.Random;
 // Started only when startGame() is called in the GameManager, takes care of movement, the food and collision checking
 public class GameLoopThread extends Thread {
 
-    private final int TICK_RATE = 33;
+    private final int TICK_RATE = 31;
 
     private final Snake snake;
 
@@ -38,9 +38,10 @@ public class GameLoopThread extends Thread {
     public GameLoopThread() {
         GameManager gm = GameManager.getInstance();
         snake = gm.getSnake();
-        isRunning = true;
         headBounds = snake.getHead().getBounds();
+
         dif = gm.getDifficulty();
+        isRunning = true;
     }
 
     @Override
@@ -52,17 +53,19 @@ public class GameLoopThread extends Thread {
             SnakeHead head = snake.getHead();
             headBounds = head.getBounds();
 
-            // this skips checking for the actual direction once per two 'frames' (updates) -this is
-            // so the snake can't turn around quicker than 12px - which would be less than its body width
-            // and it will immediately collide with itself - this presents another problem, but this is solved and
-            // explained in the HeadDirectionChangeListener
+            // This skips checking for the actual direction once per two 'frames/ticks' (or updates) -this is
+            // so the snake can't turn around quicker than 12px (twice the value of 'step') - which would be less than its body width
+            // and it will immediately collide with itself - this creates another problem, - you can have two
+            // direction inputs within the time it takes for the two ticks to pass, so if you are going UP you can
+            // input RIGHT and then (very quickly) DOWN -> updatedDirection would be DOWN so the snake makes 180 deg turn
+            // and still self collides -> this is solved in the ArrowKeysListener (which updates the direction data of the SnakeHead)
             if (!skip) {
                 updatedDirection = head.getDirection();
                 skip = true;
             } else {
                 skip = false;
             }
-            if (!snake.isPaused()) {
+            if (!snake.isStopped()) {
                 if (updatedDirection == Direction.UP) {
                     head.setBounds(headBounds.x, headBounds.y - step, headBounds.width, headBounds.height);
                     head.setAngle(3.141592653);
@@ -82,11 +85,11 @@ public class GameLoopThread extends Thread {
                 }
 
 
-
                 if (borderCollision() || selfCollision()) {
                     SoundManager.getInstance().playEndGame();
                     ScoreManager.getInstance().saveScore();
                     try {
+                        // Freezes the game for half a second when the game ends before the end game screen appears
                         sleep(500);
                     } catch (InterruptedException e) {
                         throw new RuntimeException(e);
@@ -133,9 +136,9 @@ public class GameLoopThread extends Thread {
                     // middle wall bottom right corner
                     (snakeX > 402 && snakeX < 610) && (snakeY > 540 && snakeY < 610) ||
                     (snakeX > 540 && snakeX < 610) && (snakeY > 410 && snakeY < 560) ||
-                    // middle left pillar
+                    // center left pillar
                     (snakeX > 288 && snakeX < 357) && (snakeY > 280 && snakeY < 495) ||
-                    // middle right pillar
+                    // center right pillar
                     (snakeX > 421 && snakeX < 491) && (snakeY > 280 && snakeY < 495);
         }
         return false;
@@ -149,7 +152,7 @@ public class GameLoopThread extends Thread {
             Rectangle compBounds = snake.getBody().get(i).getBounds();
             int compX = compBounds.x;
             int compY = compBounds.y;
-//            System.out.println(String.format("Component %d - coords x:%d--y:%d",i, compX, compY));
+
             if ((headX + 12 > compX && headX < compX + ComponentBounds.SNAKE_COMPONENT_SIZE) &&
                     (headY + 12> compY && headY < compY + ComponentBounds.SNAKE_COMPONENT_SIZE)) {
                 return true;
@@ -170,12 +173,12 @@ public class GameLoopThread extends Thread {
         return false;
     }
     private boolean foodCollision() {
-        //can headBounds.x/y cause issues? (not .get, so its not going through a synch method?)
+        //can headBounds.x/y cause issues? (not .get, so its not going through a sync method?)
         int snakeX = headBounds.x;
         int snakeY = headBounds.y;
         int foodX = smallFood.getBounds().x;
         int foodY = smallFood.getBounds().y;
-        //            System.out.println("Food collision");
+
         return (snakeX + ComponentBounds.SNAKE_HEAD_20 - 10 >= foodX && snakeX <= foodX + ComponentBounds.FOOD_SIZE) &&
                 (snakeY + ComponentBounds.SNAKE_HEAD_20  - 10>= foodY && snakeY <= foodY + ComponentBounds.FOOD_SIZE);
     }
@@ -189,7 +192,7 @@ public class GameLoopThread extends Thread {
             smallFood.setBounds(randomX, randomY, smallFood.getPreferredSize().width, smallFood.getPreferredSize().height);
         } else if (dif == Difficulty.HARD) {
 
-            // generates values for the food until the values are not within the
+            // Generates values for the food until the values are not within the
             // inner walls of map_3 (hard difficulty) - could be done smarter but it works for now
             while (true) {
                 int randomX = random.nextInt(MapCollisionData.foodMinX, MapCollisionData.foodMaxX);

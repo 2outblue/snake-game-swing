@@ -20,7 +20,6 @@ public class SnakeHead extends SnakeComponent{
         Graphics2D g2d = (Graphics2D) g.create();
 
         if (image != null) {
-//            System.out.println(getBounds().x + "<---X----Y--->" + getBounds().y);
                 AffineTransform transform = new AffineTransform();
                 // Translate to the center of the component
                 transform.translate(getWidth() / 2.0, getHeight() / 2.0);
@@ -34,8 +33,9 @@ public class SnakeHead extends SnakeComponent{
         g2d.dispose();
     }
 
-    // Used for the first body part when painting(rendering) the body, since all body parts point in the opposite
-    // direction of the head
+    // Used for the first body part when painting(rendering) the body, to know where to place the body - ie if SnakeHead dir
+    // is UP the body needs to be places behind the head so from the perspective of the head the body is DOWN (from the head)
+    // Note: All body parts point in the opposite direction of the head
     public Direction getReverseDirection() {
         switch (this.direction) {
             case DOWN -> {

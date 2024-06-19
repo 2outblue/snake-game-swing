@@ -14,7 +14,7 @@ public class Snake {
     private Direction currentDirectionInput;
     private Direction previousDirectionInput;
 
-    private boolean paused;
+    private boolean stopped;
 
     public Snake(SnakeHead head, List<SnakeBody> body, List<SnakeBody> tail) {
         this.head = head;
@@ -38,7 +38,7 @@ public class Snake {
         body.addLast(b);
     }
 
-    // this method was previously synchronized, but it seems like it doesn't need to be - could cause issues ?
+    // Could this cause issues if its not sync?
     public void paintBody(Rectangle headBounds) {
         Rectangle previousBounds = headBounds;
         Direction previousDirection = getHead().getReverseDirection();
@@ -74,12 +74,12 @@ public class Snake {
         this.currentDirectionInput = currentDirectionInput;
     }
 
-    public boolean isPaused() {
-        return paused;
+    public boolean isStopped() {
+        return stopped;
     }
 
-    public void setPaused(boolean paused) {
-        this.paused = paused;
+    public void setStopped(boolean moving) {
+        this.stopped = moving;
     }
 
     public synchronized Direction getPreviousDirectionInput() {
@@ -134,10 +134,12 @@ public class Snake {
                 // applies modifier if previous part is not turning - ie current part moves closer with
                 // modifier amount of pixels. If the previous part has a different direction, the current part
                 // is moved deModifier amount of pixels in the opposite direction to where its currently going
+                // Basically move the parts closer together (always) and move them back apart if the previous part has turned
 
                 // turnCompensatorFactor - the current part moves turnCompensatorFactor amount of pixels in the
                 // direction of the previous part (to make the turn more smooth and to overlap with the previous part
                 // so the current part is not just a separate circle behind the snake)
+                // In summary it if previous part is dir DOWN and current part is dir LEFT, it slightly moves the curr part DOWN (even though its still going left)
                 // y+
                 previousBounds.y -= modifier;
                 if (previousPartCurrentDirection == Direction.LEFT) {

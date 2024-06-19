@@ -6,14 +6,12 @@ import javax.sound.sampled.*;
 import java.io.File;
 import java.io.IOException;
 
+// The methods to play sounds are triggered by the event listeners (for button actions or key presses), OR game conditions
 public class SoundManager {
 
     private static SoundManager soundManager;
 
-    private SoundManager() {
-
-    }
-
+    // event listeners
     public void playButtonClick() {
 
         try {
@@ -82,6 +80,7 @@ public class SoundManager {
         }
     }
 
+    // game conditions
     public void playEndGame() {
         try {
             AudioInputStream a = AudioSystem.getAudioInputStream(new File(AudioConst.END_GAME));

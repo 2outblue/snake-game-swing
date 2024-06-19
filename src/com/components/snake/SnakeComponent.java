@@ -8,6 +8,10 @@ import java.awt.*;
 import java.io.File;
 import java.io.IOException;
 
+// TODO: Direction for the SnakeBody is useless i think.
+// Direction is used for the SnakeHead class and for the tail - Maybe make a SnakeTail class which
+// extends SnakeBody and keep the direction there and in the SnakeHead, not in this class. The actual body (not tail)
+// of the snake doesn't need direction as it only updates bounds for every individual components.
 public abstract class SnakeComponent extends JComponent {
 
     protected Direction direction;

@@ -48,7 +48,8 @@ public class GameManager {
         setDifficulty(Difficulty.EASY);
 
         // event listeners for button clicks are automatically attached in the component factory
-        // component bounds are also set in the factory
+        // component bounds are also set in the factory.
+        // The game starts when the play button is pressed -
         layeredPane.add(componentFactory.createPlayButton(), JLayeredPane.POPUP_LAYER);
         layeredPane.add(componentFactory.createEasyButton(), JLayeredPane.POPUP_LAYER);
         layeredPane.add(componentFactory.createMediumButton(), JLayeredPane.POPUP_LAYER);
@@ -63,10 +64,12 @@ public class GameManager {
     public void startGame() {
         inGame = true;
         layeredPane.removeAll();
-//        layeredPane.revalidate();
-//        layeredPane.repaint();
+        layeredPane.revalidate();
+        layeredPane.repaint();
+
         scoreManager.resetCurrentScore();
         renderMap();
+        // if you don't render the snake, the game crashes (in contrast to everything else with the 'render' prefix)
         renderSnake();
         renderBestScore();
         renderCurrentScore();
@@ -92,7 +95,9 @@ public class GameManager {
     }
 
     private void setInitialSnakePosition(){
-        snake.getHead().setBounds(390, 390, ComponentBounds.SNAKE_HEAD_20, ComponentBounds.SNAKE_HEAD_20);
+        if (snake != null) {
+            snake.getHead().setBounds(390, 390, ComponentBounds.SNAKE_HEAD_20, ComponentBounds.SNAKE_HEAD_20);
+        }
     }
     private void renderSnake() {
         snake = componentFactory.createSnake();
@@ -117,8 +122,8 @@ public class GameManager {
         snake.grow(body2);
     }
     public synchronized void pauseGame() {
-        if (snake.isPaused()) {
-            snake.setPaused(false);
+        if (snake.isStopped()) {
+            snake.setStopped(false);
             // TODO: is this try-catch necessary ?
             try {
                 for (Component comp : layeredPane.getComponentsInLayer(JLayeredPane.POPUP_LAYER)) {
@@ -133,7 +138,7 @@ public class GameManager {
             layeredPane.add(componentFactory.createBackToMenuButton(), JLayeredPane.POPUP_LAYER);
             layeredPane.add(componentFactory.createGamePauseComponent(), JLayeredPane.POPUP_LAYER);
 
-            snake.setPaused(true);
+            snake.setStopped(true);
         }
     }
     public void endGame() {
@@ -141,10 +146,9 @@ public class GameManager {
         layeredPane.add(componentFactory.createGameOverComponent(), JLayeredPane.POPUP_LAYER);
 
         inGame = false;
-        snake.setPaused(true);
+        snake.setStopped(true);
     }
 
-    // maybe make a class field SmallFood sf; and use it instead ?
     public void renderFood(SmallFood sf) {
         layeredPane.add(sf, JLayeredPane.PALETTE_LAYER);
     }
@@ -160,7 +164,7 @@ public class GameManager {
         layeredPane.add(componentFactory.createMap(selectedDifficulty), JLayeredPane.DEFAULT_LAYER);
     }
 
-    public void setDifficulty(Difficulty dif) {
+    public synchronized void setDifficulty(Difficulty dif) {
         MapCollisionData.setDifficulty(dif);
         difficultyMark.set(dif);
         selectedDifficulty = dif;

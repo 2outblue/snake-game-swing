@@ -1,5 +1,7 @@
 package com.game_utility;
 
+// Updates the wall/border collision data based on which difficulty (and therefore map) is currently selected
+// Note: for the hard map, additional collision data (for the inner walls) is managed in the GameLoopThread
 public class MapCollisionData {
     public static int borderMinX;
     public static int borderMaxX;
